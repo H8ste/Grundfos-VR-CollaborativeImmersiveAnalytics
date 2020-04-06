@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 
 public class Exist
@@ -26,6 +27,8 @@ public class CreateMesh : MonoBehaviour
   Vector3[] vertices;
   int[] triangles;
   List<System.String>[] data;
+  GameObject label1;
+  GameObject label2;
 
   private float[] dataAverages;
   public bool dataChanged = true;
@@ -44,7 +47,6 @@ public class CreateMesh : MonoBehaviour
 
   private DataReader dataReader;
 
-
   public void Create(int _featureOne, int _featureTwo, DataReader _dataReader)
   {
     featureOne = _featureOne; featureTwo = _featureTwo; dataReader = _dataReader;
@@ -52,8 +54,19 @@ public class CreateMesh : MonoBehaviour
     data = dataReader.GetData();
     dataCompared = Compare(data[featureOne], data[featureTwo]);
 
+    string strFtr1 = dataReader.GetHeaders()[featureOne];
+    string strFtr2 = dataReader.GetHeaders()[featureTwo];
+
     mesh = new Mesh(); GetComponent<MeshFilter>().mesh = mesh;
     UpdateMesh();
+
+    label1 = new GameObject("myLabel1");
+    label1.transform.SetParent(this.transform);
+ 
+    Text myText = label1.AddComponent<Text>();
+    myText.text = "LLLLLLLLLLLLEEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTT MMMMMMMMMMMMMMMMMEEEEEEEEEEEEEEEEEEEEE CCCCCCCCCCCCRRRRRRRRRRRRYYYYYYYYYYYYYYYYYYYY";
+    myText.fontSize = 26;
+
   }
 
   void Update()
