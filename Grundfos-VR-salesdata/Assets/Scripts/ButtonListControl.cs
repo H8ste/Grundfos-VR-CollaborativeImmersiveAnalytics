@@ -9,6 +9,7 @@ public class ButtonListControl : MonoBehaviour
     string[] headers;
     private List<GameObject> schrollMenuButtonList;
 
+
     public int FeatureSelected { get; set; } = -1;
     public int FeatureNumber { get; set; } = 0;
 
@@ -55,8 +56,14 @@ public class ButtonListControl : MonoBehaviour
         {
             //// Call setFeature on localplotcontroller
             GameObject.FindObjectsOfType<LocalPlotController>()[0].GetComponent<LocalPlotController>().setFeature(FeatureNumber, FeatureSelected);
-            GameObject.Destroy(GameObject.FindGameObjectWithTag("FeatureSelector"));
+            Object.Destroy(transform.parent.gameObject);
+            // Allows for another menu to be spawned 
         }
+        else
+        {
+            Object.Destroy(transform.parent.gameObject);
+        }
+        FeatureButtonScript.featureMenuSpawned = false;
     }
 
     public void ChangeButtonColor(Button button)
