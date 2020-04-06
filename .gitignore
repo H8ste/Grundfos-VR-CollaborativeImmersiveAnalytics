@@ -60,3 +60,4 @@ crashlytics-build.properties
 
 # Remove env folder //data
 Grundfos-VR-salesdata/Assets/Resources/env/src/*
+/Grundfos-VR-salesdata/Assets/Resources/env/src/*
