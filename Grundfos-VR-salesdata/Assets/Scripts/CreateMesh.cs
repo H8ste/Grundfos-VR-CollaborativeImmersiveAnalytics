@@ -44,7 +44,6 @@ public class CreateMesh : MonoBehaviour
 
   private DataReader dataReader;
 
-
   public void Create(int _featureOne, int _featureTwo, DataReader _dataReader)
   {
     featureOne = _featureOne; featureTwo = _featureTwo; dataReader = _dataReader;
