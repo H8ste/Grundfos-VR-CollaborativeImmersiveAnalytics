@@ -21,18 +21,26 @@ public class SpawnPlotController : MonoBehaviour
   private Vector3 leftOffset = new Vector3(-90f, -90f, 0);
   private Vector3 rightOffset = new Vector3(90f, 90f, 0);
 
+  [HideInInspector]
+  public GameObject FlippedHand { get { return flippedHand; } private set { flippedHand = value; } }
+  private GameObject flippedHand = null;
+
+  [HideInInspector]
+  public GameObject NonFlippedHand { get { return nonFlippedHand; } private set { nonFlippedHand = value; } }
+  private GameObject nonFlippedHand = null;
+
   // Start is called before the first frame update
   void Start()
   {
 
     LeftHand = transform.parent.GetChild(1).gameObject;
-    RightHand = transform.parent.GetChild(2).gameObject; ;
+    RightHand = transform.parent.GetChild(2).gameObject;
     cameraForCanvas = transform.parent.GetChild(0).GetComponent<Camera>();
 
   }
 
   // Update is called once per frame
-  void Update()
+  public void CheckForMenu()
   {
     float RHandRot = OVRInput.GetLocalControllerRotation(OVRInput.Controller.RHand).eulerAngles.z;
     float LHandRot = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LHand).eulerAngles.z;
@@ -57,11 +65,26 @@ public class SpawnPlotController : MonoBehaviour
       DeSpawn("right");
     }
 
+    if (!NonFlippedHand)
+    {
+      // Debug.Log("Reference is not known");
+    }
+
+    if (!RightHand)
+    {
+      Debug.Log("Right hand not found");
+    }
+    if (!LeftHand)
+    {
+      Debug.Log("Left hand not found");
+    }
+
   }
 
   private void Spawn(string hand)
   {
-    GameObject usedHand = null;
+    FlippedHand = null;
+    NonFlippedHand = null;
     if (alreadySpawned[0] || alreadySpawned[1])
     { }
     else
@@ -69,45 +92,55 @@ public class SpawnPlotController : MonoBehaviour
       switch (hand)
       {
         case "left":
-          usedHand = LeftHand;
+          FlippedHand = LeftHand;
+          NonFlippedHand = RightHand;
           alreadySpawned[0] = true;
           break;
 
         case "right":
-          usedHand = RightHand;
+          FlippedHand = RightHand;
+          NonFlippedHand = LeftHand;
           alreadySpawned[1] = true;
           break;
       }
       spawnedPlotController = Instantiate(PlotControllerPrefab);
       spawnedPlotController.transform.GetChild(0).GetComponent<Canvas>().worldCamera = cameraForCanvas;
-      spawnedPlotController.transform.SetParent(usedHand.transform);
+      spawnedPlotController.transform.SetParent(FlippedHand.transform);
       spawnedPlotController.transform.localPosition = new Vector3(0, -0.12f, 0);
-      // Debug.Log("Spawned A plot controller for " + hand + " hand");
     }
   }
 
   private void DeSpawn(string hand)
   {
-    GameObject usedHand = null;
     int handIndex = -1;
     switch (hand)
     {
       case "left":
-        usedHand = LeftHand;
         handIndex = 0;
         break;
 
       case "right":
-        usedHand = RightHand;
         handIndex = 1;
         break;
     }
     if (alreadySpawned[handIndex])
     {
-      Destroy(usedHand.transform.GetChild(usedHand.transform.childCount - 1).gameObject);
+      switch (hand)
+      {
+        case "left":
+          FlippedHand = LeftHand;
+          break;
+
+        case "right":
+          FlippedHand = RightHand;
+          break;
+      }
+      Destroy(FlippedHand.transform.GetChild(FlippedHand.transform.childCount - 1).gameObject);
       alreadySpawned[handIndex] = false;
-      // Debug.Log("Destroyed a plotcontroller for " + hand + " hand");
+      FlippedHand = null;
+      NonFlippedHand = null;
     }
+
   }
 
   public bool isMenuUp()
