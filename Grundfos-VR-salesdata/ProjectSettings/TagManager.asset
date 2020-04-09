@@ -7,6 +7,8 @@ TagManager:
   - Button
   - Canvas
   - ButtonSchrollList
+  - FeatureSelector
+  - PlotMesh
   layers:
   - Default
   - TransparentFX
