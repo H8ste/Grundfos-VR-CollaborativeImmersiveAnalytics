@@ -4,118 +4,143 @@ using UnityEngine;
 
 public class LocalPlotController : MonoBehaviour
 {
-    public string[] headers;
-    public List<int> featuresChosen = new List<int>();
-    private enum plotType { };
-    private int width, height;
+  public string[] headers;
+  public List<int> featuresChosen = new List<int>();
+  private enum plotType { };
+  private int width, height;
 
-    public GameObject createPlotPrefab;
+  public bool inVR;
 
-    public GameObject createNewPlotButton;
+  public GameObject createButtonPrefab;
+  public GameObject plotCreatorPrefab;
+  public GameObject plotPrefab;
 
-    public GameObject canvas;
+  private GameObject plot;
 
-    public GameObject plotPrefab;
+  DataReader dataReader;
 
-    private GameObject plot;
+  void Start()
+  {
+    gameObject.AddComponent<DataReader>();
+    dataReader = gameObject.GetComponent<DataReader>();
+    headers = dataReader.GetHeaders();
 
-    DataReader dataReader;
+    featuresChosen.Add(-1);
+    featuresChosen.Add(-1);
+  }
 
-    void Start()
+  private void HideMenu()
+  {
+    transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+  }
+
+  private void ShowMenu()
+  {
+    transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+  }
+
+  // Spawns in screen that is used to create a new plot
+  public void NewPlotCreator()
+  {
+    // Hide Menu Screen
+    HideMenu();
+
+    // Spawn
+    GameObject plotCreator = GameObject.Instantiate(plotCreatorPrefab);
+    plotCreator.transform.SetParent(transform.GetChild(0));
+    plotCreator.transform.localPosition = new Vector3(0, 0, 0);
+  }
+
+
+  public void Update()
+  {
+    if (inVR)
+    {    //rotate towards headset
+
+      // Determine which direction to rotate towards
+      Vector3 targetDirection = transform.position - transform.parent.parent.GetChild(0).position;
+
+      // The step size is equal to speed times frame time.
+      float singleStep = 3f * Time.deltaTime;
+
+      // Rotate the forward vector towards the target direction by one step
+      Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
+
+      // Draw a ray pointing at our target in
+      // Debug.DrawRay(transform.position, newDirection, Color.red);
+
+      // Calculate a rotation a step closer to the target and applies rotation to this object
+      transform.rotation = Quaternion.LookRotation(newDirection);
+      // transform.localPosition = new Vector3(0, 0, 0);}
+    }
+  }
+
+
+  public void setFeature(int featureNumber, int featureID)
+  {
+    featuresChosen[featureNumber] = featureID;
+    // check if both features have been selected,
+    bool ready = true;
+    foreach (var feature in featuresChosen)
     {
+      if (feature == -1)
+      {
+        ready = false;
+        break;
+      }
+    }
+    if (ready)
+    {
+      if (plot != null)
+      {
+        GameObject.Destroy(plot);
+      }
+      plot = GameObject.Instantiate(plotPrefab);
+      plot.GetComponent<CreateMesh>().Create(featuresChosen[0], featuresChosen[1], dataReader);
 
-        gameObject.AddComponent<DataReader>();
-        dataReader = gameObject.GetComponent<DataReader>();
-        headers = dataReader.GetHeaders();
-
-        featuresChosen.Add(-1);
-        featuresChosen.Add(-1);
-
-
+      // Instantiate plot prefab
+      //   plot = GameObject.Instantiate();
     }
 
+  }
+  private bool isReady()
+  {
 
-    // Create plot function
-    public void CreateNewPlot()
+    if (featuresChosen.Count == 4)
     {
-        //remove button
-        // GameObject.Destroy(buttonRef);
-        createNewPlotButton.SetActive(false);
-        //spawn canvas
-        Debug.Log("Created plot");
-
-        GameObject oof = GameObject.Instantiate(createPlotPrefab);
-        oof.transform.SetParent(canvas.transform);
-        oof.transform.localPosition = new Vector3(0, 150f, 0);
-
+      return true;
     }
 
+    return false;
+  }
 
-    public void setFeature(int featureNumber, int featureID)
-    {
-
-        featuresChosen[featureNumber] = featureID;
-        // check if both features have been selected,
-        bool ready = true;
-        foreach (var feature in featuresChosen)
-        {
-            if (feature == -1)
-            {
-                ready = false;
-                break;
-            }
-        }
-        if (ready)
-        {
-            if (plot != null)
-            {
-                GameObject.Destroy(plot);
-            }
-            plot = GameObject.Instantiate(plotPrefab);
-            plot.GetComponent<CreateMesh>().Create(featuresChosen[0], featuresChosen[1], dataReader);
-
-            // Instantiate plot prefab
-            //   plot = GameObject.Instantiate();
-        }
-
-    }
-    private bool isReady()
-    {
-
-        if (featuresChosen.Count == 4)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private void renderFeatureSelector(int featureNumber)
-    {
+  private void renderFeatureSelector(int featureNumber)
+  {
 
 
 
-    }
+  }
 
 
-    private void renderFeatureSelector(int featureNumber, int featureID)
-    {
-
-
-
-    }
-
-    private void sendPlot(GameObject plot)
-    {
-
-
-    }
-    private void reRenderLocalVersion()
-    {
+  private void renderFeatureSelector(int featureNumber, int featureID)
+  {
 
 
 
-    }
+  }
+
+  private void sendPlot(GameObject plot)
+  {
+
+
+  }
+  private void reRenderLocalVersion()
+  {
+
+
+
+  }
+
 
 
 

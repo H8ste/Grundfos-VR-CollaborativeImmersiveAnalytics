@@ -790,10 +790,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headers: []
   featuresChosen: 
-  createPlotPrefab: {fileID: 289831205726462505, guid: 5e552cecbf14edd4d9047e359a08924a,
+  inVR: 0
+  createButtonPrefab: {fileID: 0}
+  featureSelectorPrefab: {fileID: 2499950107539525976, guid: 3dc0b392864794149a38a224686558d8,
     type: 3}
-  createNewPlotButton: {fileID: 813508887}
-  canvas: {fileID: 2016607646}
   plotPrefab: {fileID: 1668697730447907967, guid: ced3d809396bf4f40b12106a0c54cffb,
     type: 3}
 --- !u!4 &1843873610
@@ -806,7 +806,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 471.5, y: 255.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 2016607650}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -901,9 +902,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 813508888}
-  - {fileID: 1205970083}
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Father: {fileID: 1843873610}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
