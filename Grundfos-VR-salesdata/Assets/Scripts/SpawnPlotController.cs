@@ -82,7 +82,7 @@ public class SpawnPlotController : MonoBehaviour
       spawnedPlotController.transform.GetChild(0).GetComponent<Canvas>().worldCamera = cameraForCanvas;
       spawnedPlotController.transform.SetParent(usedHand.transform);
       spawnedPlotController.transform.localPosition = new Vector3(0, -0.12f, 0);
-      Debug.Log("Spawned A plot controller for " + hand + " hand");
+      // Debug.Log("Spawned A plot controller for " + hand + " hand");
     }
   }
 
@@ -106,7 +106,12 @@ public class SpawnPlotController : MonoBehaviour
     {
       Destroy(usedHand.transform.GetChild(usedHand.transform.childCount - 1).gameObject);
       alreadySpawned[handIndex] = false;
-      Debug.Log("Destroyed a plotcontroller for " + hand + " hand");
+      // Debug.Log("Destroyed a plotcontroller for " + hand + " hand");
     }
+  }
+
+  public bool isMenuUp()
+  {
+    return spawnedPlotController;
   }
 }
