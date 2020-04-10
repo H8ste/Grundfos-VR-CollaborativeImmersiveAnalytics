@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.UI;
 
@@ -24,11 +25,13 @@ public class Exist
 [RequireComponent(typeof(MeshRenderer))]
 public class CreateMesh : MonoBehaviour
 {
-    public int plotID { get; private set; }
-    Mesh mesh;
-    Vector3[] vertices;
-    int[] triangles;
-    List<System.String>[] data;
+  public int plotID { get; private set; }
+  Mesh mesh;
+  Vector3[] vertices;
+  int[] triangles;
+  List<System.String>[] data;
+  GameObject label1;
+  GameObject label2;
 
     public float[] dataAverages { get; set; }
     public bool dataChanged = true;
@@ -56,6 +59,19 @@ public class CreateMesh : MonoBehaviour
     public void Create(int _featureOne, int _featureTwo, DataReader _dataReader)
     {
         featureOne = _featureOne; featureTwo = _featureTwo; dataReader = _dataReader;
+    string strFtr1 = dataReader.GetHeaders()[featureOne];
+    string strFtr2 = dataReader.GetHeaders()[featureTwo];
+
+    mesh = new Mesh(); GetComponent<MeshFilter>().mesh = mesh;
+    UpdateMesh();
+
+    label1 = new GameObject("myLabel1");
+    label1.transform.SetParent(this.transform);
+ 
+    Text myText = label1.AddComponent<Text>();
+    myText.text = "LLLLLLLLLLLLEEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTT MMMMMMMMMMMMMMMMMEEEEEEEEEEEEEEEEEEEEE CCCCCCCCCCCCRRRRRRRRRRRRYYYYYYYYYYYYYYYYYYYY";
+    myText.fontSize = 26;
+
 
         data = dataReader.GetData();
         dataCompared = Compare(data[featureOne], data[featureTwo]);
