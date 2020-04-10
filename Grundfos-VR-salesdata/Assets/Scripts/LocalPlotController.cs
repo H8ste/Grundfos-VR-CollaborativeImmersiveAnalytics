@@ -49,6 +49,8 @@ public class LocalPlotController : MonoBehaviour
     GameObject plotCreator = GameObject.Instantiate(plotCreatorPrefab);
     plotCreator.transform.SetParent(transform.GetChild(0));
     plotCreator.transform.localPosition = new Vector3(0, 0, 0);
+    plotCreator.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+    plotCreator.transform.localEulerAngles = new Vector3(0, 0, 0);
   }
 
 
@@ -97,6 +99,10 @@ public class LocalPlotController : MonoBehaviour
       }
       plot = GameObject.Instantiate(plotPrefab);
       plot.GetComponent<CreateMesh>().Create(featuresChosen[0], featuresChosen[1], dataReader);
+      plot.transform.SetParent(transform);
+      plot.transform.localPosition = new Vector3(0, 0, 0);
+      plot.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+      plot.transform.localEulerAngles = new Vector3(0, 0, 0);
 
       // Instantiate plot prefab
       //   plot = GameObject.Instantiate();

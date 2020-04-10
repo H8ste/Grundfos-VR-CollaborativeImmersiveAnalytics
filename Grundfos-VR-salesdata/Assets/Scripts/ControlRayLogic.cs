@@ -55,17 +55,22 @@ namespace UnityEngine.XR.Interaction.Toolkit
           // Disable Any potential XR Ray on current hand if they are not already converted to line renderer
           XRRayInteractor rayInteractorRef = MenuRef.FlippedHand.GetComponent<XRRayInteractor>();
           rayInteractorRef.enabled = false;
+          rayInteractorRef = null;
 
           // 	Add XR Ray interactable on opposite hand (straight line) if Menu is UP
           if (MenuRef.NonFlippedHand)
           {
-            rayInteractorRef = MenuRef.NonFlippedHand.GetComponent<XRRayInteractor>() as XRRayInteractor;
+            XRRayInteractor test = MenuRef.NonFlippedHand.GetComponent<XRRayInteractor>();
+            // rayInteractorRef = MenuRef.NonFlippedHand.GetComponent<XRRayInteractor>() as XRRayInteractor;
             // And Change XR Ray to be a line
-            rayInteractorRef.enabled = true;
-            rayInteractorRef.lineType = XRRayInteractor.LineType.StraightLine;
+            test.lineType = XRRayInteractor.LineType.ProjectileCurve;
+            test.Velocity = 8;
+            test.enabled = true;
+            Debug.Log("Shows xray on nonflipped hand");
+            // rayInteractorRef.lineType = XRRayInteractor.LineType.StraightLine;
 
             // And change it such that this ray only interacts with UI Elements
-            // rayInteractorRef.InteractionLayerMask =
+            // rayInteractorRef.InteractionLayerMask = (1 << 5);
           }
           else
           {
@@ -77,8 +82,8 @@ namespace UnityEngine.XR.Interaction.Toolkit
       {
         // If button is held Add XR Ray interactable to contorller (curvy  thick line)
         // Check left hand
-        bool leftTriggerValue;
-        if (leftHand.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out leftTriggerValue) && leftTriggerValue)
+        bool leftPrimaryValue;
+        if (leftHand.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out leftPrimaryValue) && leftPrimaryValue)
         {
           if (triggerHeld[0] == false)
           {
@@ -90,16 +95,21 @@ namespace UnityEngine.XR.Interaction.Toolkit
             rayInteractorRef.enabled = true;
 
             // And change it such that this ray only interacts with Area Elements
-            // rayInteractorRef.InteractionLayerMask =
+            // rayInteractorRef.InteractionLayerMask = (1 << 10);
           }
         }
         else
         {
-          triggerHeld[0] = false;
+          if (triggerHeld[0])
+          {
+            triggerHeld[0] = false;
+            Debug.Log("Teleport me away fam");
+          }
+
           LeftHandRef.GetComponent<XRRayInteractor>().enabled = false;
         }
-        bool rigthTriggerValue;
-        if (rightHand.TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out rigthTriggerValue) && rigthTriggerValue)
+        bool rigthPrimaryValue;
+        if (rightHand.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out rigthPrimaryValue) && rigthPrimaryValue)
         {
           if (triggerHeld[1] == false)
           {
@@ -113,7 +123,11 @@ namespace UnityEngine.XR.Interaction.Toolkit
         }
         else
         {
-          triggerHeld[1] = false;
+          if (triggerHeld[1])
+          {
+            triggerHeld[1] = false;
+            Debug.Log("Teleport me away fam");
+          }
           RightHandRef.GetComponent<XRRayInteractor>().enabled = false;
         }
         // Check right hand
@@ -176,6 +190,11 @@ namespace UnityEngine.XR.Interaction.Toolkit
     public void TeleportLeave()
     {
       // Debug.Log("Teleporting should HIDE now");
+    }
+
+    public void Debugbutton()
+    {
+      Debug.Log("Button was clicked");
     }
   }
 }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class FeatureButtonScript : MonoBehaviour
 {
   // Start is called before the first frame update
-  public GameObject Canvas;
+  public GameObject ScrollPrefab;
 
   public GameObject featureMenu;
   public int featureNumber;
@@ -24,9 +24,13 @@ public class FeatureButtonScript : MonoBehaviour
 
     if (!featureMenuSpawned)
     {
-      featureMenu = Instantiate(Canvas, transform.position, Quaternion.identity) as GameObject;
+      featureMenu = Instantiate(ScrollPrefab, transform.position, Quaternion.identity) as GameObject;
       featureMenu.transform.GetChild(0).GetComponent<ButtonListControl>().FeatureNumber = featureNumber;
-      // featureMenu.transform.SetParent(controller.canvas.transform);
+      featureMenu.transform.SetParent(transform.parent.parent);
+      featureMenu.transform.localPosition = new Vector3(0, 0, 0);
+      featureMenu.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+      featureMenu.transform.localEulerAngles = new Vector3(0, 0, 0);
+
       Debug.Log("im here");
       featureMenuSpawned = true;
     }

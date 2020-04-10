@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5300349393503468038
 Transform:
   m_ObjectHideFlags: 0
@@ -79,7 +79,7 @@ GameObject:
   - component: {fileID: 1638041407026380718}
   - component: {fileID: 8897642182089114270}
   - component: {fileID: 895648969995085970}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,7 @@ GameObject:
   - component: {fileID: 208893563588113732}
   - component: {fileID: 6700416647478202690}
   - component: {fileID: 8918289748267420079}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,7 +231,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 431518249262133721}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: PlotCreatorINTRO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,7 +272,7 @@ GameObject:
   - component: {fileID: 8669084725259074987}
   - component: {fileID: 8164961607560793935}
   - component: {fileID: 8153975769208336361}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: CreatePlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -400,7 +400,7 @@ GameObject:
   - component: {fileID: 6204924794665209936}
   - component: {fileID: 6204924794665209937}
   - component: {fileID: 1563661270522059872}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: PlotController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -457,7 +457,7 @@ MonoBehaviour:
   inVR: 1
   createButtonPrefab: {fileID: 5410281699371237825, guid: b7dcfd5849850e74ca7aa06e8481e607,
     type: 3}
-  plotCreatorPrefab: {fileID: 472054292336266708, guid: d14fc21e17a318f47ae71a9606b4e710,
+  plotCreatorPrefab: {fileID: 2499950107539525976, guid: 3dc0b392864794149a38a224686558d8,
     type: 3}
   plotPrefab: {fileID: 1668697730447907967, guid: ced3d809396bf4f40b12106a0c54cffb,
     type: 3}
@@ -485,7 +485,7 @@ GameObject:
   - component: {fileID: 4084140254364287624}
   - component: {fileID: 8926867008745590013}
   - component: {fileID: 2570278970725672036}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Other Functionality
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -613,7 +613,7 @@ GameObject:
   - component: {fileID: 572774966208594642}
   - component: {fileID: 771898180697486751}
   - component: {fileID: 3414354360563151135}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
