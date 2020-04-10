@@ -51,6 +51,7 @@ public class CreateMesh : MonoBehaviour
     public float spacing;
 
     private List<string> featureTypeList = new List<string>();
+    private Vector3 previousMousePos;
 
 
     public void Create(int _featureOne, int _featureTwo, DataReader _dataReader)
@@ -290,7 +291,7 @@ public class CreateMesh : MonoBehaviour
         return isDifferent;
     }
 
-    public string setTextBox(Vector3 mousePosInMesh)
+    public int GetIndexByPos(Vector3 mousePosInMesh)
     {
 
 
@@ -305,17 +306,35 @@ public class CreateMesh : MonoBehaviour
             int index1 = (int)index;
 
 
+            previousMousePos = mousePosInMesh;
 
-            Debug.Log(dataAverages[index1 + 1].ToString());
+            // Debug.Log(dataAverages[index1 + 1].ToString());
 
-            return dataAverages[index1 + 1].ToString();
+            return index1;
+
 
         }
 
 
 
 
-        return null;
+        return -1;
+    }
+
+    public Vector3 getTextPos(int index)
+    {
+
+
+        //Debug.Log("index = " + index);
+
+
+        Vector3 vectTopLeftCorner = new Vector3(index * spacing, Remap(dataAverages[index + 1], 0, dataAverages[0], 0, plotHeight), 0);
+        Vector3 vectTopRightCorner = new Vector3(index * spacing + spacing, Remap(dataAverages[index + 1], 0, dataAverages[0], 0, plotHeight), 0);
+
+        // Debug.Log("Vect Top left = " + vectTopLeftCorner);
+        // Debug.Log("VectTopRight = " + vectTopRightCorner);
+        //Debug.Log(((vectTopRightCorner - vectTopLeftCorner) / 2).ToString());
+        return vectTopRightCorner + (vectTopLeftCorner - vectTopRightCorner);
     }
 
 

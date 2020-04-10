@@ -57,14 +57,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataChanged: 1
-  plotLength: 5
-  plotHeight: 5
+  plotLength: 400
+  plotHeight: 400
   plotColor:
     serializedVersion: 2
     rgba: 4282993081
   featureColors: []
   spacing: 0
-  featureTypeText: {fileID: 4874845225336682002}
 --- !u!23 &1668697730447907937
 MeshRenderer:
   m_ObjectHideFlags: 0
