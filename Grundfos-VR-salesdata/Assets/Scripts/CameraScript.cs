@@ -18,11 +18,13 @@ public class CameraScript : MonoBehaviour
 
     [SerializeField]
     public Text featureTypeText;
+    public int index1;
 
     // Use this for initialization
     void Start()
     {
-
+        index1 = 11;
+        featureTypeText.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -51,24 +53,48 @@ public class CameraScript : MonoBehaviour
 
             Vector3 touchPosVector = new Vector3(hit.collider.gameObject.transform.position.x, hit.collider.gameObject.transform.position.y, hit.collider.transform.position.z);
             touchPosVector = hit.point - touchPosVector;
-            // Debug.Log("world coords : " + hit.point);
-            // Debug.Log("coords on the barchart" + touchPosVector.ToString());
 
+
+
+            // Debug.Log("world coords : " + hit.point);
+            // Debug.Log("coords on the barchart" + touchPosVector.ToString());    
             if (createMesh)
             {
                 // float spacing1 = createMesh.GetComponent<CreateMesh>().spacing;
-                featureTypeText.gameObject.SetActive(true);
-                featureTypeText.text = createMesh.GetComponent<CreateMesh>().setTextBox(touchPosVector);
-                featureTypeText.gameObject.transform.position = hit.point;
+                int index = createMesh.GetIndexByPos(touchPosVector);
+                if (index1 != index)
+                {
+
+
+                    featureTypeText.gameObject.SetActive(true);
+                    featureTypeText.text = createMesh.dataAverages[createMesh.GetComponent<CreateMesh>().GetIndexByPos(touchPosVector)].ToString();
+
+
+                    featureTypeText.GetComponent<RectTransform>().position = new Vector3(createMesh.getTextPos(index).x, createMesh.getTextPos(index).y + 10, createMesh.getTextPos(index).z - 5);
+                    Debug.Log("assigned pos  = " + createMesh.getTextPos(index));
+                    index1 = index;
+
+                }
+
+
             }
             else
             {
 
+
                 createMesh = GameObject.FindObjectOfType<CreateMesh>();
+
+
                 // createMesh.dataAverages;
             }
         }
-        //featureTypeText.gameObject.SetActive(false);
+        if (hit.collider == false && featureTypeText.IsActive())
+        {
+            featureTypeText.gameObject.SetActive(false);
+            index1 = 11;
+            // Debug.Log("no collider hit");
+        }
+        //
     }
 
 
