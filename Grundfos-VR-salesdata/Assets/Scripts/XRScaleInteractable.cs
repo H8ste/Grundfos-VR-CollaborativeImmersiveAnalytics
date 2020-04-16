@@ -67,7 +67,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
     private InitialGrab initialGrab = new InitialGrab(false, new Vector3(), new Vector3());
 
 
-    private int prevIndex = -1;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -180,33 +180,6 @@ namespace UnityEngine.XR.Interaction.Toolkit
       // RegisteredInteractionManager.UnregisterInteractable(this);
       // RegisteredInteractionManager = null;
       BigHack();
-    }
-
-    public void XRPointerHit(Vector3 hitPosition)
-    {
-
-      // float spacing1 = createMesh.GetComponent<CreateMesh>().spacing;
-      int index = transform.GetComponent<CreateMesh>().GetIndexByPos(hitPosition);
-      if (index != prevIndex)
-      {
-        prevIndex = index;
-        transform.GetComponentInChildren<Text>().transform.gameObject.SetActive(true);
-        transform.GetComponentInChildren<Text>().text = transform.GetComponent<CreateMesh>().
-          dataAverages[index].ToString();
-        // featureTypeText.gameObject.SetActive(true);
-        // featureTypeText.text = createMesh.dataAverages[createMesh.GetComponent<CreateMesh>().GetIndexByPos(touchPosVector)].ToString();
-        Vector3 tempPos = transform.GetComponent<CreateMesh>().getTextPos(index);
-        transform.GetComponentInChildren<Text>().transform.position = new Vector3(tempPos.x, tempPos.y + 10, tempPos.z - 5);
-        // Debug.Log("assigned pos  = " + createMesh.getTextPos(index));
-
-
-      }
-      Debug.Log("This interactable was hit at position: " + hitPosition);
-    }
-
-    public void XRNoPointerHit()
-    {
-      transform.GetComponentInChildren<Text>().transform.gameObject.SetActive(false);
     }
 
 

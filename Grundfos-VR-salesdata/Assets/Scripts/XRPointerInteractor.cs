@@ -4,15 +4,16 @@ using UnityEngine;
 // using Unity.Oculus.XR;
 // using Unit
 using Unity.XR.Oculus;
+// using UnityEngine
+public enum HandSide
+{
+  Left,
+  Right
+}
+
 namespace UnityEngine.XR.Interaction.Toolkit
 {
 
-  // using UnityEngine
-  public enum HandSide
-  {
-    Left,
-    Right
-  }
 
   public class XRPointerInteractor : MonoBehaviour
   {
@@ -24,6 +25,11 @@ namespace UnityEngine.XR.Interaction.Toolkit
     private UnityEngine.XR.InputDevice hand;
 
     private bool controllerFound = false;
+
+    private RaycastHit prevHit;
+
+    private bool alreadyDeleted = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -59,43 +65,36 @@ namespace UnityEngine.XR.Interaction.Toolkit
           //   out hit, Mathf.Infinity, layerMask);
           if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 50f, layerMask))
           {
+            alreadyDeleted = false;
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
             // Debug.Log("Did Hit");
-            hit.transform.GetComponent<XRScaleInteractable>().XRPointerHit(hit.point - hit.collider.gameObject.transform.position);
+            hit.transform.GetComponent<HandlePoints>().XRPointerHit(hit.point - hit.collider.gameObject.transform.position, handSide, hit.point + new Vector3(0, 0, -0.02f));
+            prevHit = hit;
           }
           else
           {
-            hit.transform.GetComponent<XRScaleInteractable>().XRNoPointerHit();
+            if (!alreadyDeleted)
+            {
+              alreadyDeleted = true;
+              prevHit.transform.GetComponent<HandlePoints>().XRNoPointerHit(handSide);
+            }
+
+
           }
-          // Debug.DrawRay(ray.origin, ray.direction * 15, Color.yellow);
-        }
-
-
-        // Unity.XR.Oculus.OculusUsages.indexTouch
-        if (handSide == HandSide.Left)
-        {
-          // Debug.Log(OVRInput.Get(OVRInput.RawTouch.));
-          //   Debug.Log(UnityEngine.XR.CommonUsages.indexTouch);
         }
         else
         {
-          //   Debug.Log(OVRInput.GetUp(OVRInput.Touch.PrimaryIndexTrigger, OVRInput.Controller.RHand));
-          //Debug.Log(OVRInput.Get(OVRInput.RawTouch.RIndexTrigger));
+          if (!alreadyDeleted)
+          {
+            alreadyDeleted = true;
+            if (prevHit.point != null)
+            {
+              prevHit.transform.GetComponent<HandlePoints>().XRNoPointerHit(handSide);
+            }
 
+          }
         }
-        // Debug.Log(UnityEngine.XR.CommonUsages.triggerButton.Touch);
 
-
-
-        // hand.TryGetFeatureValue(Unity.XR.Oculus.OculusUsages.indexTouch, out pointerValue);
-        // if (true)
-        // {
-        //   Debug.Log("Is pointing: " + pointerValue);
-        // }
-        // else
-        // {
-        //   //   Debug.Log("Couldn't check value");
-        // }
       }
       else
       {
@@ -120,10 +119,6 @@ namespace UnityEngine.XR.Interaction.Toolkit
       }
     }
   }
-
-
-
-
 }
 
 
