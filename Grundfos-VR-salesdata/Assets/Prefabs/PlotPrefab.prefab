@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 1668697730447907938}
   - component: {fileID: 1668697730447907937}
   - component: {fileID: 8821875305138337749}
-  - component: {fileID: 8725483061475065751}
-  m_Layer: 0
+  - component: {fileID: 9048682712401330309}
+  - component: {fileID: 8861786744380597157}
+  m_Layer: 11
   m_Name: PlotPrefab
   m_TagString: PlotMesh
   m_Icon: {fileID: 0}
@@ -56,6 +57,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c2141395f7d51947880e3c20b8d3d0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dataChanged: 1
+  plotLength: 5
+  plotHeight: 5
+  plotColor:
+    serializedVersion: 2
+    rgba: 0
+  featureColors: []
+  spacing: 0
 --- !u!23 &1668697730447907937
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -111,7 +120,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8725483061475065751
+--- !u!114 &9048682712401330309
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,7 +129,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1668697730447907967}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
+  m_Script: {fileID: 11500000, guid: 160667e0212d0cf45b5af13e5212251e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
@@ -153,38 +162,22 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_CustomReticle: {fileID: 0}
-  m_AttachTransform: {fileID: 0}
-  m_AttachEaseInTime: 0.15
-  m_MovementType: 1
-  m_TrackPosition: 1
-  m_SmoothPosition: 0
-  m_SmoothPositionAmount: 5
-  m_TightenPosition: 0.5
-  m_TrackRotation: 1
-  m_SmoothRotation: 0
-  m_SmoothRotationAmount: 5
-  m_TightenRotation: 0.5
-  m_ThrowOnDetach: 1
-  m_ThrowSmoothingDuration: 0.25
-  m_ThrowSmoothingCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  m_ThrowVelocityScale: 1.5
-  m_ThrowAngularVelocityScale: 0.25
-  m_GravityOnDetach: 0
-  m_RetainTransformParent: 1
+--- !u!114 &8861786744380597157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668697730447907967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 991c69b8a1b6a444a9177914f77cf7d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TintColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  m_TintOnHover: 1
+  m_TintOnSelection: 1
+  m_TintRenderers: []
 --- !u!1 &6935024557541002046
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,7 +189,7 @@ GameObject:
   - component: {fileID: 8093467343264750211}
   - component: {fileID: 9037292427310011260}
   - component: {fileID: 4874845225336682002}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: FeatureAvarageValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}

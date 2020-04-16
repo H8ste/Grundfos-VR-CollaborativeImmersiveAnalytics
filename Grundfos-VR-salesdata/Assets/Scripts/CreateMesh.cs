@@ -27,23 +27,18 @@ public class Exist
 public class CreateMesh : MonoBehaviour
 {
   public int plotID { get; private set; }
-  Mesh mesh;
-  Vector3[] vertices;
-  int[] triangles;
-  List<System.String>[] data;
-  GameObject label1;
-  GameObject label2;
+  Mesh mesh; Vector3[] vertices; int[] triangles;
+  List<System.String>[] data; GameObject label1; GameObject label2;
 
   public float[] dataAverages { get; set; }
+
   public bool dataChanged = true;
 
   private List<System.String>[] dataCompared;
 
-  public float plotLength = 5f, plotHeight = 5f;
-  private float LplotLength = 5f, LplotHeight = 5f;
+  public float plotLength = 5f, plotHeight = 5f; private float LplotLength = 5f, LplotHeight = 5f;
 
-  public Color32 plotColor;
-  private Color32 LplotColor;
+  public Color32 plotColor; private Color32 LplotColor;
 
   public Color32[] featureColors;
 
@@ -97,8 +92,9 @@ public class CreateMesh : MonoBehaviour
       Debug.Log("Mesh Collider Created");
       Debug.Log(collider.bounds);
       meshColiderBool = true;
-      GetComponent<XRGrabInteractable>().colliders.Clear();
-      GetComponent<XRGrabInteractable>().colliders.Add(collider);
+      GetComponent<XRScaleInteractable>().colliders.Clear();
+      GetComponent<XRScaleInteractable>().colliders.Add(collider);
+      GetComponent<XRScaleInteractable>().BigHack();
       // gameObject.GetComponent<XRSimpleInteractable>().colliders = GetComponent<MeshFilter>().mesh;
     }
 

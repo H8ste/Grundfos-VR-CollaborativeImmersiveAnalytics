@@ -179,6 +179,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
     {
       if (m_Interactables.Contains(interactable))
       {
+        Debug.Log("Unregistering interactable ");
         m_Interactables.Remove(interactable);
 
         foreach (var collider in interactable.colliders)
@@ -190,6 +191,10 @@ namespace UnityEngine.XR.Interaction.Toolkit
                 if (interactable is ARBaseGestureInteractable)
 	                m_GestureInteractablesNeedReconnect = true;
 #endif
+      }
+      else
+      {
+        Debug.Log("Interactable wasn't registered beforehand");
       }
     }
 

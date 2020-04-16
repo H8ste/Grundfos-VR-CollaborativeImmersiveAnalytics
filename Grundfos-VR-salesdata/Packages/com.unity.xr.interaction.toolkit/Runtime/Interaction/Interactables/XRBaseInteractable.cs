@@ -70,6 +70,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
     public bool isSelected { get; private set; }
 
     XRInteractionManager m_RegisteredInteractionManager = null;
+    public XRInteractionManager RegisteredInteractionManager { get { return m_RegisteredInteractionManager; } set { m_RegisteredInteractionManager = value; } }
 
     [Header("Interactable Events")]
 
@@ -153,17 +154,36 @@ namespace UnityEngine.XR.Interaction.Toolkit
       }
     }
 
+    public void BigHack()
+    {
+      if (m_RegisteredInteractionManager != null)
+      {
+        Debug.Log("Unregestering it");
+        m_RegisteredInteractionManager.UnregisterInteractable(this);
+        m_RegisteredInteractionManager = null;
+      }
+      if (m_InteractionManager)
+      {
+        Debug.Log("Regestering it");
+        m_InteractionManager.RegisterInteractable(this);
+        m_RegisteredInteractionManager = m_InteractionManager;
+      }
+    }
+
     void RegisterWithInteractionMananger()
     {
+      Debug.Log("Checking to see if interactable is already registered");
       if (m_InteractionManager != m_RegisteredInteractionManager)
       {
         if (m_RegisteredInteractionManager != null)
         {
+          Debug.Log("Unregestering it");
           m_RegisteredInteractionManager.UnregisterInteractable(this);
           m_RegisteredInteractionManager = null;
         }
         if (m_InteractionManager)
         {
+          Debug.Log("Regestering it");
           m_InteractionManager.RegisterInteractable(this);
           m_RegisteredInteractionManager = m_InteractionManager;
         }

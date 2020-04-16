@@ -27,7 +27,10 @@ public class GlobalPlotController : MonoBehaviour
       debugInstance.dataReader = gameObject.GetComponent<DataReader>();
 
       GameObject tempPlot = GameObject.Instantiate(debugInstance.plotPrefab);
-      tempPlot.GetComponent<CreateMesh>().Create((int)Random.Range(0, debugInstance.dataReader.GetHeaders().Length - 1), (int)Random.Range(0, debugInstance.dataReader.GetHeaders().Length - 1), debugInstance.dataReader);
+      // tempPlot.GetComponent<CreateMesh>().Create((int)Random.Range(0, debugInstance.dataReader.GetHeaders().Length - 1), (int)Random.Range(0, debugInstance.dataReader.GetHeaders().Length - 1), debugInstance.dataReader);
+      tempPlot.GetComponent<CreateMesh>().Create(11, 7, debugInstance.dataReader);
+
+
       AddPlot(tempPlot);
     }
 

@@ -57,7 +57,7 @@ public class CameraScript : MonoBehaviour
 
 
             // Debug.Log("world coords : " + hit.point);
-            // Debug.Log("coords on the barchart" + touchPosVector.ToString());    
+            // Debug.Log("coords on the barchart" + touchPosVector.ToString());
             if (createMesh)
             {
                 // float spacing1 = createMesh.GetComponent<CreateMesh>().spacing;
