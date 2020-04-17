@@ -29,6 +29,8 @@ public class CreateMesh : MonoBehaviour
   public int plotID { get; private set; }
   Mesh mesh; Vector3[] vertices; int[] triangles;
   List<System.String>[] data; GameObject label1; GameObject label2;
+  GameObject myCanvas1;
+  GameObject myCanvas2;
 
   public float[] dataAverages { get; set; }
 
@@ -63,11 +65,14 @@ public class CreateMesh : MonoBehaviour
     UpdateMesh();
 
     label1 = new GameObject("myLabel1");
-    label1.transform.SetParent(this.transform);
-
+    myCanvas1.AddComponent<Canvas>();
     Text myText = label1.AddComponent<Text>();
-    myText.text = "LLLLLLLLLLLLEEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTT MMMMMMMMMMMMMMMMMEEEEEEEEEEEEEEEEEEEEE CCCCCCCCCCCCRRRRRRRRRRRRYYYYYYYYYYYYYYYYYYYY";
+    myText.text = strFtr1;
     myText.fontSize = 26;
+    //myText.transform.Width= 200; 
+    myText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+    myText.transform.localPosition = new Vector3(50f, -50f, -0.2f);
+    myCanvas1.transform.localScale = new Vector3(0.01f, 0.01f, 1);
 
 
     data = dataReader.GetData();
@@ -77,6 +82,18 @@ public class CreateMesh : MonoBehaviour
     UpdateMesh();
     mesh.RecalculateNormals();
     meshColiderBool = false;
+
+    label2.transform.SetParent(myCanvas2.transform);
+   // label2.GetComponent<RectTransform>().sizeDelta.x=200;
+
+ 
+    Text myText2 = label2.AddComponent<Text>();
+    myText2.text = strFtr2;
+    myText2.fontSize = 26;
+    //myText2.transform.Width= 200; 
+    myText2.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+    myText2.transform.localPosition = new Vector3(-100, 50f, -0.2f);
+    myCanvas2.transform.localScale = new Vector3(0.01f, 0.01f, 1);
 
   }
 
