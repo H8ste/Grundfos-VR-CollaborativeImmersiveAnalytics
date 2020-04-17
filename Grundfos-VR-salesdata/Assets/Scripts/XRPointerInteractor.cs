@@ -86,11 +86,11 @@ namespace UnityEngine.XR.Interaction.Toolkit
         {
           if (!alreadyDeleted)
           {
-            alreadyDeleted = true;
-            if (prevHit.point != null)
-            {
-              prevHit.transform.GetComponent<HandlePoints>().XRNoPointerHit(handSide);
-            }
+            // alreadyDeleted = true;
+            // if (prevHit.point != null)
+            // {
+            //   prevHit.transform.GetComponent<HandlePoints>().XRNoPointerHit(handSide);
+            // }
 
           }
         }

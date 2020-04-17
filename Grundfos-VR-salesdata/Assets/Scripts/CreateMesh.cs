@@ -309,24 +309,18 @@ public class CreateMesh : MonoBehaviour
 
   public int GetIndexByPos(Vector3 mousePosInMesh)
   {
-
-
-
-    //spacing dataAverages[] featureTypeList[] featureTypeText
-    //plotLenght
     if (featureTypeList != null)
     {
 
       float xPosMouse = mousePosInMesh.x;
-      float index = (xPosMouse / plotLength) * featureTypeList.Count;
-      int index1 = (int)index;
+      int index = (int)((xPosMouse / plotLength) * featureTypeList.Count);
 
 
       previousMousePos = mousePosInMesh;
 
-      // Debug.Log(dataAverages[index1 + 1].ToString());
+      Debug.Log("Position in array of bars: " + index + ". Avg: " + dataAverages[index + 1].ToString());
 
-      return index1;
+      return index;
 
 
     }

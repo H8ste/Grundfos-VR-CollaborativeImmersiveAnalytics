@@ -65,7 +65,7 @@ public class HandlePoints : MonoBehaviour
     // if (index != prevIndex)
     // {
     prevIndex = index;
-    temporaryTextHolder[(int)handside].GetComponent<Text>().text = createMeshRef.dataAverages[index].ToString();
+    temporaryTextHolder[(int)handside].GetComponent<Text>().text = createMeshRef.dataAverages[index + 1].ToString();
     Vector3 tempPos = transform.GetComponent<CreateMesh>().getTextPos(index);
     temporaryTextHolder[(int)handside].transform.position = hitWorldSpace;
     // }
