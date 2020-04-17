@@ -5,10 +5,35 @@ using UnityEngine;
 public class GlobalPlotController : MonoBehaviour
 {
   private List<GameObject> plots;
+
+  [System.Serializable]
+  public class Debugger
+  {
+    public bool spawnPlotOnStart = false;
+    public GameObject plotPrefab;
+    [HideInInspector]
+    public DataReader dataReader;
+  }
+
+  public Debugger debugInstance = new Debugger();
   // Start is called before the first frame update
   void Start()
   {
     plots = new List<GameObject>();
+
+    if (debugInstance.spawnPlotOnStart)
+    {
+      gameObject.AddComponent<DataReader>();
+      debugInstance.dataReader = gameObject.GetComponent<DataReader>();
+
+      GameObject tempPlot = GameObject.Instantiate(debugInstance.plotPrefab);
+      // tempPlot.GetComponent<CreateMesh>().Create((int)Random.Range(0, debugInstance.dataReader.GetHeaders().Length - 1), (int)Random.Range(0, debugInstance.dataReader.GetHeaders().Length - 1), debugInstance.dataReader);
+      tempPlot.GetComponent<CreateMesh>().Create(11, 7, debugInstance.dataReader);
+
+
+      AddPlot(tempPlot);
+    }
+
   }
 
   public void AddPlot(GameObject plotToAdd)
