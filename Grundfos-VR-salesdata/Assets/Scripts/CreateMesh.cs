@@ -28,7 +28,7 @@ public class CreateMesh : MonoBehaviour
 {
   public int plotID { get; private set; }
   Mesh mesh; Vector3[] vertices; int[] triangles;
-  List<System.String>[] data; GameObject label1; GameObject label2;
+  List<System.String>[] data; GameObject xLabel; GameObject yLabel;
   GameObject myCanvas1;
   GameObject myCanvas2;
 
@@ -47,7 +47,8 @@ public class CreateMesh : MonoBehaviour
   private int featureOne, featureTwo;
 
   private DataReader dataReader;
-  bool meshColiderBool;
+  private bool meshColiderBool;
+  public bool MeshColliderBool { get { return meshColiderBool; } set { meshColiderBool = value; } }
 
   public float spacing;
 
@@ -58,21 +59,32 @@ public class CreateMesh : MonoBehaviour
   public void Create(int _featureOne, int _featureTwo, DataReader _dataReader)
   {
     featureOne = _featureOne; featureTwo = _featureTwo; dataReader = _dataReader;
-    string strFtr1 = dataReader.GetHeaders()[featureOne];
-    string strFtr2 = dataReader.GetHeaders()[featureTwo];
+
 
     mesh = new Mesh(); GetComponent<MeshFilter>().mesh = mesh;
     UpdateMesh();
 
-    label1 = new GameObject("myLabel1");
-    myCanvas1.AddComponent<Canvas>();
-    Text myText = label1.AddComponent<Text>();
-    myText.text = strFtr1;
-    myText.fontSize = 26;
-    //myText.transform.Width= 200; 
-    myText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-    myText.transform.localPosition = new Vector3(50f, -50f, -0.2f);
-    myCanvas1.transform.localScale = new Vector3(0.01f, 0.01f, 1);
+    string xFeature = dataReader.GetHeaders()[featureOne];
+    string yFeature = dataReader.GetHeaders()[featureTwo];
+
+
+    xLabel = new GameObject("xLabel");
+    yLabel = new GameObject("yLabel");
+    xLabel.transform.SetParent(gameObject.GetComponentInChildren<Canvas>().transform);
+    yLabel.transform.SetParent(gameObject.GetComponentInChildren<Canvas>().transform);
+    xLabel.transform.localScale = new Vector3(1f, 1f, 1f);
+    yLabel.transform.localScale = new Vector3(1f, 1f, 1f);
+
+    Text xLabelText = xLabel.AddComponent<Text>();
+    xLabelText.text = xFeature;
+    xLabelText.fontSize = 26;
+    xLabelText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+    xLabelText.transform.localPosition = new Vector3(50f, -50f, -0.2f);
+    Text yLabelText = yLabel.AddComponent<Text>();
+    yLabelText.text = yFeature;
+    yLabelText.fontSize = 26;
+    yLabelText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+    yLabelText.transform.localPosition = new Vector3(-100, 50f, -0.2f);
 
 
     data = dataReader.GetData();
@@ -83,17 +95,7 @@ public class CreateMesh : MonoBehaviour
     mesh.RecalculateNormals();
     meshColiderBool = false;
 
-    label2.transform.SetParent(myCanvas2.transform);
-   // label2.GetComponent<RectTransform>().sizeDelta.x=200;
 
- 
-    Text myText2 = label2.AddComponent<Text>();
-    myText2.text = strFtr2;
-    myText2.fontSize = 26;
-    //myText2.transform.Width= 200; 
-    myText2.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-    myText2.transform.localPosition = new Vector3(-100, 50f, -0.2f);
-    myCanvas2.transform.localScale = new Vector3(0.01f, 0.01f, 1);
 
   }
 
@@ -117,6 +119,7 @@ public class CreateMesh : MonoBehaviour
 
 
   }
+
 
   public void UpdateMesh()
   {
@@ -328,41 +331,20 @@ public class CreateMesh : MonoBehaviour
   {
     if (featureTypeList != null)
     {
-
       float xPosMouse = mousePosInMesh.x;
-      int index = (int)((xPosMouse / plotLength) * featureTypeList.Count);
-
-
+      int index = (int)(((xPosMouse / (plotLength * transform.localScale.x)) * featureTypeList.Count));
       previousMousePos = mousePosInMesh;
-
       Debug.Log("Position in array of bars: " + index + ". Avg: " + dataAverages[index + 1].ToString());
-
       return index;
-
-
     }
-
-
-
-
     return -1;
   }
 
   public Vector3 getTextPos(int index)
   {
-
-
-    //Debug.Log("index = " + index);
-
-
     Vector3 vectTopLeftCorner = new Vector3(index * spacing, Remap(dataAverages[index + 1], 0, dataAverages[0], 0, plotHeight), 0);
     Vector3 vectTopRightCorner = new Vector3(index * spacing + spacing, Remap(dataAverages[index + 1], 0, dataAverages[0], 0, plotHeight), 0);
 
-    // Debug.Log("Vect Top left = " + vectTopLeftCorner);
-    // Debug.Log("VectTopRight = " + vectTopRightCorner);
-    //Debug.Log(((vectTopRightCorner - vectTopLeftCorner) / 2).ToString());
     return vectTopRightCorner + (vectTopLeftCorner - vectTopRightCorner);
   }
-
-
 }

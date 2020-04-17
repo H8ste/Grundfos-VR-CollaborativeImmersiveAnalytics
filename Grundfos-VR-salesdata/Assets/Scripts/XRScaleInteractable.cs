@@ -172,6 +172,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
         float scaleMultiplier = Vector3.Magnitude(newDistance) - Vector3.Magnitude(initialDistance.distanceVector);
 
         transform.localScale = new Vector3(initialDistance.initialScale.x * (1 + scaleMultiplier), initialDistance.initialScale.y * (1 + scaleMultiplier), 1f);
+        gameObject.GetComponent<CreateMesh>().MeshColliderBool = false;
       }
     }
 
