@@ -27,6 +27,9 @@ public class CreateMesh : MonoBehaviour
   Vector3[] vertices;
   int[] triangles;
   List<System.String>[] data;
+
+  GameObject myCanvas1;
+  GameObject myCanvas2;
   GameObject label1;
   GameObject label2;
 
@@ -61,11 +64,38 @@ public class CreateMesh : MonoBehaviour
     UpdateMesh();
 
     label1 = new GameObject("myLabel1");
-    label1.transform.SetParent(this.transform);
+    myCanvas1 = new GameObject("myCanvas1");
+    label2 = new GameObject("myLabel2");
+    myCanvas2 = new GameObject("myCanvas2");
+
+    myCanvas1.AddComponent<Canvas>();
+    myCanvas2.AddComponent<Canvas>();
+    myCanvas1.transform.SetParent(this.transform);
+    myCanvas2.transform.SetParent(this.transform);
+    
+    label1.transform.SetParent(myCanvas1.transform);
+    //label1.GetComponent<RectTransform>().sizeDelta.x=200;
+
  
     Text myText = label1.AddComponent<Text>();
-    myText.text = "LLLLLLLLLLLLEEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTT MMMMMMMMMMMMMMMMMEEEEEEEEEEEEEEEEEEEEE CCCCCCCCCCCCRRRRRRRRRRRRYYYYYYYYYYYYYYYYYYYY";
+    myText.text = strFtr1;
     myText.fontSize = 26;
+    //myText.transform.Width= 200; 
+    myText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+    myText.transform.localPosition = new Vector3(50f, -50f, -0.2f);
+    myCanvas1.transform.localScale = new Vector3(0.01f, 0.01f, 1);
+
+    label2.transform.SetParent(myCanvas2.transform);
+   // label2.GetComponent<RectTransform>().sizeDelta.x=200;
+
+ 
+    Text myText2 = label2.AddComponent<Text>();
+    myText2.text = strFtr2;
+    myText2.fontSize = 26;
+    //myText2.transform.Width= 200; 
+    myText2.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+    myText2.transform.localPosition = new Vector3(-100, 50f, -0.2f);
+    myCanvas2.transform.localScale = new Vector3(0.01f, 0.01f, 1);
 
   }
 
