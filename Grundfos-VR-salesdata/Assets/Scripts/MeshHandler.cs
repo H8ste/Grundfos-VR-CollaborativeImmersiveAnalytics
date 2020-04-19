@@ -48,6 +48,10 @@ public class PlotOptions
   [HideInInspector]
   public TypeOfPlot PlotType { get { return plotType; } set { plotType = value; } }
 
+  string[] specifiedOrder = null;
+  [HideInInspector]
+  public string[] SpecifiedOrder { get { return specifiedOrder; } set { specifiedOrder = value; } }
+
   public PlotOptions()
   {
     this.plotLength = 5f; this.plotHeight = 5f;
@@ -57,8 +61,6 @@ public class PlotOptions
 [Serializable]
 public class Plot
 {
-  public float test = 0;
-
   [SerializeField]
   PlotOptions plotOptions;
   [HideInInspector]
@@ -115,6 +117,8 @@ public class MeshHandler : MonoBehaviour
   [SerializeField]
   public Plot plot;
 
+  private int[] sortedOrder;
+
 
   [SerializeField] bool plotOptionsChanged = false;
   bool plotMeshChanged = false;
@@ -141,7 +145,6 @@ public class MeshHandler : MonoBehaviour
 
     if (plotOptionsChanged)
     {
-      Debug.Log("Recomputing colors");
       plotOptionsChanged = false;
 
       Color32[] colors = new Color32[plot.Vertices.Length];
@@ -290,13 +293,83 @@ public class MeshHandler : MonoBehaviour
 
     List<System.String>[] comparison = new List<System.String>[seenBefore.Count];
     plot.DataComparedHeaders = new List<string>();
-    for (int i = 0; i < comparison.Length; i++)
+
+    if (plot.PlotOptions.SpecifiedOrder == null)
     {
-      comparison[i] = seenBefore[i].content;
-      plot.DataComparedHeaders.Add(seenBefore[i].header);
+      sortedOrder = findSortedOrder(seenBefore);
+
+      int i = 0;
+      foreach (var index in sortedOrder)
+      {
+        comparison[i] = seenBefore[index].content;
+        plot.DataComparedHeaders.Add(seenBefore[index].header);
+        i++;
+      }
+
+      // foreach (var header in plot.DataComparedHeaders)
+      // {
+      //   Debug.Log("header: " + header);
+      // }
+
+    }
+    else
+    {
+      // TODO: Add code to use mapping provided from user instead of return value from findSortedOrder
     }
 
     return comparison;
+  }
+
+  private int[] findSortedOrder(List<ComparedRow> input)
+  {
+    string[] arrayToSort = new string[input.Count];
+
+    // Fill an int array : [0, 1, 3, ..., length]
+    int[] mapping = Enumerable.Range(0, arrayToSort.Length).Select(i => (int)i).ToArray();
+
+    for (int i = 0; i < input.Count; i++)
+    {
+      arrayToSort[i] = input[i].header;
+    }
+    string temp;
+    int tempMapping;
+    // Loops through array from back and from the front, sorting it by eather greatest number or greatest string value (alphabetically)
+    for (int i = 1; i < arrayToSort.Length; i++)
+    {
+      for (int j = 0; j < arrayToSort.Length - 1; j++)
+      {
+        if (float.TryParse(arrayToSort[j], out _))
+        {
+          // Numbers
+          if (float.Parse(arrayToSort[j]) > float.Parse(arrayToSort[j + 1]))
+          {
+            temp = arrayToSort[j];
+            arrayToSort[j] = arrayToSort[j + 1];
+            arrayToSort[j + 1] = temp;
+
+            tempMapping = mapping[j];
+            mapping[j] = mapping[j + 1];
+            mapping[j + 1] = tempMapping;
+          }
+        }
+        else
+        {
+          // Letters
+          if (arrayToSort[j][0] > arrayToSort[j + 1][0])
+          {
+            temp = arrayToSort[j];
+            arrayToSort[j] = arrayToSort[j + 1];
+            arrayToSort[j + 1] = temp;
+
+            tempMapping = mapping[j];
+            mapping[j] = mapping[j + 1];
+            mapping[j + 1] = tempMapping;
+          }
+        }
+      }
+    }
+
+    return mapping;
   }
 
   // Returns found vertices for data input
@@ -305,12 +378,7 @@ public class MeshHandler : MonoBehaviour
     spacing = plot.PlotOptions.PlotLength / input.Length;
     Vector3[] foundVertices = new Vector3[input.Length * 4];
 
-    // If new features or dataset has changed, recalculate Averages
-    // if (dataChanged)
-    // {
     plot.DataAverages = FindMaxAvg(input);
-    // dataChanged = false;
-    // }
 
     for (int i = 0; i < input.GetLength(0); i++)
     {
@@ -328,7 +396,7 @@ public class MeshHandler : MonoBehaviour
   {
     List<int> returnList = new List<int>();
     int k = 0;
-    // TODO: check  if input.length is different form plot.Datacompared.length
+
     for (int i = 0; i < plot.DataCompared.Length; i++)
     {
       returnList.Add(k);//first
@@ -366,6 +434,7 @@ public class MeshHandler : MonoBehaviour
   {
     float avgVal = 0;
     int lengthDeduct = 0;
+
     // Checks if input is ordinal -> Yes: Return occurence    No: Return Average
     if (float.TryParse(input[0], out _))
     {
