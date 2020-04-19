@@ -49,7 +49,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
         if (hand.TryGetFeatureValue(UnityEngine.XR.CommonUsages.indexTouch, out pointerValue) && pointerValue < 1)
         {
           // we are point
-          Debug.Log("Is pointing: " + handSide);
+          // Debug.Log("Is pointing: " + handSide);
           Ray ray = new Ray(transform.position, transform.forward);
 
           // Bit shift the index of the layer (8) to get a bit mask
@@ -73,7 +73,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
           }
           else
           {
-            if (!alreadyDeleted)
+            if (!alreadyDeleted && prevHit.transform)
             {
               alreadyDeleted = true;
               prevHit.transform.GetComponent<HandlePoints>().XRNoPointerHit(handSide);
@@ -81,6 +81,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
 
 
           }
+          Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 5f, Color.yellow);
         }
         else
         {
@@ -98,7 +99,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
       }
       else
       {
-        Debug.Log("Couldn't find controller");
+        // Debug.Log("Couldn't find controller");
       }
 
       // Spawn ray

@@ -136,9 +136,6 @@ public class CreateMesh : MonoBehaviour
     {
       featureColors[i] = new Color32((byte)(int)Random.Range(0, 255f), (byte)(int)Random.Range(0, 255f), (byte)(int)Random.Range(0, 255f), 255);
     }
-
-
-
   }
 
   // Recomputes the vertices, triangles, and colors for mesh.

@@ -15,7 +15,7 @@ public class HandlePoints : MonoBehaviour
   private int prevIndex = -1;
 
   private GameObject canvasGameObject;
-  private CreateMesh createMeshRef;
+  private MeshHandler meshHandlerRef;
 
   private GameObject[] temporaryTextHolder = new GameObject[] { null, null };
 
@@ -34,8 +34,8 @@ public class HandlePoints : MonoBehaviour
 
     canvasGameObject.GetComponent<Canvas>().worldCamera = Camera.main;
 
-    if (!createMeshRef)
-      createMeshRef = gameObject.GetComponent<CreateMesh>();
+    if (!meshHandlerRef)
+      meshHandlerRef = gameObject.GetComponent<MeshHandler>();
 
     if (!textPrefab)
     {
@@ -54,7 +54,7 @@ public class HandlePoints : MonoBehaviour
   public void XRPointerHit(Vector3 hitPosition, HandSide handside, Vector3 hitWorldSpace)
   {
     previouslyAiming[(int)handside] = true;
-    int index = createMeshRef.GetIndexByPos(hitPosition);
+    int index = meshHandlerRef.GetIndexByPos(hitPosition);
     if (!temporaryTextHolder[(int)handside])
     {
       temporaryTextHolder[(int)handside] = Instantiate(textPrefab, hitPosition, Quaternion.identity);
@@ -65,8 +65,8 @@ public class HandlePoints : MonoBehaviour
     // if (index != prevIndex)
     // {
     prevIndex = index;
-    temporaryTextHolder[(int)handside].GetComponent<Text>().text = createMeshRef.dataAverages[index + 1].ToString();
-    Vector3 tempPos = transform.GetComponent<CreateMesh>().getTextPos(index);
+    temporaryTextHolder[(int)handside].GetComponent<Text>().text = meshHandlerRef.GetDataAverages()[index + 1].ToString();
+    Vector3 tempPos = meshHandlerRef.getTextPos(index);
     temporaryTextHolder[(int)handside].transform.position = hitWorldSpace;
     // }
     Debug.Log("This interactable was hit at position: " + hitPosition);
