@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.XR.Interaction.Toolkit;
+using System;
 
 public enum TypeOfPlot { Barchart };
 
@@ -21,26 +22,30 @@ public class ComparedRow
   }
 }
 
-
+[Serializable]
 public class PlotOptions
 {
   private float plotLength, plotHeight;
+  [HideInInspector]
   public float PlotLength { get { return plotLength; } set { plotLength = value; } }
+  [HideInInspector]
   public float PlotHeight { get { return plotHeight; } set { plotHeight = value; } }
 
 
   GameObject[] plotLabels;
-
+  [HideInInspector]
   public GameObject[] PlotLabels { get { return plotLabels; } set { plotLabels = value; } }
   // GameObject xLabel; GameObject yLabel;
   // public GameObject XLabel { get { return xLabel; } set { xLabel = value; } }
   // public GameObject YLabel { get { return yLabel; } set { yLabel = value; } }
-
+  [SerializeField]
   Color32[] featureColors;
+  [HideInInspector]
   public Color32[] FeatureColors { get { return featureColors; } set { featureColors = value; } }
 
 
   TypeOfPlot plotType;
+  [HideInInspector]
   public TypeOfPlot PlotType { get { return plotType; } set { plotType = value; } }
 
   public PlotOptions()
@@ -49,33 +54,48 @@ public class PlotOptions
   }
 }
 
+[Serializable]
 public class Plot
 {
+  public float test = 0;
+
+  [SerializeField]
   PlotOptions plotOptions;
+  [HideInInspector]
   public PlotOptions PlotOptions { get { return plotOptions; } set { plotOptions = value; } }
 
   List<System.String>[] data;
+  [HideInInspector]
   public List<System.String>[] Data { get { return data; } set { data = value; } }
 
   List<System.String>[] dataCompared;
+  [HideInInspector]
   public List<System.String>[] DataCompared { get { return dataCompared; } set { dataCompared = value; } }
 
   string[] dataHeaders;
+  [HideInInspector]
   public string[] DataHeaders { get { return dataHeaders; } set { dataHeaders = value; } }
 
   List<string> dataComparedHeaders = new List<string>();
+  [HideInInspector]
   public List<string> DataComparedHeaders { get { return dataComparedHeaders; } set { dataComparedHeaders = value; } }
 
   float[] dataAverages;
+  [HideInInspector]
   public float[] DataAverages { get { return dataAverages; } set { dataAverages = value; } }
 
   Mesh mesh; Vector3[] vertices; int[] triangles;
+  [HideInInspector]
   public Mesh Mesh { get { return mesh; } set { mesh = value; } }
+  [HideInInspector]
   public Vector3[] Vertices { get { return vertices; } set { vertices = value; } }
+  [HideInInspector]
   public int[] Triangles { get { return triangles; } set { triangles = value; } }
 
   private int featureOneIndex, featureTwoIndex;
+  [HideInInspector]
   public int FeatureOneIndex { get { return featureOneIndex; } set { featureOneIndex = value; } }
+  [HideInInspector]
   public int FeatureTwoIndex { get { return featureTwoIndex; } set { featureTwoIndex = value; } }
 
   public Plot()
@@ -92,36 +112,62 @@ public class MeshHandler : MonoBehaviour
   DataReader dataReader;
   float spacing;
 
-  Plot plot;
+  [SerializeField]
+  public Plot plot;
+
+
+  [SerializeField] bool plotOptionsChanged = false;
+  bool plotMeshChanged = false;
 
 
   // should only run content if anything is changed I think
   public void Render()
   {
-    plot.Mesh.Clear();
-    plot.Mesh.vertices = plot.Vertices;
-    plot.Mesh.triangles = plot.Triangles;
 
-    Color32[] colors = new Color32[plot.Vertices.Length];
-
-    for (int i = 0; i < colors.Length; i++)
+    if (plotMeshChanged)
     {
-      int colorIndex = (int)(((1 - (i / (plot.Vertices.Length * 1f))) * plot.DataCompared.Length) - 0.25);
-      colors[i] = plot.PlotOptions.FeatureColors[colorIndex];
-    }
-    plot.Mesh.colors32 = colors;
+      plotMeshChanged = false;
 
-    plot.Mesh.RecalculateNormals();
+      plot.Mesh.Clear();
+      plot.Mesh.vertices = plot.Vertices;
+      plot.Mesh.triangles = plot.Triangles;
+
+      plot.Mesh.RecalculateNormals();
+
+      GetComponent<MeshFilter>().mesh = plot.Mesh;
+
+      ReComputeColliders();
+    }
+
+    if (plotOptionsChanged)
+    {
+      Debug.Log("Recomputing colors");
+      plotOptionsChanged = false;
+
+      Color32[] colors = new Color32[plot.Vertices.Length];
+
+      for (int i = 0; i < colors.Length; i++)
+      {
+        int colorIndex = (int)(((1 - (i / (plot.Vertices.Length * 1f))) * plot.DataCompared.Length) - 0.25);
+        colors[i] = plot.PlotOptions.FeatureColors[colorIndex];
+      }
+      plot.Mesh.colors32 = colors;
+
+      plot.Mesh.RecalculateNormals();
+
+      GetComponent<MeshFilter>().mesh = plot.Mesh;
+    }
+
   }
 
   public void CreateNewPlot(int _featureOneIndex, int _featureTwoIndex, DataReader dataReaderRef, TypeOfPlot plotType)
   {
     plot = new Plot();
+
     plot.FeatureOneIndex = _featureOneIndex; plot.FeatureTwoIndex = _featureTwoIndex;
     dataReader = dataReaderRef;
 
     plot.Mesh = new Mesh();
-    GetComponent<MeshFilter>().mesh = plot.Mesh;
 
     ComputeMesh();
 
@@ -130,6 +176,10 @@ public class MeshHandler : MonoBehaviour
     SetupAxisLabels();
 
     plot.Mesh.RecalculateNormals();
+
+    plotOptionsChanged = true;
+    plotMeshChanged = true;
+    Render();
   }
 
   private void SetupAxisLabels()
@@ -185,8 +235,6 @@ public class MeshHandler : MonoBehaviour
 
     plot.Vertices = CreateChartOfType(plot.PlotOptions.PlotType);
     plot.Triangles = FindTriangles(plot.Vertices);
-
-    ReComputeColliders();
   }
 
   private void InitialiseMeshColors()
@@ -195,7 +243,7 @@ public class MeshHandler : MonoBehaviour
     for (int i = 0; i < plot.PlotOptions.FeatureColors.Length; i++)
     {
       // gives random value, should use colors in user-selected color array
-      plot.PlotOptions.FeatureColors[i] = new Color32((byte)(int)Random.Range(0, 255f), (byte)(int)Random.Range(0, 255f), (byte)(int)Random.Range(0, 255f), 255);
+      plot.PlotOptions.FeatureColors[i] = new Color32((byte)(int)UnityEngine.Random.Range(0, 255f), (byte)(int)UnityEngine.Random.Range(0, 255f), (byte)(int)UnityEngine.Random.Range(0, 255f), 255);
     }
   }
 
@@ -366,7 +414,7 @@ public class MeshHandler : MonoBehaviour
     {
       float xPosMouse = hitPosInMesh.x;
       int index = (int)(((xPosMouse / (plot.PlotOptions.PlotLength * transform.localScale.x)) * plot.DataComparedHeaders.Count));
-      Debug.Log("Position in array of bars: " + index + ". Avg: " + plot.DataAverages[index + 1].ToString());
+      // Debug.Log("Position in array of bars: " + index + ". Avg: " + plot.DataAverages[index + 1].ToString());
       return index;
     }
     return -1;
@@ -400,17 +448,17 @@ public class MeshHandler : MonoBehaviour
   {
     //Redo collider
     MeshCollider collider;
-    if (gameObject.GetComponent<MeshCollider>())
+    if (GetComponent<MeshCollider>())
     {
-      collider = gameObject.GetComponent<MeshCollider>();
+      Destroy(GetComponent<MeshCollider>());
     }
-    else
-    {
-      collider = gameObject.AddComponent<MeshCollider>();
-    }
-    collider.convex = true;
-    collider.convex = false;
+    collider = gameObject.AddComponent<MeshCollider>();
+
     collider.sharedMesh = GetComponent<MeshFilter>().mesh;
+    collider.convex = false;
+    // collider.sharedMaterial =h;
+    // collider.convex = false;
+
     // meshColiderBool = true;
     GetComponent<XRScaleInteractable>().colliders.Clear();
     GetComponent<XRScaleInteractable>().colliders.Add(collider);

@@ -69,7 +69,7 @@ public class HandlePoints : MonoBehaviour
     Vector3 tempPos = meshHandlerRef.getTextPos(index);
     temporaryTextHolder[(int)handside].transform.position = hitWorldSpace;
     // }
-    Debug.Log("This interactable was hit at position: " + hitPosition);
+    // Debug.Log("This interactable was hit at position: " + hitPosition);
   }
 
 
