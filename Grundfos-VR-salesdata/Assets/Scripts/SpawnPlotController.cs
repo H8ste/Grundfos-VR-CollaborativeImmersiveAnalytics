@@ -9,138 +9,87 @@ public class SpawnPlotController : MonoBehaviour
 {
   float minRot = 200f; float maxRot = 320f;
 
+
   public GameObject PlotControllerPrefab;
 
-  private GameObject LeftHandGameObject;
-  private GameObject RightHandGameObject;
-  private UnityEngine.XR.InputDevice LeftHandInputDevice = new UnityEngine.XR.InputDevice();
-  private UnityEngine.XR.InputDevice RightHandInputDevice = new UnityEngine.XR.InputDevice();
-  private XRDirectInteractor LeftHandDirectInteractor;
-  private XRDirectInteractor RightHandDirectInteractor;
+  private GameObject[] HandGameObjects;
+  private XRDirectInteractor[] HandDirectInteractors;
+  private XRRayInteractor[] HandXrayInteractors;
+  private UnityEngine.XR.InputDevice[] HandInputDevices;
 
   private GameObject spawnedPlotController;
-  // private Camera cameraForCanvas;
+  private int flippedHand = -1;
 
-  private bool[] alreadySpawned = new bool[2] { false, false };
-  private Vector3 leftOffset = new Vector3(-90f, -90f, 0);
-  private Vector3 rightOffset = new Vector3(90f, 90f, 0);
-
-  [HideInInspector]
-  public GameObject FlippedHand { get { return flippedHand; } private set { flippedHand = value; } }
-  private GameObject flippedHand = null;
-
-  [HideInInspector]
-  public GameObject NonFlippedHand { get { return nonFlippedHand; } private set { nonFlippedHand = value; } }
-  private GameObject nonFlippedHand = null;
-
-  // Start is called before the first frame update
   void Start()
   {
     XRController[] hands = gameObject.GetComponentsInChildren<XRController>();
-    LeftHandGameObject = hands[0].gameObject;
-    RightHandGameObject = hands[1].gameObject;
-
-    LeftHandDirectInteractor = LeftHandGameObject.GetComponent<XRDirectInteractor>();
-    RightHandDirectInteractor = RightHandGameObject.GetComponent<XRDirectInteractor>();
-    // cameraForCanvas = transform.parent.GetChild(0).GetComponent<Camera>();
-
+    HandGameObjects = new GameObject[hands.Length];
+    HandDirectInteractors = new XRDirectInteractor[hands.Length];
+    HandXrayInteractors = new XRRayInteractor[hands.Length];
+    HandInputDevices = new UnityEngine.XR.InputDevice[hands.Length];
+    for (int i = 0; i < HandGameObjects.Length; i++)
+    {
+      HandGameObjects[i] = hands[i].gameObject;
+      HandDirectInteractors[i] = HandGameObjects[i].GetComponent<XRDirectInteractor>();
+      HandXrayInteractors[i] = null;
+    }
   }
 
   void Update()
   {
     FindControllers();
 
-    // DirectInteractor Isn't even there
-    //  should check for menu
-    // DirectInteractor is there
-    //  but neither interactor is selected and active
-    //    Should check for menu
-
-
-
     if (MenuCouldBeUp() || isMenuUp())
     {
       // Debug.Log("Menu could be up");
-
       CheckForMenu();
       if (isMenuUp())
       {
-        if (NonFlippedHand && FlippedHand)
+        // Check if hand that is not flipped, currently has XRDirectInteractor
+        if (HandDirectInteractors[1 - flippedHand])
         {
-          // removes XRDirectInteractor on hand
-          XRDirectInteractor directInteractor = NonFlippedHand.GetComponent<XRDirectInteractor>();
-          if (directInteractor)
-          {
-            Destroy(directInteractor.attachTransform.gameObject);
-            Destroy(directInteractor);
-            // Debug.Log("Removed existing directInteractor");
-          }
+          // If it does, it should be removed
+          Destroy(HandDirectInteractors[1 - flippedHand].attachTransform.gameObject);
+          Destroy(HandDirectInteractors[1 - flippedHand]);
+          HandDirectInteractors[1 - flippedHand] = null;
+          // Debug.Log("Destroyed HandDirector for :" + (1 - flippedHand));
         }
+        // If it doesn't, check if it has xray
         else
         {
-          if (!LeftHandGameObject.GetComponent<XRDirectInteractor>() && !LeftHandGameObject.GetComponent<XRRayInteractor>())
+          if (!HandXrayInteractors[1 - flippedHand])
           {
-            // Debug.Log("Added xray");
-            XRRayInteractor ray = LeftHandGameObject.AddComponent<XRRayInteractor>();
-            // And Change XR Ray to be a line
-            ray.lineType = XRRayInteractor.LineType.ProjectileCurve;
-            ray.Velocity = 8;
-            ray.enabled = true;
-            LineRenderer lineRender = LeftHandGameObject.AddComponent<LineRenderer>();
-            XRInteractorLineVisual xRInteractorLineVisual = LeftHandGameObject.AddComponent<XRInteractorLineVisual>();
-          }
-          if (!RightHandGameObject.GetComponent<XRDirectInteractor>() && !RightHandGameObject.GetComponent<XRRayInteractor>())
-          {
-            // Debug.Log("Added xray");
-            XRRayInteractor ray = RightHandGameObject.AddComponent<XRRayInteractor>();
-            // And Change XR Ray to be a line
-            ray.lineType = XRRayInteractor.LineType.ProjectileCurve;
-            ray.Velocity = 8;
-            ray.enabled = true;
-            LineRenderer lineRender = RightHandGameObject.AddComponent<LineRenderer>();
-            XRInteractorLineVisual xRInteractorLineVisual = RightHandGameObject.AddComponent<XRInteractorLineVisual>();
+            // If it doesn't, add xray to that hand
+            HandXrayInteractors[1 - flippedHand] = HandGameObjects[1 - flippedHand].AddXrayComponent();
+            // Debug.Log("Added Xray for :" + (1 - flippedHand));
           }
         }
       }
       else
       {
-        // left
-        XRRayInteractor ray = LeftHandGameObject.GetComponent<XRRayInteractor>();
-        if (ray)
+        // Debug.Log("Menu could be up but it isn't");
+        // For each hand,
+        for (int i = 0; i < HandGameObjects.Length; i++)
         {
-          Destroy(LeftHandGameObject.GetComponent<XRInteractorLineVisual>());
-          Destroy(LeftHandGameObject.GetComponent<LineRenderer>());
-          Destroy(ray.attachTransform.gameObject);
-          Destroy(ray);
-          // Debug.Log("Removed XRRAY");
-        }
-        else
-        {
-          XRDirectInteractor directInteractor = LeftHandGameObject.GetComponent<XRDirectInteractor>();
-          if (!directInteractor)
+          // Check if hand has Xray Interactor Component on it
+          // If it does, destory component
+          if (HandXrayInteractors[i])
           {
-            LeftHandGameObject.AddComponent<XRDirectInteractor>();
-            // Debug.Log("Added XRDirectInteractor");
+            // Debug.Log("Destroyed Xray for :" + i);
+            HandXrayInteractors[i].RemoveXrayComponent();
+            // Destroy(HandXrayInteractors[i]);
+            HandXrayInteractors[i] = null;
           }
-        }
-
-        // right
-        ray = RightHandGameObject.GetComponent<XRRayInteractor>();
-        if (ray)
-        {
-          Destroy(RightHandGameObject.GetComponent<XRInteractorLineVisual>());
-          Destroy(RightHandGameObject.GetComponent<LineRenderer>());
-          Destroy(ray.attachTransform.gameObject);
-          Destroy(ray);
-          // Debug.Log("Removed XRRAY");
-        }
-        else
-        {
-          XRDirectInteractor directInteractor = RightHandGameObject.GetComponent<XRDirectInteractor>();
-          if (!directInteractor)
+          // If it doesn't
+          else
           {
-            RightHandGameObject.AddComponent<XRDirectInteractor>();
-            // Debug.Log("Added XRDirectInteractor");
+            // Check if hand has Direct Interactor Component
+            if (!HandDirectInteractors[i])
+            {
+              // Debug.Log("Added Direct Interactor for :" + i);
+              // If it doesn't add a Director Interactor component to it
+              HandDirectInteractors[i] = HandGameObjects[i].AddDirectComponent();
+            }
           }
         }
       }
@@ -149,21 +98,18 @@ public class SpawnPlotController : MonoBehaviour
     {
       // Debug.Log("Menu can't be up");
     }
-
   }
 
   private bool MenuCouldBeUp()
   {
-    if (LeftHandDirectInteractor || RightHandDirectInteractor)
+    if (HandDirectInteractors[0] || HandDirectInteractors[1])
     {
-      if (LeftHandDirectInteractor.isSelectActive || RightHandDirectInteractor.isSelectActive)
+      if ((HandDirectInteractors[0] && HandDirectInteractors[0].isSelectActive) || (HandDirectInteractors[1] && HandDirectInteractors[1].isSelectActive))
       {
-        // Debug.Log("Menu Could Be up - 1");
         return false;
       }
       else
       {
-        // Debug.Log("Menu Could Be up - 2");
         return true;
       }
     }
@@ -171,67 +117,40 @@ public class SpawnPlotController : MonoBehaviour
     {
       return true;
     }
-    // else
-    // {
-    //   // hand director isn't there, is xrray interactor there?
-    //   if (FlippedHand && NonFlippedHand)
-    //   {
-    //     if (FlippedHand.GetComponent<XRRayInteractor>())
-    //     {
-
-    //     }
-    //   }
-    //   Debug.Log("Menu Could Be up -3 ");
-    //   return true;
-    // }
   }
 
   private void FindControllers()
   {
-    if (!LeftHandInputDevice.isValid)
+    for (int i = 0; i < HandInputDevices.Length; i++)
     {
-      List<UnityEngine.XR.InputDevice> leftInputDevices = new List<UnityEngine.XR.InputDevice>();
-      UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.LeftHand, leftInputDevices);
-
-      if (leftInputDevices.Count == 1)
+      if (!HandInputDevices[i].isValid)
       {
-        LeftHandInputDevice = leftInputDevices[0];
-        Debug.Log(string.Format("Device name '{0}' with role '{1}'", LeftHandInputDevice.name, LeftHandInputDevice.characteristics.ToString()));
-      }
-      else if (leftInputDevices.Count > 1)
-      {
-        Debug.Log("Found more than one left hand!");
-      }
-      else if (leftInputDevices.Count == 0)
-      {
-        // Debug.Log("Found no left hand");
-      }
-    }
-    //left
-
-    //rigth
-    if (!RightHandInputDevice.isValid)
-    {
-      List<UnityEngine.XR.InputDevice> rightInputDevices = new List<UnityEngine.XR.InputDevice>();
-      UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.RightHand, rightInputDevices);
-
-      if (rightInputDevices.Count == 1)
-      {
-        RightHandInputDevice = rightInputDevices[0];
-        Debug.Log(string.Format("Device name '{0}' with role '{1}'", RightHandInputDevice.name, RightHandInputDevice.characteristics.ToString()));
-      }
-      else if (rightInputDevices.Count > 1)
-      {
-        Debug.Log("Found more than one right hand!");
-      }
-      else if (rightInputDevices.Count == 0)
-      {
-        // Debug.Log("Found no right hand");
+        List<UnityEngine.XR.InputDevice> InputDevices = new List<UnityEngine.XR.InputDevice>();
+        switch (i)
+        {
+          case 0:
+            UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.LeftHand, InputDevices);
+            break;
+          case 1:
+            UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.RightHand, InputDevices);
+            break;
+        }
+        if (InputDevices.Count == 1)
+        {
+          HandInputDevices[i] = InputDevices[0];
+          Debug.Log(string.Format("Device name '{0}' with role '{1}'", HandInputDevices[i].name, HandInputDevices[i].characteristics.ToString()));
+        }
+        else if (InputDevices.Count > 1)
+        {
+          Debug.Log("Found more than one hand!");
+        }
+        else if (InputDevices.Count == 0)
+        {
+          // Debug.Log("Found no left hand");
+        }
       }
     }
   }
-
-
 
   public void CheckForMenu()
   {
@@ -240,94 +159,66 @@ public class SpawnPlotController : MonoBehaviour
 
     // Continiously check if hand is tilted and not grabbing anything
     // If that is the case, spawn the canvas for plotcontroller as child to hand (remember to have canvas in worldspace)
+    bool[] boolArr = new bool[2] { false, false };
+
     if (LHandRot > 360 - maxRot && LHandRot < 360 - minRot)
     {
-      Spawn("left");
+      boolArr[0] = true;
     }
     else
     {
-      DeSpawn("left");
+      boolArr[0] = false;
     }
-
     if (RHandRot < maxRot && RHandRot > minRot)
     {
-      Spawn("right");
+      boolArr[1] = true;
     }
     else
     {
-      DeSpawn("right");
+      boolArr[1] = false;
+    }
+
+    if (boolArr[0] && !boolArr[1] && flippedHand == -1)
+    {
+      Spawn(HandSide.Left);
+    }
+    else if (!boolArr[0] && boolArr[1] && flippedHand == -1)
+    {
+      Spawn(HandSide.Right);
+    }
+
+    if (flippedHand != -1 && !boolArr[flippedHand])
+    {
+      DeSpawn();
     }
   }
 
-  private void Spawn(string hand)
+  private void Spawn(HandSide hand)
   {
-    FlippedHand = null;
-    NonFlippedHand = null;
-    if (alreadySpawned[0] || alreadySpawned[1])
-    { }
-    else
-    {
-      switch (hand)
-      {
-        case "left":
-          FlippedHand = LeftHandGameObject;
-          NonFlippedHand = RightHandGameObject;
-          alreadySpawned[0] = true;
-          break;
+    flippedHand = (int)hand;
 
-        case "right":
-          FlippedHand = RightHandGameObject;
-          NonFlippedHand = LeftHandGameObject;
-          alreadySpawned[1] = true;
-          break;
-      }
-      spawnedPlotController = Instantiate(PlotControllerPrefab);
-      spawnedPlotController.transform.GetChild(0).GetComponent<Canvas>().worldCamera = Camera.main;
-      spawnedPlotController.transform.SetParent(FlippedHand.transform);
-      spawnedPlotController.transform.localPosition = new Vector3(0, -0.12f, 0);
-
-
-    }
+    spawnedPlotController = Instantiate(PlotControllerPrefab);
+    spawnedPlotController.transform.GetChild(0).GetComponent<Canvas>().worldCamera = Camera.main;
+    spawnedPlotController.transform.SetParent(HandGameObjects[flippedHand].transform);
+    spawnedPlotController.transform.localPosition = new Vector3(0, -0.12f, 0);
   }
 
-  private void DeSpawn(string hand)
+  private void DeSpawn()
   {
-    int handIndex = -1;
-    switch (hand)
-    {
-      case "left":
-        handIndex = 0;
-        break;
+    flippedHand = -1;
 
-      case "right":
-        handIndex = 1;
-        break;
-    }
-
-    if (alreadySpawned[handIndex])
-    {
-      switch (hand)
-      {
-        case "left":
-          FlippedHand = LeftHandGameObject;
-          break;
-
-        case "right":
-          FlippedHand = RightHandGameObject;
-          break;
-      }
-
-      if (spawnedPlotController)
-        Destroy(spawnedPlotController);
-
-      alreadySpawned[handIndex] = false;
-      FlippedHand = null;
-      NonFlippedHand = null;
-    }
+    Destroy(spawnedPlotController);
   }
 
   public bool isMenuUp()
   {
-    return spawnedPlotController;
+    if (flippedHand == -1)
+    {
+      return false;
+    }
+    else
+    {
+      return true;
+    }
   }
 }

@@ -7,8 +7,8 @@ using Unity.XR.Oculus;
 // using UnityEngine
 public enum HandSide
 {
-  Left,
-  Right
+  Left = (int)0,
+  Right = (int)1
 }
 
 namespace UnityEngine.XR.Interaction.Toolkit

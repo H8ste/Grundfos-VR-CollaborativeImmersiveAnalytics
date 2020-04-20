@@ -21,7 +21,7 @@ public class LocalPlotController : MonoBehaviour
 
   void Start()
   {
-    Debug.Log("Started localplotcontroller");
+    // Debug.Log("Started localplotcontroller");
     gameObject.AddComponent<DataReader>();
     dataReader = gameObject.GetComponent<DataReader>();
     headers = dataReader.GetHeaders();

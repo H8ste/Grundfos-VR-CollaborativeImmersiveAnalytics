@@ -97,7 +97,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
       SpawnPlotController plotController = interactor.GetComponentInParent<SpawnPlotController>();
       if (plotController.isMenuUp())
       {
-        Debug.Log("Menu is up");
+        Debug.Log("Can't interact with plot as menu is up");
         return;
       }
 
