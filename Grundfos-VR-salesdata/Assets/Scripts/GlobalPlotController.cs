@@ -28,8 +28,7 @@ public class GlobalPlotController : MonoBehaviour
 
       GameObject tempPlot = GameObject.Instantiate(debugInstance.plotPrefab);
       // tempPlot.GetComponent<CreateMesh>().Create((int)Random.Range(0, debugInstance.dataReader.GetHeaders().Length - 1), (int)Random.Range(0, debugInstance.dataReader.GetHeaders().Length - 1), debugInstance.dataReader);
-      tempPlot.GetComponent<CreateMesh>().Create(11, 7, debugInstance.dataReader);
-
+      tempPlot.GetComponent<MeshHandler>().CreateNewPlot(11, 7, debugInstance.dataReader, TypeOfPlot.Barchart);
 
       AddPlot(tempPlot);
     }
@@ -54,17 +53,17 @@ public class GlobalPlotController : MonoBehaviour
     plots[plots.Count - 1].transform.SetParent(transform);
   }
 
-  public void DeletePlot(GameObject plotToDelete)
-  {
-    // Using its ID, find the plot provided in the local array of plots
-    int index = FindPlotInArray(plotToDelete.GetComponent<CreateMesh>().plotID, plots);
-    if (index != -1)
-    {
-      plots.RemoveAt(index);
-    }
+  // public void DeletePlot(GameObject plotToDelete)
+  // {
+  //   // Using its ID, find the plot provided in the local array of plots
+  //   int index = FindPlotInArray(plotToDelete.GetComponent<MeshHandler>().plotID, plots);
+  //   if (index != -1)
+  //   {
+  //     plots.RemoveAt(index);
+  //   }
 
-    RenderPlots();
-  }
+  //   RenderPlots();
+  // }
 
   int FindPlotInArray(int providedPlotID, List<GameObject> array)
   {
@@ -78,12 +77,18 @@ public class GlobalPlotController : MonoBehaviour
     return -1;
   }
 
+  public void Update()
+  {
+    // This shouldn't be here
+    RenderPlots();
+  }
+
   void RenderPlots()
   {
     // Call render on each plot element in local array of plots
     foreach (var plot in plots)
     {
-      plot.GetComponent<CreateMesh>().UpdateMesh();
+      plot.GetComponent<MeshHandler>().Render();
     }
   }
 }

@@ -179,7 +179,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
     {
       if (m_Interactables.Contains(interactable))
       {
-        Debug.Log("Unregistering interactable ");
+        // Debug.Log("Unregistering interactable ");
         m_Interactables.Remove(interactable);
 
         foreach (var collider in interactable.colliders)

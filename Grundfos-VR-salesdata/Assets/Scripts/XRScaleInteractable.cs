@@ -38,7 +38,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
   /// Interactable component that allows basic "scaling" functionality.
   /// </summary>
   [DisallowMultipleComponent]
-  [RequireComponent(typeof(Rigidbody))]
+  // [RequireComponent(typeof(Rigidbody))]
   [AddComponentMenu("XR/XR Scale Interactable")]
   public class XRScaleInteractable : XRBaseInteractable
   {
@@ -61,7 +61,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
 
     // public requireSelectExclusive
 
-    Rigidbody m_RigidBody;
+    // Rigidbody m_RigidBody;
 
     private InitialDistance initialDistance = new InitialDistance(false, new Vector3(), new Vector3());
     private InitialGrab initialGrab = new InitialGrab(false, new Vector3(), new Vector3());
@@ -78,10 +78,10 @@ namespace UnityEngine.XR.Interaction.Toolkit
     {
       base.Awake();
       requireSelectExclusive = false;
-      if (m_RigidBody == null)
-        m_RigidBody = GetComponent<Rigidbody>();
-      if (m_RigidBody == null)
-        Debug.LogWarning("Scale Interactable does not have a required RigidBody.", this);
+      // if (m_RigidBody == null)
+      //   m_RigidBody = GetComponent<Rigidbody>();
+      // if (m_RigidBody == null)
+      //   Debug.LogWarning("Scale Interactable does not have a required RigidBody.", this);
     }
 
     /// <summary>This method is called by the interaction manager
@@ -99,12 +99,12 @@ namespace UnityEngine.XR.Interaction.Toolkit
       if (!firstSelectingInteractor)
       {
         m_FirstSelectingInteractor = interactor;
-        Debug.Log("First controller has selected object");
+        // Debug.Log("First controller has selected object");
       }
       else
       {
         m_SecondSelectingInteractor = interactor;
-        Debug.Log("Second controller has selected object");
+        // Debug.Log("Second controller has selected object");
       }
     }
 
@@ -120,13 +120,13 @@ namespace UnityEngine.XR.Interaction.Toolkit
       if (m_SecondSelectingInteractor == interactor)
       {
         m_SecondSelectingInteractor = null;
-        Debug.Log("Second controller has de-selected object");
+        // Debug.Log("Second controller has de-selected object");
       }
       if (m_FirstSelectingInteractor == interactor)
       {
         m_FirstSelectingInteractor = m_SecondSelectingInteractor;
         m_SecondSelectingInteractor = null;
-        Debug.Log("First controller has de-selected object");
+        // Debug.Log("First controller has de-selected object");
       }
     }
 
@@ -141,7 +141,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
 
         if (!initialGrab.isInitialised)
         {
-          Debug.Log("initialDistance has been reset");
+          // Debug.Log("initialDistance has been reset");
           initialGrab.isInitialised = true;
           initialGrab.interactorStart = m_FirstSelectingInteractor.transform.position;
           initialGrab.interactableStart = m_FirstSelectingInteractor.selectTarget.transform.position;
@@ -161,7 +161,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
       {
         if (!initialDistance.isInitialised)
         {
-          Debug.Log("initialDistance has been reset");
+          // Debug.Log("initialDistance has been reset");
           initialDistance.isInitialised = true;
           initialDistance.distanceVector = m_SecondSelectingInteractor.transform.position - m_FirstSelectingInteractor.transform.position;
           initialDistance.initialScale = transform.localScale;
@@ -172,7 +172,9 @@ namespace UnityEngine.XR.Interaction.Toolkit
         float scaleMultiplier = Vector3.Magnitude(newDistance) - Vector3.Magnitude(initialDistance.distanceVector);
 
         transform.localScale = new Vector3(initialDistance.initialScale.x * (1 + scaleMultiplier), initialDistance.initialScale.y * (1 + scaleMultiplier), 1f);
-        gameObject.GetComponent<CreateMesh>().MeshColliderBool = false;
+        // gameObject.GetComponent<CreateMesh>().MeshColliderBool = false;
+        // re add meshcolliderbool
+        // gameObject.GetComponent<MeshHandler>().ReComputeColliders();
       }
     }
 

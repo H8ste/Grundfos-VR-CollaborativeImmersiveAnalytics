@@ -158,13 +158,13 @@ namespace UnityEngine.XR.Interaction.Toolkit
     {
       if (m_RegisteredInteractionManager != null)
       {
-        Debug.Log("Unregestering it");
+        Debug.Log("Unregestering interactable");
         m_RegisteredInteractionManager.UnregisterInteractable(this);
         m_RegisteredInteractionManager = null;
       }
       if (m_InteractionManager)
       {
-        Debug.Log("Regestering it");
+        Debug.Log("Regestering interactable");
         m_InteractionManager.RegisterInteractable(this);
         m_RegisteredInteractionManager = m_InteractionManager;
       }
@@ -177,7 +177,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
       {
         if (m_RegisteredInteractionManager != null)
         {
-          Debug.Log("Unregestering it");
+          // Debug.Log("Unregestering it");
           m_RegisteredInteractionManager.UnregisterInteractable(this);
           m_RegisteredInteractionManager = null;
         }
