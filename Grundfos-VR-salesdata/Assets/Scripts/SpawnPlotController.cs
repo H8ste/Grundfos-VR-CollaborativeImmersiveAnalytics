@@ -7,6 +7,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class SpawnPlotController : MonoBehaviour
 {
+  public bool DebugWithoutVR = false;
+
   float minRot = 200f; float maxRot = 320f;
 
 
@@ -22,81 +24,99 @@ public class SpawnPlotController : MonoBehaviour
 
   void Start()
   {
-    XRController[] hands = gameObject.GetComponentsInChildren<XRController>();
-    HandGameObjects = new GameObject[hands.Length];
-    HandDirectInteractors = new XRDirectInteractor[hands.Length];
-    HandXrayInteractors = new XRRayInteractor[hands.Length];
-    HandInputDevices = new UnityEngine.XR.InputDevice[hands.Length];
-    for (int i = 0; i < HandGameObjects.Length; i++)
+    if (DebugWithoutVR)
     {
-      HandGameObjects[i] = hands[i].gameObject;
-      HandDirectInteractors[i] = HandGameObjects[i].GetComponent<XRDirectInteractor>();
-      HandXrayInteractors[i] = null;
+      spawnedPlotController = Instantiate(PlotControllerPrefab);
+      spawnedPlotController.transform.GetChild(0).GetComponent<Canvas>().worldCamera = Camera.main;
+      spawnedPlotController.transform.localPosition = new Vector3(0, 0.98f, -9.49f);
+
     }
+    else
+    {
+      XRController[] hands = gameObject.GetComponentsInChildren<XRController>();
+      HandGameObjects = new GameObject[hands.Length];
+      HandDirectInteractors = new XRDirectInteractor[hands.Length];
+      HandXrayInteractors = new XRRayInteractor[hands.Length];
+      HandInputDevices = new UnityEngine.XR.InputDevice[hands.Length];
+      for (int i = 0; i < HandGameObjects.Length; i++)
+      {
+        HandGameObjects[i] = hands[i].gameObject;
+        HandDirectInteractors[i] = HandGameObjects[i].GetComponent<XRDirectInteractor>();
+        HandXrayInteractors[i] = null;
+      }
+    }
+
   }
 
   void Update()
   {
-    FindControllers();
-
-    if (MenuCouldBeUp() || isMenuUp())
+    if (DebugWithoutVR)
     {
-      // Debug.Log("Menu could be up");
-      CheckForMenu();
-      if (isMenuUp())
+
+    }
+    else
+    {
+      FindControllers();
+
+      if (MenuCouldBeUp() || isMenuUp())
       {
-        // Check if hand that is not flipped, currently has XRDirectInteractor
-        if (HandDirectInteractors[1 - flippedHand])
+        // Debug.Log("Menu could be up");
+        CheckForMenu();
+        if (isMenuUp())
         {
-          // If it does, it should be removed
-          Destroy(HandDirectInteractors[1 - flippedHand].attachTransform.gameObject);
-          Destroy(HandDirectInteractors[1 - flippedHand]);
-          HandDirectInteractors[1 - flippedHand] = null;
-          // Debug.Log("Destroyed HandDirector for :" + (1 - flippedHand));
+          // Check if hand that is not flipped, currently has XRDirectInteractor
+          if (HandDirectInteractors[1 - flippedHand])
+          {
+            // If it does, it should be removed
+            Destroy(HandDirectInteractors[1 - flippedHand].attachTransform.gameObject);
+            Destroy(HandDirectInteractors[1 - flippedHand]);
+            HandDirectInteractors[1 - flippedHand] = null;
+            // Debug.Log("Destroyed HandDirector for :" + (1 - flippedHand));
+          }
+          // If it doesn't, check if it has xray
+          else
+          {
+            if (!HandXrayInteractors[1 - flippedHand])
+            {
+              // If it doesn't, add xray to that hand
+              HandXrayInteractors[1 - flippedHand] = HandGameObjects[1 - flippedHand].AddXrayComponent();
+              // Debug.Log("Added Xray for :" + (1 - flippedHand));
+            }
+          }
         }
-        // If it doesn't, check if it has xray
         else
         {
-          if (!HandXrayInteractors[1 - flippedHand])
+          // Debug.Log("Menu could be up but it isn't");
+          // For each hand,
+          for (int i = 0; i < HandGameObjects.Length; i++)
           {
-            // If it doesn't, add xray to that hand
-            HandXrayInteractors[1 - flippedHand] = HandGameObjects[1 - flippedHand].AddXrayComponent();
-            // Debug.Log("Added Xray for :" + (1 - flippedHand));
+            // Check if hand has Xray Interactor Component on it
+            // If it does, destory component
+            if (HandXrayInteractors[i])
+            {
+              // Debug.Log("Destroyed Xray for :" + i);
+              HandXrayInteractors[i].RemoveXrayComponent();
+              // Destroy(HandXrayInteractors[i]);
+              HandXrayInteractors[i] = null;
+            }
+            // If it doesn't
+            else
+            {
+              // Check if hand has Direct Interactor Component
+              if (!HandDirectInteractors[i])
+              {
+                // Debug.Log("Added Direct Interactor for :" + i);
+                // If it doesn't add a Director Interactor component to it
+                HandDirectInteractors[i] = HandGameObjects[i].AddDirectComponent();
+              }
+            }
           }
         }
       }
       else
       {
-        // Debug.Log("Menu could be up but it isn't");
-        // For each hand,
-        for (int i = 0; i < HandGameObjects.Length; i++)
-        {
-          // Check if hand has Xray Interactor Component on it
-          // If it does, destory component
-          if (HandXrayInteractors[i])
-          {
-            // Debug.Log("Destroyed Xray for :" + i);
-            HandXrayInteractors[i].RemoveXrayComponent();
-            // Destroy(HandXrayInteractors[i]);
-            HandXrayInteractors[i] = null;
-          }
-          // If it doesn't
-          else
-          {
-            // Check if hand has Direct Interactor Component
-            if (!HandDirectInteractors[i])
-            {
-              // Debug.Log("Added Direct Interactor for :" + i);
-              // If it doesn't add a Director Interactor component to it
-              HandDirectInteractors[i] = HandGameObjects[i].AddDirectComponent();
-            }
-          }
-        }
+        // Debug.Log("Menu can't be up");
       }
-    }
-    else
-    {
-      // Debug.Log("Menu can't be up");
     }
   }
 

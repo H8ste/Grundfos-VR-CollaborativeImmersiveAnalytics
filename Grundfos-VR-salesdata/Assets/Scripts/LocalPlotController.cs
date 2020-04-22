@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LocalPlotController : MonoBehaviour
 {
@@ -14,8 +15,10 @@ public class LocalPlotController : MonoBehaviour
   public GameObject createButtonPrefab;
   public GameObject plotCreatorPrefab;
   public GameObject plotPrefab;
+  public GameObject ScrollPrefab;
 
   private GameObject plot;
+  private GameObject featureMenu;
 
   DataReader dataReader;
 
@@ -33,28 +36,31 @@ public class LocalPlotController : MonoBehaviour
   private void HideMenu()
   {
     // transform.GetComponentInChildren<
-    gameObject.GetComponentInChildWithTag<RectTransform>("PlotCreatorINTRO").gameObject.SetActive(false);
+    gameObject.GetComponentInChildrenWithTag<RectTransform>("PlotCreatorIntro").gameObject.SetActive(false);
     // transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
   }
 
   private void ShowMenu()
   {
-    gameObject.GetComponentInChildWithTag<Transform>("PlotCreatorINTRO").gameObject.SetActive(false);
+    gameObject.GetComponentInChildrenWithTag<RectTransform>("PlotCreatorIntro").gameObject.SetActive(false);
     transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
   }
 
+  GameObject plotCreator;
   // Spawns in screen that is used to create a new plot
   public void NewPlotCreator()
   {
+
+
     // Hide Menu Screen
     HideMenu();
 
     // // Spawn
-    // GameObject plotCreator = GameObject.Instantiate(plotCreatorPrefab);
-    // plotCreator.transform.SetParent(transform.GetChild(0));
-    // plotCreator.transform.localPosition = new Vector3(0, 0, 0);
-    // plotCreator.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-    // plotCreator.transform.localEulerAngles = new Vector3(0, 0, 0);
+    plotCreator = GameObject.Instantiate(plotCreatorPrefab);
+    plotCreator.transform.SetParent(transform.GetChild(0));
+    plotCreator.transform.localPosition = new Vector3(0, 0, 0);
+    plotCreator.transform.localScale = new Vector3(1f, 1f, 1f);
+    plotCreator.transform.localEulerAngles = new Vector3(0, 0, 0);
   }
 
 
@@ -85,6 +91,7 @@ public class LocalPlotController : MonoBehaviour
   public void setFeature(int featureNumber, int featureID)
   {
     featuresChosen[featureNumber] = featureID;
+    Debug.Log("changed feature: " + featureNumber + ", to: " + featureID);
     // check if both features have been selected,
     bool ready = true;
     foreach (var feature in featuresChosen)
@@ -102,10 +109,11 @@ public class LocalPlotController : MonoBehaviour
         GameObject.Destroy(plot);
       }
       plot = GameObject.Instantiate(plotPrefab);
-      plot.GetComponent<CreateMesh>().Create(featuresChosen[0], featuresChosen[1], dataReader);
+      plot.GetComponent<MeshHandler>().CreateNewPlot(featuresChosen[0], featuresChosen[1], dataReader, TypeOfPlot.Barchart);
+      // Create(featuresChosen[0], featuresChosen[1], dataReader);
       plot.transform.SetParent(transform);
-      plot.transform.localPosition = new Vector3(0, 0, 0);
-      plot.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+      plot.transform.localPosition = new Vector3(-2.69f, -2.58f, 0.005f);
+      plot.transform.localScale = new Vector3(1f, 1f, 1f);
       plot.transform.localEulerAngles = new Vector3(0, 0, 0);
     }
 
@@ -145,6 +153,62 @@ public class LocalPlotController : MonoBehaviour
 
 
 
+  }
+
+  private int featureBeingChanged = -1;
+  public void spawnFeatureSelection(int feature)
+  {
+    if (plot)
+    {
+      plot.SetActive(false);
+    }
+    // If feature menu isn't already spawned
+    if (!featureMenu)
+    {
+      featureBeingChanged = feature;
+      featureMenu = Instantiate(ScrollPrefab, transform.position, Quaternion.identity) as GameObject;
+      featureMenu.GetComponentInChildren<ButtonListControl>().BeginControl();
+      featureMenu.transform.SetParent(transform.GetChild(0));
+      featureMenu.transform.localPosition = new Vector3(0, 0, 0);
+      featureMenu.transform.localScale = new Vector3(1f, 1f, 1f);
+      featureMenu.transform.localEulerAngles = new Vector3(0, 0, 0);
+
+
+      Button[] temp = plotCreator.GetComponentsInChildren<Button>();
+
+      //make both feature buttons inactive
+      foreach (var button in temp)
+      {
+        button.interactable = false;
+      }
+    }
+  }
+
+  public void confirmFeatureSelection(int feature, int featureSelected)
+  {
+    if (plot)
+    {
+      plot.SetActive(true);
+    }
+    if (featureSelected != -1)
+    {
+      setFeature(featureBeingChanged, featureSelected);
+      Object.Destroy(featureMenu);
+    }
+
+    Button[] temp = plotCreator.GetComponentsInChildren<Button>();
+
+    //make both feature buttons inactive
+    foreach (var button in temp)
+    {
+      button.interactable = true;
+    }
+
+  }
+
+  public DataReader GetDataReader()
+  {
+    return dataReader;
   }
 
 

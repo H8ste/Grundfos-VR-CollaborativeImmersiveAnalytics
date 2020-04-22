@@ -169,6 +169,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc181f6a3fbb4d04f92f3b399c244842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  plot:
+    plotOptions:
+      featureColors: []
+  plotOptionsChanged: 0
 --- !u!54 &105545843746034372
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -265,7 +269,7 @@ MonoBehaviour:
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 100
+  m_DynamicPixelsPerUnit: 1
 --- !u!114 &2816643168419884561
 MonoBehaviour:
   m_ObjectHideFlags: 0

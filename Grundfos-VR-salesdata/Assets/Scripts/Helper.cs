@@ -6,14 +6,33 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public static class Helper
 {
-  public static T GetComponentInChildWithTag<T>(this GameObject parent, string tag) where T : Component
+  public static T GetComponentInChildWithTag<T>(this GameObject _parent, string tag) where T : Component
   {
-    Transform t = parent.transform;
+    Transform t = _parent.transform;
     foreach (Transform tr in t)
     {
       if (tr.tag == tag)
       {
         return tr.GetComponent<T>();
+      }
+    }
+    return null;
+  }
+  public static T GetComponentInChildrenWithTag<T>(this GameObject _parent, string tag) where T : Component
+  {
+    Transform parent = _parent.transform;
+    foreach (Transform child in parent)
+    {
+      if (child.tag == tag)
+      {
+        return child.GetComponent<T>();
+      }
+      foreach (Transform grandChild in child)
+      {
+        if (grandChild.tag == tag)
+        {
+          return grandChild.GetComponent<T>();
+        }
       }
     }
     return null;

@@ -272,7 +272,6 @@ GameObject:
   - component: {fileID: 8669084725259074987}
   - component: {fileID: 8164961607560793935}
   - component: {fileID: 8153975769208336361}
-  - component: {fileID: 3334550699858039181}
   m_Layer: 0
   m_Name: CreatePlot
   m_TagString: Untagged
@@ -379,8 +378,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3334550699858039181}
-        m_MethodName: clickMe
+      - m_Target: {fileID: 5711133165412728873}
+        m_MethodName: NewPlotCreator
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -390,18 +389,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &3334550699858039181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4804551823336656556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4a751518806d643ac184fae7e05a6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6204924794665209938
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,10 +441,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headers: []
   featuresChosen: 
-  inVR: 1
+  inVR: 0
   createButtonPrefab: {fileID: 0}
-  plotCreatorPrefab: {fileID: 0}
-  plotPrefab: {fileID: 0}
+  plotCreatorPrefab: {fileID: 2499950107539525976, guid: 3dc0b392864794149a38a224686558d8,
+    type: 3}
+  plotPrefab: {fileID: 1668697730447907967, guid: ced3d809396bf4f40b12106a0c54cffb,
+    type: 3}
+  ScrollPrefab: {fileID: 6526948138860554042, guid: 196721118033cf9459f471b7f0098ecb,
+    type: 3}
 --- !u!1 &7696639007534501013
 GameObject:
   m_ObjectHideFlags: 0

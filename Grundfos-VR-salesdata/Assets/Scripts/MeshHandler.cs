@@ -196,25 +196,28 @@ public class MeshHandler : MonoBehaviour
       case TypeOfPlot.Barchart:
         plot.PlotOptions.PlotLabels = new GameObject[2];
         plot.PlotOptions.PlotLabels[0] = new GameObject("xLabel");
-        plot.PlotOptions.PlotLabels[1] = new GameObject("xLabel");
+        plot.PlotOptions.PlotLabels[1] = new GameObject("yLabel");
         int axisCount = 0;
         foreach (var label in plot.PlotOptions.PlotLabels)
         {
           label.transform.SetParent(gameObject.GetComponentInChildren<Canvas>().transform);
           label.transform.localScale = new Vector3(1f, 1f, 1f);
           Text labelText = label.AddComponent<Text>();
+          label.GetComponent<RectTransform>().sizeDelta = new Vector2(400, 40);
+          // label.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0.5f);
+
           switch (axisCount)
           {
             // X
             case 0:
               labelText.text = plot.DataHeaders[plot.FeatureOneIndex];
-              labelText.transform.localPosition = new Vector3(230f, 0f, -0.2f);
+              labelText.transform.localPosition = new Vector3(380f, 0f, -0.2f);
               labelText.alignment = TextAnchor.MiddleLeft;
               break;
             // Y
             case 1:
               labelText.text = plot.DataHeaders[plot.FeatureTwoIndex];
-              labelText.transform.localPosition = new Vector3(0f, 180f, -0.2f);
+              labelText.transform.localPosition = new Vector3(0f, 200f, -0.2f);
               labelText.alignment = TextAnchor.MiddleCenter;
               break;
           }
