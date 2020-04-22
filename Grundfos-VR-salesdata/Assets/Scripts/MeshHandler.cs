@@ -32,12 +32,19 @@ public class PlotOptions
   public float PlotHeight { get { return plotHeight; } set { plotHeight = value; } }
 
 
-  GameObject[] plotLabels;
+  Text[] plotNotations;
   [HideInInspector]
-  public GameObject[] PlotLabels { get { return plotLabels; } set { plotLabels = value; } }
-  // GameObject xLabel; GameObject yLabel;
-  // public GameObject XLabel { get { return xLabel; } set { xLabel = value; } }
-  // public GameObject YLabel { get { return yLabel; } set { yLabel = value; } }
+  public Text[] PlotNotations { get { return plotNotations; } set { plotNotations = value; } }
+
+
+  List<GameObject> plotXLabels = new List<GameObject>();
+  [HideInInspector]
+  public List<GameObject> PlotXLabels { get { return plotXLabels; } set { plotXLabels = value; } }
+
+  List<GameObject> plotYLabels = new List<GameObject>();
+  [HideInInspector]
+  public List<GameObject> PlotYLabels { get { return plotYLabels; } set { plotYLabels = value; } }
+
   [SerializeField]
   Color32[] featureColors;
   [HideInInspector]
@@ -111,6 +118,7 @@ public class Plot
 [RequireComponent(typeof(MeshRenderer))]
 public class MeshHandler : MonoBehaviour
 {
+
   DataReader dataReader;
   float spacing;
 
@@ -122,6 +130,8 @@ public class MeshHandler : MonoBehaviour
 
   [SerializeField] bool plotOptionsChanged = false;
   bool plotMeshChanged = false;
+
+  public GameObject plotLabelPrefab;
 
 
   // should only run content if anything is changed I think
@@ -176,6 +186,8 @@ public class MeshHandler : MonoBehaviour
 
     InitialiseMeshColors();
 
+    SetupAxisNotation();
+
     SetupAxisLabels();
 
     plot.Mesh.RecalculateNormals();
@@ -185,7 +197,7 @@ public class MeshHandler : MonoBehaviour
     Render();
   }
 
-  private void SetupAxisLabels()
+  private void SetupAxisNotation()
   {
     if (plot.DataHeaders == null)
     {
@@ -194,40 +206,75 @@ public class MeshHandler : MonoBehaviour
     switch (plot.PlotOptions.PlotType)
     {
       case TypeOfPlot.Barchart:
-        plot.PlotOptions.PlotLabels = new GameObject[2];
-        plot.PlotOptions.PlotLabels[0] = new GameObject("xLabel");
-        plot.PlotOptions.PlotLabels[1] = new GameObject("yLabel");
+        plot.PlotOptions.PlotNotations = transform.GetChild(0).GetComponentsInChildren<Text>();
+        // plot.PlotOptions.PlotNotations[0] = new GameObject("xLabel");
+        // plot.PlotOptions.PlotNotations[1] = new GameObject("yLabel");
         int axisCount = 0;
-        foreach (var label in plot.PlotOptions.PlotLabels)
+        foreach (var notation in plot.PlotOptions.PlotNotations)
         {
-          label.transform.SetParent(gameObject.GetComponentInChildren<Canvas>().transform);
-          label.transform.localScale = new Vector3(1f, 1f, 1f);
-          Text labelText = label.AddComponent<Text>();
-          label.GetComponent<RectTransform>().sizeDelta = new Vector2(400, 40);
+          // label.transform.SetParent(gameObject.GetComponentInChildren<Canvas>().transform);
+          notation.transform.localScale = new Vector3(1f, 1f, 1f);
+          notation.transform.eulerAngles = new Vector3(0f, 0f, 0f);
+          // Text labelText = label.AddComponent<Text>();
+          notation.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(400, 40);
           // label.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0.5f);
 
           switch (axisCount)
           {
             // X
             case 0:
-              labelText.text = plot.DataHeaders[plot.FeatureOneIndex];
-              labelText.transform.localPosition = new Vector3(380f, 0f, -0.2f);
-              labelText.alignment = TextAnchor.MiddleLeft;
+              notation.text = plot.DataHeaders[plot.FeatureOneIndex];
+              // label.transform.localPosition = new Vector3(380f, 0f, -0.2f);
+              notation.alignment = TextAnchor.MiddleLeft;
               break;
             // Y
             case 1:
-              labelText.text = plot.DataHeaders[plot.FeatureTwoIndex];
-              labelText.transform.localPosition = new Vector3(0f, 200f, -0.2f);
-              labelText.alignment = TextAnchor.MiddleCenter;
+              notation.text = plot.DataHeaders[plot.FeatureTwoIndex];
+              // label.transform.localPosition = new Vector3(0f, 200f, -0.2f);
+              notation.alignment = TextAnchor.MiddleCenter;
               break;
           }
-          labelText.fontSize = 26;
-          labelText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+          notation.fontSize = 26;
+          notation.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
           axisCount++;
         }
         break;
         // default:
+    }
+  }
+
+  private void SetupAxisLabels()
+  {
+    if (plot.PlotOptions.PlotXLabels.Count > 0)
+      plot.PlotOptions.PlotXLabels.Clear();
+    if (plot.PlotOptions.PlotYLabels.Count > 0)
+      plot.PlotOptions.PlotYLabels.Clear();
+
+    // X
+    for (int i = 0; i < plot.DataCompared.Count(); i++)
+    {
+      float actualSpacing = 176f / plot.DataCompared.Count();
+      GameObject temp = Instantiate(plotLabelPrefab,
+      new Vector3(i * actualSpacing + (actualSpacing / 2), -7f, -0.06f),
+      Quaternion.Euler(0f, 0f, -35f));
+      temp.transform.SetParent(transform.GetChild(0).GetChild(0), false);
+      plot.PlotOptions.PlotXLabels.Add(temp);
+      plot.PlotOptions.PlotXLabels[i].GetComponent<Text>().text = plot.DataComparedHeaders[i];
+      plot.PlotOptions.PlotXLabels[i].transform.localScale = (1f / (float)plot.DataCompared.Count()) * new Vector3(1f, 1f, 1f);
+    }
+
+    // y
+    for (int i = 0; i < 11; i++)
+    {
+      float actualSpacing = 176f / 10;
+      GameObject temp = Instantiate(plotLabelPrefab,
+      new Vector3(0f, i * actualSpacing, -0.06f),
+      Quaternion.Euler(0f, 0f, -35f));
+      temp.transform.SetParent(transform.GetChild(0).GetChild(0), false);
+      plot.PlotOptions.PlotYLabels.Add(temp);
+      plot.PlotOptions.PlotYLabels[i].GetComponent<Text>().text = Remap(i * actualSpacing, 0, 176f, 0, plot.DataAverages[0]).ToString();
+      plot.PlotOptions.PlotYLabels[i].transform.localScale = (1f / 10f) * new Vector3(1f, 1f, 1f);
     }
   }
 

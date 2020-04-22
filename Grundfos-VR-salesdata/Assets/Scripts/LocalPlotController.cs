@@ -24,7 +24,6 @@ public class LocalPlotController : MonoBehaviour
 
   void Start()
   {
-    // Debug.Log("Started localplotcontroller");
     gameObject.AddComponent<DataReader>();
     dataReader = gameObject.GetComponent<DataReader>();
     headers = dataReader.GetHeaders();
@@ -78,9 +77,6 @@ public class LocalPlotController : MonoBehaviour
       // Rotate the forward vector towards the target direction by one step
       Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
 
-      // Draw a ray pointing at our target in
-      // Debug.DrawRay(transform.position, newDirection, Color.red);
-
       // Calculate a rotation a step closer to the target and applies rotation to this object
       transform.rotation = Quaternion.LookRotation(newDirection);
       // transform.localPosition = new Vector3(0, 0, 0);}
@@ -91,7 +87,6 @@ public class LocalPlotController : MonoBehaviour
   public void setFeature(int featureNumber, int featureID)
   {
     featuresChosen[featureNumber] = featureID;
-    Debug.Log("changed feature: " + featureNumber + ", to: " + featureID);
     // check if both features have been selected,
     bool ready = true;
     foreach (var feature in featuresChosen)
@@ -110,7 +105,7 @@ public class LocalPlotController : MonoBehaviour
       }
       plot = GameObject.Instantiate(plotPrefab);
       plot.GetComponent<MeshHandler>().CreateNewPlot(featuresChosen[0], featuresChosen[1], dataReader, TypeOfPlot.Barchart);
-      // Create(featuresChosen[0], featuresChosen[1], dataReader);
+
       plot.transform.SetParent(transform);
       plot.transform.localPosition = new Vector3(-2.69f, -2.58f, 0.005f);
       plot.transform.localScale = new Vector3(1f, 1f, 1f);
@@ -184,7 +179,7 @@ public class LocalPlotController : MonoBehaviour
     }
   }
 
-  public void confirmFeatureSelection(int feature, int featureSelected)
+  public void confirmFeatureSelection(int featureSelected)
   {
     if (plot)
     {
@@ -194,6 +189,7 @@ public class LocalPlotController : MonoBehaviour
     {
       setFeature(featureBeingChanged, featureSelected);
       Object.Destroy(featureMenu);
+      featureBeingChanged = -1;
     }
 
     Button[] temp = plotCreator.GetComponentsInChildren<Button>();

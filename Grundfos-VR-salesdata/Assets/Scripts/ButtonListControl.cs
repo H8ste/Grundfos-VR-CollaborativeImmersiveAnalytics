@@ -21,14 +21,9 @@ public class ButtonListControl : MonoBehaviour
   private Button confirmButton;
   public void BeginControl()
   {
-    Debug.Log("New instance of control isntantiated");
     confirmButton = transform.GetComponentInChildren<Button>();
     plotControllerRef = GameObject.FindObjectsOfType<LocalPlotController>()[0].GetComponent<LocalPlotController>();
-    // gameObject.AddComponent<DataReader>();
-    // dataReader = gameObject.GetComponent<DataReader>();
     schrollMenuButtonList = new List<GameObject>();
-
-
 
     // Get an array with the headers from the data.
     headers = plotControllerRef.GetDataReader().GetHeaders();
@@ -57,25 +52,12 @@ public class ButtonListControl : MonoBehaviour
 
   public void OnClick(Button button)
   {
-
     ChangeButtonColor(button);
   }
 
   public void OnClickConfirm()
   {
-    plotControllerRef.confirmFeatureSelection(FeatureNumber, FeatureSelected);
-    // if (FeatureSelected != -1)
-    // {
-    //   //// Call setFeature on localplotcontroller
-    //   GameObject.FindObjectsOfType<LocalPlotController>()[0].GetComponent<LocalPlotController>().setFeature(FeatureNumber, FeatureSelected);
-    //   Object.Destroy(transform.parent.gameObject);
-    //   // Allows for another menu to be spawned
-    // }
-    // else
-    // {
-    //   Object.Destroy(transform.parent.gameObject);
-    // }
-    // FeatureButtonScript.featureMenuSpawned = false;
+    plotControllerRef.confirmFeatureSelection(FeatureSelected);
   }
 
   public void ChangeButtonColor(Button button)

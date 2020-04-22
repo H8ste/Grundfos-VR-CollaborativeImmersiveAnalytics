@@ -23,7 +23,6 @@ public class FeatureButtonScript : MonoBehaviour
   }
   public void OnClick()
   {
-    Debug.Log("clicked Featurebutton: " + featureNumber);
     plotControllerRef.spawnFeatureSelection(featureNumber);
   }
   public void Update()
