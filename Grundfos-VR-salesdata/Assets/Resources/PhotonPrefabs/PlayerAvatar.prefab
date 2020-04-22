@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 3774412656931841325}
   - component: {fileID: 2767131193800508327}
   - component: {fileID: 5979959740101317260}
-  - component: {fileID: 6885783701298391910}
   - component: {fileID: 502839492940605371}
   - component: {fileID: 2621263516007723943}
   - component: {fileID: 5005670101245423377}
   - component: {fileID: 8457987003818119333}
+  - component: {fileID: 7412552325385465299}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Untagged
@@ -52,7 +52,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7562469293297504267}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -84,20 +84,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &6885783701298391910
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7562469293297504267}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &502839492940605371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,5 +151,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f538a0f3e1681144d80178bab096b7a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 55
+  movementSpeed: 1
   rotationSpeed: 55
+--- !u!114 &7412552325385465299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7562469293297504267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fd7601a1928f6a4b8b375d83c25b27d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myCharacter: {fileID: 0}
+  characterValue: 0

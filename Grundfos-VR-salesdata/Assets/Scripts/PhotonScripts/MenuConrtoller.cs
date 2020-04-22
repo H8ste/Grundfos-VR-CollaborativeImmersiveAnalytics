@@ -1,0 +1,20 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MenuConrtoller : MonoBehaviour
+{
+
+    public void OnClickCharacterPick(int whichCharacter)
+    {
+        if (PlayerInfo.PI != null)
+        {
+            PlayerInfo.PI.mySelectedCharacter = whichCharacter;
+            PlayerPrefs.SetInt("MyCharacter", whichCharacter);
+        }
+
+
+        Debug.Log("my character" + whichCharacter);
+    }
+
+}
