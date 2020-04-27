@@ -5,207 +5,237 @@ using UnityEngine.UI;
 
 public class LocalPlotController : MonoBehaviour
 {
-  public string[] headers;
-  public List<int> featuresChosen = new List<int>();
-  private enum plotType { };
-  private int width, height;
+    public string[] headers;
+    public List<int> featuresChosen = new List<int>();
+    private enum plotType { };
+    private int width, height;
 
-  public bool inVR;
+    public bool inVR;
 
-  public GameObject createButtonPrefab;
-  public GameObject plotCreatorPrefab;
-  public GameObject plotPrefab;
-  public GameObject ScrollPrefab;
+    public GameObject createButtonPrefab;
+    public GameObject plotCreatorPrefab;
+    public GameObject plotPrefab;
 
-  private GameObject plot;
-  private GameObject featureMenu;
+    public GameObject ThresholdingSlidersPrefab;
 
-  DataReader dataReader;
+    public GameObject ScrollPrefab;
 
-  void Start()
-  {
-    gameObject.AddComponent<DataReader>();
-    dataReader = gameObject.GetComponent<DataReader>();
-    headers = dataReader.GetHeaders();
+    private GameObject plot;
+    private GameObject featureMenu;
 
-    featuresChosen.Add(-1);
-    featuresChosen.Add(-1);
-  }
-
-  private void HideMenu()
-  {
-    // transform.GetComponentInChildren<
-    gameObject.GetComponentInChildrenWithTag<RectTransform>("PlotCreatorIntro").gameObject.SetActive(false);
-    // transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-  }
-
-  private void ShowMenu()
-  {
-    gameObject.GetComponentInChildrenWithTag<RectTransform>("PlotCreatorIntro").gameObject.SetActive(false);
-    transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
-  }
-
-  GameObject plotCreator;
-  // Spawns in screen that is used to create a new plot
-  public void NewPlotCreator()
-  {
+    private GameObject ThresholdingSliders;
 
 
-    // Hide Menu Screen
-    HideMenu();
 
-    // // Spawn
-    plotCreator = GameObject.Instantiate(plotCreatorPrefab);
-    plotCreator.transform.SetParent(transform.GetChild(0));
-    plotCreator.transform.localPosition = new Vector3(0, 0, 0);
-    plotCreator.transform.localScale = new Vector3(1f, 1f, 1f);
-    plotCreator.transform.localEulerAngles = new Vector3(0, 0, 0);
-  }
+    DataReader dataReader;
 
-
-  public void Update()
-  {
-    if (inVR)
-    {    //rotate towards headset
-
-      // Determine which direction to rotate towards
-      Vector3 targetDirection = transform.position - transform.parent.parent.GetChild(0).position;
-
-      // The step size is equal to speed times frame time.
-      float singleStep = 3f * Time.deltaTime;
-
-      // Rotate the forward vector towards the target direction by one step
-      Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
-
-      // Calculate a rotation a step closer to the target and applies rotation to this object
-      transform.rotation = Quaternion.LookRotation(newDirection);
-      // transform.localPosition = new Vector3(0, 0, 0);}
-    }
-  }
-
-
-  public void setFeature(int featureNumber, int featureID)
-  {
-    featuresChosen[featureNumber] = featureID;
-    // check if both features have been selected,
-    bool ready = true;
-    foreach (var feature in featuresChosen)
+    void Start()
     {
-      if (feature == -1)
-      {
-        ready = false;
-        break;
-      }
+        gameObject.AddComponent<DataReader>();
+        dataReader = gameObject.GetComponent<DataReader>();
+        headers = dataReader.GetHeaders();
+
+        featuresChosen.Add(-1);
+        featuresChosen.Add(-1);
     }
-    if (ready)
+
+    private void HideMenu()
     {
-      if (plot != null)
-      {
-        GameObject.Destroy(plot);
-      }
-      plot = GameObject.Instantiate(plotPrefab);
-      plot.GetComponent<MeshHandler>().CreateNewPlot(featuresChosen[0], featuresChosen[1], dataReader, TypeOfPlot.Barchart);
-
-      plot.transform.SetParent(transform);
-      plot.transform.localPosition = new Vector3(-2.69f, -2.58f, 0.005f);
-      plot.transform.localScale = new Vector3(1f, 1f, 1f);
-      plot.transform.localEulerAngles = new Vector3(0, 0, 0);
+        // transform.GetComponentInChildren<
+        gameObject.GetComponentInChildrenWithTag<RectTransform>("PlotCreatorIntro").gameObject.SetActive(false);
+        // transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
     }
 
-  }
-  private bool isReady()
-  {
-    if (featuresChosen.Count == 4)
+    private void ShowMenu()
     {
-      return true;
+        gameObject.GetComponentInChildrenWithTag<RectTransform>("PlotCreatorIntro").gameObject.SetActive(false);
+        transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
     }
 
-    return false;
-  }
-
-  private void renderFeatureSelector(int featureNumber)
-  {
-
-
-
-  }
-
-
-  private void renderFeatureSelector(int featureNumber, int featureID)
-  {
-
-
-
-  }
-
-  private void sendPlot(GameObject plot)
-  {
-
-
-  }
-  private void reRenderLocalVersion()
-  {
-
-
-
-  }
-
-  private int featureBeingChanged = -1;
-  public void spawnFeatureSelection(int feature)
-  {
-    if (plot)
+    GameObject plotCreator;
+    // Spawns in screen that is used to create a new plot
+    public void NewPlotCreator()
     {
-      plot.SetActive(false);
+
+
+        // Hide Menu Screen
+        HideMenu();
+
+        // // Spawn
+        plotCreator = GameObject.Instantiate(plotCreatorPrefab);
+        plotCreator.transform.SetParent(transform.GetChild(0));
+        plotCreator.transform.localPosition = new Vector3(0, 0, 0);
+        plotCreator.transform.localScale = new Vector3(1f, 1f, 1f);
+        plotCreator.transform.localEulerAngles = new Vector3(0, 0, 0);
+
     }
-    // If feature menu isn't already spawned
-    if (!featureMenu)
+
+
+    public void Update()
     {
-      featureBeingChanged = feature;
-      featureMenu = Instantiate(ScrollPrefab, transform.position, Quaternion.identity) as GameObject;
-      featureMenu.GetComponentInChildren<ButtonListControl>().BeginControl();
-      featureMenu.transform.SetParent(transform.GetChild(0));
-      featureMenu.transform.localPosition = new Vector3(0, 0, 0);
-      featureMenu.transform.localScale = new Vector3(1f, 1f, 1f);
-      featureMenu.transform.localEulerAngles = new Vector3(0, 0, 0);
+        if (inVR)
+        {    //rotate towards headset
 
+            // Determine which direction to rotate towards
+            Vector3 targetDirection = transform.position - transform.parent.parent.GetChild(0).position;
 
-      Button[] temp = plotCreator.GetComponentsInChildren<Button>();
+            // The step size is equal to speed times frame time.
+            float singleStep = 3f * Time.deltaTime;
 
-      //make both feature buttons inactive
-      foreach (var button in temp)
-      {
-        button.interactable = false;
-      }
+            // Rotate the forward vector towards the target direction by one step
+            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
+
+            // Calculate a rotation a step closer to the target and applies rotation to this object
+            transform.rotation = Quaternion.LookRotation(newDirection);
+            // transform.localPosition = new Vector3(0, 0, 0);}
+        }
     }
-  }
 
-  public void confirmFeatureSelection(int featureSelected)
-  {
-    if (plot)
+
+    public void setFeature(int featureNumber, int featureID)
     {
-      plot.SetActive(true);
+        featuresChosen[featureNumber] = featureID;
+        // check if both features have been selected,
+        bool ready = true;
+        foreach (var feature in featuresChosen)
+        {
+            if (feature == -1)
+            {
+                ready = false;
+                break;
+            }
+        }
+        if (ready)
+        {
+            if (plot != null)
+            {
+                GameObject.Destroy(plot);
+            }
+            plot = GameObject.Instantiate(plotPrefab);
+            plot.GetComponent<MeshHandler>().CreateNewPlot(featuresChosen[0], featuresChosen[1], dataReader, TypeOfPlot.Barchart);
+
+            plot.transform.SetParent(transform);
+            plot.transform.localPosition = new Vector3(-2.69f, -2.58f, 0.005f);
+            plot.transform.localScale = new Vector3(1f, 1f, 1f);
+            plot.transform.localEulerAngles = new Vector3(0, 0, 0);
+
+
+            ThresholdingSliders = GameObject.Instantiate(ThresholdingSlidersPrefab);
+            ThresholdingSliders.transform.SetParent(plotCreator.transform, false);
+            SliderRange[] sliders = ThresholdingSlidersPrefab.GetComponentsInChildren<SliderRange>();
+
+            // set min and max for x and y slider
+            // x
+
+            // y
+            List<string> allYs = new List<string>();
+            foreach (List<string> row in plot.GetComponent<MeshHandler>().plot.DataCompared)
+            {
+                foreach (string entry in row)
+                {
+                    allYs.Add(entry);
+                }
+            }
+
+            sliders[0].initialiseSlider(plot.GetComponent<MeshHandler>().FindMinMaxValues(plot.GetComponent<MeshHandler>().plot.DataComparedHeaders.ToArray()));
+
+            sliders[1].initialiseSlider(plot.GetComponent<MeshHandler>().FindMinMaxValues(allYs.ToArray()));
+        }
+
     }
-    if (featureSelected != -1)
+    private bool isReady()
     {
-      setFeature(featureBeingChanged, featureSelected);
-      Object.Destroy(featureMenu);
-      featureBeingChanged = -1;
+        if (featuresChosen.Count == 4)
+        {
+            return true;
+        }
+
+        return false;
     }
 
-    Button[] temp = plotCreator.GetComponentsInChildren<Button>();
-
-    //make both feature buttons inactive
-    foreach (var button in temp)
+    private void renderFeatureSelector(int featureNumber)
     {
-      button.interactable = true;
+
+
+
     }
 
-  }
 
-  public DataReader GetDataReader()
-  {
-    return dataReader;
-  }
+    private void renderFeatureSelector(int featureNumber, int featureID)
+    {
+
+
+
+    }
+
+    private void sendPlot(GameObject plot)
+    {
+
+
+    }
+    private void reRenderLocalVersion()
+    {
+
+
+
+    }
+
+    private int featureBeingChanged = -1;
+    public void spawnFeatureSelection(int feature)
+    {
+        if (plot)
+        {
+            plot.SetActive(false);
+        }
+        // If feature menu isn't already spawned
+        if (!featureMenu)
+        {
+            featureBeingChanged = feature;
+            featureMenu = Instantiate(ScrollPrefab, transform.position, Quaternion.identity) as GameObject;
+            featureMenu.GetComponentInChildren<ButtonListControl>().BeginControl();
+            featureMenu.transform.SetParent(transform.GetChild(0));
+            featureMenu.transform.localPosition = new Vector3(0, 0, 0);
+            featureMenu.transform.localScale = new Vector3(1f, 1f, 1f);
+            featureMenu.transform.localEulerAngles = new Vector3(0, 0, 0);
+
+
+            Button[] temp = plotCreator.GetComponentsInChildren<Button>();
+
+            //make both feature buttons inactive
+            foreach (var button in temp)
+            {
+                button.interactable = false;
+            }
+        }
+    }
+
+    public void confirmFeatureSelection(int featureSelected)
+    {
+        if (plot)
+        {
+            plot.SetActive(true);
+        }
+        if (featureSelected != -1)
+        {
+            setFeature(featureBeingChanged, featureSelected);
+            Object.Destroy(featureMenu);
+            featureBeingChanged = -1;
+        }
+
+        Button[] temp = plotCreator.GetComponentsInChildren<Button>();
+
+        //make both feature buttons inactive
+        foreach (var button in temp)
+        {
+            button.interactable = true;
+        }
+
+    }
+
+    public DataReader GetDataReader()
+    {
+        return dataReader;
+    }
 
 
 
