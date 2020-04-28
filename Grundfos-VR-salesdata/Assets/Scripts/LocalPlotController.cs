@@ -120,28 +120,39 @@ public class LocalPlotController : MonoBehaviour
             plot.transform.localEulerAngles = new Vector3(0, 0, 0);
 
 
-            if (ThresholdingSliders != null)
-                Destroy(ThresholdingSliders);
-            ThresholdingSliders = GameObject.Instantiate(ThresholdingSlidersPrefab);
-            ThresholdingSliders.transform.SetParent(plotCreator.transform, false);
-            SliderRange[] sliders = ThresholdingSlidersPrefab.GetComponentsInChildren<SliderRange>();
+            if (ThresholdingSliders == null)
+            {
+                ThresholdingSliders = GameObject.Instantiate(ThresholdingSlidersPrefab);
+                ThresholdingSliders.transform.SetParent(plotCreator.transform, false);
+            }
+            SliderRange[] sliders = ThresholdingSliders.GetComponentsInChildren<SliderRange>();
 
-            // set min and max for x and y slider
-            // x
 
-            // y
+
             List<string> allYs = new List<string>();
             foreach (List<string> row in plot.GetComponent<MeshHandler>().plot.DataCompared)
             {
                 foreach (string entry in row)
                 {
+                    if (float.TryParse(entry, out float value))
+                    {
+                        if (value > 100f)
+                        {
+                            Debug.Log("Added: " + entry);
+                        }
+
+                    }
+
                     allYs.Add(entry);
                 }
             }
+            float[] xThresholds = plot.GetComponent<MeshHandler>().FindMinMaxValues(plot.GetComponent<MeshHandler>().plot.DataComparedHeaders.ToArray());
+            Debug.Log("x: " + xThresholds[0] + "," + xThresholds[1]);
+            sliders[0].setSliderValues(xThresholds);
 
-            sliders[0].initialiseSlider(plot.GetComponent<MeshHandler>().FindMinMaxValues(plot.GetComponent<MeshHandler>().plot.DataComparedHeaders.ToArray()));
-
-            sliders[1].initialiseSlider(plot.GetComponent<MeshHandler>().FindMinMaxValues(allYs.ToArray()));
+            float[] yThresholds = plot.GetComponent<MeshHandler>().FindMinMaxValues(allYs.ToArray());
+            Debug.Log("y: " + yThresholds[0] + "," + yThresholds[1]);
+            sliders[1].setSliderValues(yThresholds);
         }
 
     }
@@ -250,6 +261,7 @@ public class LocalPlotController : MonoBehaviour
                 // Debug.Log(plot.GetComponent<MeshHandler>().plot.PlotOptions.XThresholds[0] + " " + plot.GetComponent<MeshHandler>().plot.PlotOptions.XThresholds[1]);
                 break;
             case SliderAxis.y:
+                // Debug.Log("y is being changed");
                 plot.GetComponent<MeshHandler>().plot.PlotOptions.YThresholds = new float[2] { minValue, maxValue };
                 // Debug.Log(plot.GetComponent<MeshHandler>().plot.PlotOptions.YThresholds[0] + " " + plot.GetComponent<MeshHandler>().plot.PlotOptions.YThresholds[1]);
                 break;

@@ -23,11 +23,26 @@ public class SliderRange : MonoBehaviour
     public RectTransform fill;
     void FindSliders()
     {
-        Debug.Log("finding sliders");
-        sliders = GetComponentsInChildren<Slider>();
-        sliderHandles = new RectTransform[sliders.Length];
-        sliderHandles[0] = sliders[0].transform.GetChild(0).GetComponentInChildren<RectTransform>();
-        sliderHandles[1] = sliders[1].transform.GetChild(0).GetComponentInChildren<RectTransform>();
+        if (sliders == null)
+        {
+            Debug.Log("It was neccescary to find sliders");
+            sliders = GetComponentsInChildren<Slider>();
+            sliderHandles = new RectTransform[sliders.Length];
+            sliderHandles[0] = sliders[0].transform.GetChild(0).GetComponentInChildren<RectTransform>();
+            sliderHandles[1] = sliders[1].transform.GetChild(0).GetComponentInChildren<RectTransform>();
+        }
+    }
+
+    void Awake()
+    {
+        if (sliders == null)
+        {
+            sliders = GetComponentsInChildren<Slider>();
+            sliderHandles = new RectTransform[sliders.Length];
+            sliderHandles[0] = sliders[0].transform.GetChild(0).GetComponentInChildren<RectTransform>();
+            sliderHandles[1] = sliders[1].transform.GetChild(0).GetComponentInChildren<RectTransform>();
+        }
+
     }
 
     // Update is called once per frame
@@ -93,6 +108,14 @@ public class SliderRange : MonoBehaviour
 
 
         this.updateSliderOof = true;
+    }
+
+    public void setSliderValues(float[] minmax)
+    {
+        Debug.Log("sliderValues set for" + sliderAxis);
+        FindSliders();
+        sliders[0].minValue = minmax[0]; sliders[0].maxValue = minmax[1]; sliders[0].value = sliders[0].minValue;
+        sliders[1].minValue = minmax[0]; sliders[1].maxValue = minmax[1]; sliders[1].value = sliders[1].maxValue;
     }
 
     public void sliderValueChanged()

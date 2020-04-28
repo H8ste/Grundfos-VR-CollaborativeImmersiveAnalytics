@@ -178,6 +178,8 @@ public class MeshHandler : MonoBehaviour
             GetComponent<MeshFilter>().mesh = plot.Mesh;
         }
 
+        Debug.Log("max avg: " + plot.DataAverages[0]);
+
     }
 
     public void CreateNewPlot(int _featureOneIndex, int _featureTwoIndex, DataReader dataReaderRef, TypeOfPlot plotType)
@@ -189,7 +191,8 @@ public class MeshHandler : MonoBehaviour
 
         plot.Mesh = new Mesh();
 
-        ComputeMesh();
+
+        InitialiseMesh();
 
         InitialiseMeshColors();
 
@@ -296,6 +299,17 @@ public class MeshHandler : MonoBehaviour
         }
     }
 
+    private void InitialiseMesh()
+    {
+        plot.Data = dataReader.GetData();
+        plot.DataCompared = Compare(plot.Data[plot.FeatureOneIndex], plot.Data[plot.FeatureTwoIndex], plot.PlotOptions.XThresholds, plot.PlotOptions.YThresholds);
+
+        SortPlot();
+
+        plot.Vertices = CreateChartOfType(plot.PlotOptions.PlotType);
+        plot.Triangles = FindTriangles(plot.Vertices);
+    }
+
     private void ComputeMesh()
     {
         if (plot.DataCompared == null)
@@ -334,6 +348,7 @@ public class MeshHandler : MonoBehaviour
     List<System.String>[] Compare(List<System.String> first, List<System.String> second, float[] xThresholds, float[] yThresholds)
     {
         List<ComparedRow> seenBefore = new List<ComparedRow>();
+
         // For each item in first feature
         for (int i = 0; i < first.Count; i++)
         {
@@ -408,6 +423,14 @@ public class MeshHandler : MonoBehaviour
 
                             if (shouldAddYElement)
                             {
+                                if (float.TryParse(second[i], out float value))
+                                {
+                                    if (value > 100f)
+                                    {
+                                        Debug.Log("Added element: " + second[i]);
+                                    }
+                                }
+
                                 seenBefore[k].content.Add(second[i]);
                             }
                             else
@@ -442,7 +465,7 @@ public class MeshHandler : MonoBehaviour
         }
         else
         {
-            SortPlot();
+            // SortPlot(withsomeprefix);
             // TODO: Add code to use mapping provided from user instead of return value from findSortedOrder
         }
 
@@ -489,6 +512,58 @@ public class MeshHandler : MonoBehaviour
                         temp = arrayToSort[j];
                         arrayToSort[j] = arrayToSort[j + 1];
                         arrayToSort[j + 1] = temp;
+
+                        tempMapping = mapping[j];
+                        mapping[j] = mapping[j + 1];
+                        mapping[j + 1] = tempMapping;
+                    }
+                }
+            }
+        }
+
+        return mapping;
+    }
+
+    private int[] findSortedOrder(List<string> dataHeaders)
+    {
+        // string[] arrayToSort = new string[dataHeaders.Length];
+
+        // Fill an int array : [0, 1, 3, ..., length]
+        int[] mapping = Enumerable.Range(0, dataHeaders.Count).Select(i => (int)i).ToArray();
+
+        // for (int i = 0; i < input.Count; i++)
+        // {
+        //     arrayToSort[i] = input[i].header;
+        // }
+        string temp;
+        int tempMapping;
+        // Loops through array from back and from the front, sorting it by eather greatest number or greatest string value (alphabetically)
+        for (int i = 1; i < dataHeaders.Count; i++)
+        {
+            for (int j = 0; j < dataHeaders.Count - 1; j++)
+            {
+                if (float.TryParse(dataHeaders[j], out _))
+                {
+                    // Numbers
+                    if (float.Parse(dataHeaders[j]) > float.Parse(dataHeaders[j + 1]))
+                    {
+                        temp = dataHeaders[j];
+                        dataHeaders[j] = dataHeaders[j + 1];
+                        dataHeaders[j + 1] = temp;
+
+                        tempMapping = mapping[j];
+                        mapping[j] = mapping[j + 1];
+                        mapping[j + 1] = tempMapping;
+                    }
+                }
+                else
+                {
+                    // Letters
+                    if (dataHeaders[j][0] > dataHeaders[j + 1][0])
+                    {
+                        temp = dataHeaders[j];
+                        dataHeaders[j] = dataHeaders[j + 1];
+                        dataHeaders[j + 1] = temp;
 
                         tempMapping = mapping[j];
                         mapping[j] = mapping[j + 1];
@@ -691,15 +766,47 @@ public class MeshHandler : MonoBehaviour
 
     }
 
+    public void UpdateMeshColors(Color32[] previousColors, string[] previousDataComparedHeaders)
+    {
+        Color32[] newColors = new Color32[plot.DataComparedHeaders.Count];
+        // Find any of the previous datacompared x entries that is the same as the ones in the new datacompared
+        for (int index = 0; index < previousDataComparedHeaders.Length; index++)
+        {
+            for (int i = 0; i < plot.DataComparedHeaders.Count; i++)
+            {
+                // If they are, use the previous  datacompared entrie index on as the new data x color
+                if (previousDataComparedHeaders[index] == plot.DataComparedHeaders[i])
+                {
+                    newColors[i] = previousColors[index];
+                    break;
+                }
+            }
+        }
+        // Any indexes of the new colors not filled will get a random color;
+        for (int i = 0; i < newColors.Length; i++)
+        {
+            if (newColors[i].r == 0 && newColors[i].g == 0 && newColors[i].b == 0 && newColors[i].a == 0)
+            {
+                newColors[i] = new Color32((byte)(int)UnityEngine.Random.Range(0, 255f), (byte)(int)UnityEngine.Random.Range(0, 255f), (byte)(int)UnityEngine.Random.Range(0, 255f), 255);
+            }
+        }
+        plot.PlotOptions.FeatureColors = newColors;
+    }
+
     public void ThresholdPlot()
     {
-        plot.DataCompared = null;
-        plot.DataComparedHeaders = null;
-        plot.DataAverages = null;
+        // plot.DataHeaders
+        Color32[] previousColors = plot.PlotOptions.FeatureColors;
+        string[] previousDataHeaders = plot.DataComparedHeaders.ToArray();
+
+        // plot.DataCompared = null;
+        // plot.DataComparedHeaders = null;
+        // plot.DataHeaders = null;
+        // plot.DataAverages = null;
 
         ComputeMesh();
 
-        InitialiseMeshColors();
+        UpdateMeshColors(previousColors, previousDataHeaders);
 
         SetupAxisNotation();
 
@@ -714,15 +821,33 @@ public class MeshHandler : MonoBehaviour
 
     public void SortPlot()
     {
-        // sortedOrder = findSortedOrder(seenBefore);
+        if (plot.PlotOptions.SpecifiedOrder == null)
+        {
+            Debug.Log("Sorted plot");
+            sortedOrder = findSortedOrder(plot.DataComparedHeaders);
 
-        // int i = 0;
-        // foreach (var index in sortedOrder)
-        // {
-        //     comparison[i] = seenBefore[index].content;
-        //     plot.DataComparedHeaders.Add(seenBefore[index].header);
-        //     i++;
-        // }
+            List<string>[] sortedDataCompared = new List<string>[plot.DataComparedHeaders.Count];
+            List<string> sortedDataComparedHeaders = new List<string>();
+            int i = 0;
+            foreach (int index in sortedOrder)
+            {
+                sortedDataCompared[i] = plot.DataCompared[index];
+                sortedDataComparedHeaders.Add(plot.DataComparedHeaders[index]);
+                i++;
+            }
+
+            plot.DataCompared = sortedDataCompared;
+            plot.DataComparedHeaders = sortedDataComparedHeaders;
+
+            plot.Vertices = CreateChartOfType(plot.PlotOptions.PlotType);
+            plot.Triangles = FindTriangles(plot.Vertices);
+        }
+        else
+        {
+            // TODO Add using specifiedorder (user input)
+        }
+
+
     }
 
 }
