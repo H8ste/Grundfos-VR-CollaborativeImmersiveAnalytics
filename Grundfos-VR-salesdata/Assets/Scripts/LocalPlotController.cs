@@ -120,6 +120,8 @@ public class LocalPlotController : MonoBehaviour
             plot.transform.localEulerAngles = new Vector3(0, 0, 0);
 
 
+            if (ThresholdingSliders != null)
+                Destroy(ThresholdingSliders);
             ThresholdingSliders = GameObject.Instantiate(ThresholdingSlidersPrefab);
             ThresholdingSliders.transform.SetParent(plotCreator.transform, false);
             SliderRange[] sliders = ThresholdingSlidersPrefab.GetComponentsInChildren<SliderRange>();
@@ -235,6 +237,25 @@ public class LocalPlotController : MonoBehaviour
     public DataReader GetDataReader()
     {
         return dataReader;
+    }
+
+    public void SliderValueChanged(SliderAxis axis, float minValue, float maxValue)
+    {
+        // Using provided min and max, change plotoptions threshold for appropiate axis
+        switch (axis)
+        {
+            case SliderAxis.x:
+                // Debug.Log(plot.GetComponent<MeshHandler>().plot.PlotOptions.PlotLength);
+                plot.GetComponent<MeshHandler>().plot.PlotOptions.XThresholds = new float[2] { minValue, maxValue };
+                // Debug.Log(plot.GetComponent<MeshHandler>().plot.PlotOptions.XThresholds[0] + " " + plot.GetComponent<MeshHandler>().plot.PlotOptions.XThresholds[1]);
+                break;
+            case SliderAxis.y:
+                plot.GetComponent<MeshHandler>().plot.PlotOptions.YThresholds = new float[2] { minValue, maxValue };
+                // Debug.Log(plot.GetComponent<MeshHandler>().plot.PlotOptions.YThresholds[0] + " " + plot.GetComponent<MeshHandler>().plot.PlotOptions.YThresholds[1]);
+                break;
+        }
+        // Enforce a recomputation of comparedData
+        plot.GetComponent<MeshHandler>().ThresholdPlot();
     }
 
 

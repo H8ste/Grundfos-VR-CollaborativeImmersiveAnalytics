@@ -125,9 +125,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 409661185203207546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43f33553bcf15f34ea33761334cfb573, type: 3}
+  m_Script: {fileID: 11500000, guid: 53ae0d39432443943a34661da7d75e3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sliderAxis: 0
   fill: {fileID: 1450816559740002896}
 --- !u!1 &2514600012222972785
 GameObject:
@@ -886,9 +887,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5561312638105097084}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43f33553bcf15f34ea33761334cfb573, type: 3}
+  m_Script: {fileID: 11500000, guid: 53ae0d39432443943a34661da7d75e3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sliderAxis: 1
   fill: {fileID: 1561666142798618277}
 --- !u!1 &5857059114791309243
 GameObject:
@@ -1126,7 +1128,18 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6113778024952644616}
+        m_MethodName: sliderValueChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6201834327982764344
 GameObject:
   m_ObjectHideFlags: 0
@@ -1249,7 +1262,18 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8374241460373139733}
+        m_MethodName: sliderValueChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6278221542178584902
 GameObject:
   m_ObjectHideFlags: 0
@@ -1336,7 +1360,18 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8374241460373139733}
+        m_MethodName: sliderValueChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6762451573193080721
 GameObject:
   m_ObjectHideFlags: 0
@@ -1423,7 +1458,18 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6113778024952644616}
+        m_MethodName: sliderValueChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6850222319932276349
 GameObject:
   m_ObjectHideFlags: 0
