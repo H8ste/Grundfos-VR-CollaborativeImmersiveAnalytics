@@ -26,6 +26,8 @@ public class LocalPlotController : MonoBehaviour
 
     private GameObject ThresholdingSliders;
 
+    private GameObject PlotComfirmButton;
+
 
 
     DataReader dataReader;
@@ -68,6 +70,10 @@ public class LocalPlotController : MonoBehaviour
         plotCreator.transform.localPosition = new Vector3(0, 0, 0);
         plotCreator.transform.localScale = new Vector3(1f, 1f, 1f);
         plotCreator.transform.localEulerAngles = new Vector3(0, 0, 0);
+
+        if (!PlotComfirmButton)
+            PlotComfirmButton = GameObject.FindObjectOfType<PushPlotToGlobalPlot>().gameObject;
+        PlotComfirmButton.gameObject.SetActive(false);
 
     }
 
@@ -120,7 +126,6 @@ public class LocalPlotController : MonoBehaviour
             plot.transform.localScale = new Vector3(1f, 1f, 1f);
             plot.transform.localEulerAngles = new Vector3(0, 0, 0);
 
-
             if (ThresholdingSliders == null)
             {
                 ThresholdingSliders = GameObject.Instantiate(ThresholdingSlidersPrefab);
@@ -128,7 +133,7 @@ public class LocalPlotController : MonoBehaviour
             }
             SliderRange[] sliders = ThresholdingSliders.GetComponentsInChildren<SliderRange>();
 
-
+            PlotComfirmButton.gameObject.SetActive(true);
 
             List<string> allYs = new List<string>();
             foreach (List<string> row in plot.GetComponent<MeshHandler>().plot.DataCompared)
@@ -267,6 +272,11 @@ public class LocalPlotController : MonoBehaviour
         }
         // Enforce a recomputation of comparedData
         plot.GetComponent<MeshHandler>().ThresholdPlot();
+    }
+
+    public GameObject GetPlot()
+    {
+        return plot;
     }
 
 
