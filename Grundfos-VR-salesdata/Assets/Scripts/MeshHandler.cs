@@ -360,7 +360,7 @@ public class MeshHandler : MonoBehaviour
                 if (float.TryParse(first[i], NumberStyles.Float, CultureInfo.InvariantCulture, out float value))
                 {
                     // numerical
-                    if (xThresholds[0] < value && value < xThresholds[1])
+                    if (xThresholds[0] <= value && value <= xThresholds[1])
                     {
                         // Debug.Log("Adding X element: " + value + ". Because it was within: " + xThresholds[0] + " <-> " + xThresholds[1]);
                         shouldAddXElement = true;
@@ -406,27 +406,27 @@ public class MeshHandler : MonoBehaviour
                                 if (float.TryParse(second[i], NumberStyles.Float, CultureInfo.InvariantCulture, out float value))
                                 {
                                     // numerical
-                                    if (yThresholds[0] < value && value < yThresholds[1])
+                                    if (yThresholds[0] <= value && value <= yThresholds[1])
                                     {
-                                        // Debug.Log("Adding Y element: " + value + ". Because it was within: " + yThresholds[0] + " <-> " + yThresholds[1]);
+                                        Debug.Log("Adding Y element: " + value + ". Because it was within: " + yThresholds[0] + " <-> " + yThresholds[1]);
                                         shouldAddYElement = true;
                                     }
                                     else
                                     {
-                                        // Debug.Log("Didn't add Y element: " + value + ". Because it wasn't within: " + yThresholds[0] + " <-> " + yThresholds[1]);
+                                        Debug.Log("Didn't add Y element: " + value + ". Because it wasn't within: " + yThresholds[0] + " <-> " + yThresholds[1]);
                                     }
                                 }
                                 else
                                 {
                                     // alphebetical
                                     // TODO: It should check if the numerical value representation of the letter is within the threshold
-                                    // Debug.Log("Adding Y element because it was alphabetical");
+                                    Debug.Log("Adding Y element because it was alphabetical");
                                     shouldAddYElement = true;
                                 }
                             }
                             else
                             {
-                                // Debug.Log("Adding Y element because there were no threshold specified");
+                                Debug.Log("Adding Y element because there were no threshold specified");
                                 shouldAddYElement = true;
                             }
 
