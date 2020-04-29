@@ -9,6 +9,7 @@ TagManager:
   - ButtonSchrollList
   - FeatureSelector
   - PlotMesh
+  - PlotCreatorIntro
   layers:
   - Default
   - TransparentFX

@@ -7,8 +7,8 @@ using Unity.XR.Oculus;
 // using UnityEngine
 public enum HandSide
 {
-  Left,
-  Right
+  Left = (int)0,
+  Right = (int)1
 }
 
 namespace UnityEngine.XR.Interaction.Toolkit
@@ -30,11 +30,13 @@ namespace UnityEngine.XR.Interaction.Toolkit
 
     private bool alreadyDeleted = false;
 
+    private SpawnPlotController PlotController;
+
 
     // Start is called before the first frame update
     void Start()
     {
-
+      PlotController = gameObject.GetComponentInParent<SpawnPlotController>();
     }
 
     // Update is called once per frame
@@ -43,7 +45,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
       FindController();
       // If hand is pointing
 
-      if (controllerFound)
+      if (controllerFound && !PlotController.isMenuUp())
       {
         float pointerValue;
         if (hand.TryGetFeatureValue(UnityEngine.XR.CommonUsages.indexTouch, out pointerValue) && pointerValue < 1)
