@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.XR.Interaction.Toolkit;
 using System;
+using System.Globalization; //used to ensure correct parsing of comma numbers
 
 public enum TypeOfPlot { Barchart };
 
@@ -356,13 +357,17 @@ public class MeshHandler : MonoBehaviour
             // Check if compare should consider Thresholds for x
             if (xThresholds != null)
             {
-                if (float.TryParse(first[i], out float value))
+                if (float.TryParse(first[i], NumberStyles.Float, CultureInfo.InvariantCulture, out float value))
                 {
                     // numerical
                     if (xThresholds[0] < value && value < xThresholds[1])
                     {
                         // Debug.Log("Adding X element: " + value + ". Because it was within: " + xThresholds[0] + " <-> " + xThresholds[1]);
                         shouldAddXElement = true;
+                    }
+                    else
+                    {
+                        // Debug.Log("Didn't add X element: " + value + ". Because it wasn't within: " + xThresholds[0] + " <-> " + xThresholds[1]);
                     }
                 }
                 else
@@ -398,13 +403,17 @@ public class MeshHandler : MonoBehaviour
                             if (yThresholds != null)
                             {
                                 // Insert entry of second feature into list of appropiate object of seenBefore
-                                if (float.TryParse(second[i], out float value))
+                                if (float.TryParse(second[i], NumberStyles.Float, CultureInfo.InvariantCulture, out float value))
                                 {
                                     // numerical
                                     if (yThresholds[0] < value && value < yThresholds[1])
                                     {
                                         // Debug.Log("Adding Y element: " + value + ". Because it was within: " + yThresholds[0] + " <-> " + yThresholds[1]);
                                         shouldAddYElement = true;
+                                    }
+                                    else
+                                    {
+                                        // Debug.Log("Didn't add Y element: " + value + ". Because it wasn't within: " + yThresholds[0] + " <-> " + yThresholds[1]);
                                     }
                                 }
                                 else
@@ -423,13 +432,13 @@ public class MeshHandler : MonoBehaviour
 
                             if (shouldAddYElement)
                             {
-                                if (float.TryParse(second[i], out float value))
-                                {
-                                    if (value > 100f)
-                                    {
-                                        Debug.Log("Added element: " + second[i]);
-                                    }
-                                }
+                                // if (float.TryParse(second[i], NumberStyles.Float, CultureInfo.InvariantCulture, out float value))
+                                // {
+                                //     if (value > 100f)
+                                //     {
+                                //         Debug.Log("Added element: " + second[i]);
+                                //     }
+                                // }
 
                                 seenBefore[k].content.Add(second[i]);
                             }
@@ -490,10 +499,10 @@ public class MeshHandler : MonoBehaviour
         {
             for (int j = 0; j < arrayToSort.Length - 1; j++)
             {
-                if (float.TryParse(arrayToSort[j], out _))
+                if (float.TryParse(arrayToSort[j], NumberStyles.Float, CultureInfo.InvariantCulture, out _))
                 {
                     // Numbers
-                    if (float.Parse(arrayToSort[j]) > float.Parse(arrayToSort[j + 1]))
+                    if (float.Parse(arrayToSort[j], NumberStyles.Float, CultureInfo.InvariantCulture) > float.Parse(arrayToSort[j + 1], NumberStyles.Float, CultureInfo.InvariantCulture))
                     {
                         temp = arrayToSort[j];
                         arrayToSort[j] = arrayToSort[j + 1];
@@ -542,10 +551,10 @@ public class MeshHandler : MonoBehaviour
         {
             for (int j = 0; j < dataHeaders.Count - 1; j++)
             {
-                if (float.TryParse(dataHeaders[j], out _))
+                if (float.TryParse(dataHeaders[j], NumberStyles.Float, CultureInfo.InvariantCulture, out _))
                 {
                     // Numbers
-                    if (float.Parse(dataHeaders[j]) > float.Parse(dataHeaders[j + 1]))
+                    if (float.Parse(dataHeaders[j], NumberStyles.Float, CultureInfo.InvariantCulture) > float.Parse(dataHeaders[j + 1], NumberStyles.Float, CultureInfo.InvariantCulture))
                     {
                         temp = dataHeaders[j];
                         dataHeaders[j] = dataHeaders[j + 1];
@@ -638,13 +647,12 @@ public class MeshHandler : MonoBehaviour
     {
         float avgVal = 0;
         int lengthDeduct = 0;
-
         // Checks if input is ordinal -> Yes: Return occurence    No: Return Average
-        if (float.TryParse(input[0], out _))
+        if (float.TryParse(input[0], NumberStyles.Float, CultureInfo.InvariantCulture, out _))
         {
             foreach (var number in input)
             {
-                float parsedNumber = float.Parse(number);
+                float.TryParse(number, NumberStyles.Float, CultureInfo.InvariantCulture, out float parsedNumber);
                 if (parsedNumber == 0)
                 {
                     lengthDeduct++;
@@ -738,7 +746,7 @@ public class MeshHandler : MonoBehaviour
     public float[] FindMinMaxValues(String[] input)
     {
         // Check if value can be converted to number
-        if (float.TryParse(input[0], out _))
+        if (float.TryParse(input[0], NumberStyles.Float, CultureInfo.InvariantCulture, out _))
         {
             // Numbers
             float minValue = 1000000;
@@ -746,7 +754,7 @@ public class MeshHandler : MonoBehaviour
             foreach (string sNumber in input)
             {
                 float fNumber;
-                float.TryParse(sNumber, out fNumber);
+                float.TryParse(sNumber, NumberStyles.Float, CultureInfo.InvariantCulture, out fNumber);
                 if (fNumber > maxValue)
                 {
                     maxValue = fNumber;
@@ -799,7 +807,7 @@ public class MeshHandler : MonoBehaviour
         Color32[] previousColors = plot.PlotOptions.FeatureColors;
         string[] previousDataHeaders = plot.DataComparedHeaders.ToArray();
 
-        // plot.DataCompared = null;
+        plot.DataCompared = null;
         // plot.DataComparedHeaders = null;
         // plot.DataHeaders = null;
         // plot.DataAverages = null;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Globalization; //used to ensure correct parsing of comma numbers
 
 public class LocalPlotController : MonoBehaviour
 {
@@ -134,18 +135,16 @@ public class LocalPlotController : MonoBehaviour
             {
                 foreach (string entry in row)
                 {
-                    if (float.TryParse(entry, out float value))
+                    if (float.TryParse(entry, NumberStyles.Float, CultureInfo.InvariantCulture, out float value))
                     {
-                        if (value > 100f)
-                        {
-                            Debug.Log("Added: " + entry);
-                        }
 
                     }
 
                     allYs.Add(entry);
                 }
             }
+
+            // Resetting threshold to be that of min and max
             float[] xThresholds = plot.GetComponent<MeshHandler>().FindMinMaxValues(plot.GetComponent<MeshHandler>().plot.DataComparedHeaders.ToArray());
             Debug.Log("x: " + xThresholds[0] + "," + xThresholds[1]);
             sliders[0].setSliderValues(xThresholds);
