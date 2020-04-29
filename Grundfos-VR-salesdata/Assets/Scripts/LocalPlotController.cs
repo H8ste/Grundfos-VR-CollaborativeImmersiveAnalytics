@@ -151,11 +151,11 @@ public class LocalPlotController : MonoBehaviour
 
             // Resetting threshold to be that of min and max
             float[] xThresholds = plot.GetComponent<MeshHandler>().FindMinMaxValues(plot.GetComponent<MeshHandler>().plot.DataComparedHeaders.ToArray());
-            Debug.Log("x: " + xThresholds[0] + "," + xThresholds[1]);
+            // Debug.Log("x: " + xThresholds[0] + "," + xThresholds[1]);
             sliders[0].setSliderValues(xThresholds);
 
             float[] yThresholds = plot.GetComponent<MeshHandler>().FindMinMaxValues(allYs.ToArray());
-            Debug.Log("y: " + yThresholds[0] + "," + yThresholds[1]);
+            // Debug.Log("y: " + yThresholds[0] + "," + yThresholds[1]);
             sliders[1].setSliderValues(yThresholds);
         }
 
