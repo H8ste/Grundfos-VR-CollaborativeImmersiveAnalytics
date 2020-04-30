@@ -67,6 +67,12 @@ public class PlotOptions
     float[] yThresholds = null;
     public float[] YThresholds { get { return yThresholds; } set { yThresholds = value; } }
 
+    string[] yUniques = null;
+    public string[] YUniques { get { return yUniques; } set { yUniques = value; } }
+
+    string[] xUniques = null;
+    public string[] XUniques { get { return xUniques; } set { xUniques = value; } }
+
     public PlotOptions()
     {
         this.plotLength = 5f; this.plotHeight = 5f;
@@ -385,9 +391,34 @@ public class MeshHandler : MonoBehaviour
                 else
                 {
                     // alphebetical
+                    // find 
+                    // if the index is above the index provided in threshold and below 
+
+                    if (plot.PlotOptions.XUniques != null)
+                    {
+                        // find index that this entry is found in uniques
+                        int xIndex = -1;
+                        for (int j = 0; j < plot.PlotOptions.XUniques.Length; j++)
+                        {
+                            if (plot.PlotOptions.XUniques[j] == first[i])
+                            {
+                                xIndex = j;
+                                break;
+                            }
+                        }
+
+                        if (xIndex != -1 && (int)plot.PlotOptions.XThresholds[0] <= xIndex && xIndex <= (int)plot.PlotOptions.XThresholds[1])
+                        {
+                            shouldAddXElement = true;
+                        }
+                    }
+                    else
+                    {
+                        shouldAddXElement = true;
+                    }
                     // TODO: It should check if the numerical value representation of the letter is within the threshold
                     // Debug.Log("Adding X element because it was alphabetical");
-                    shouldAddXElement = true;
+
 
                 }
 
@@ -437,7 +468,30 @@ public class MeshHandler : MonoBehaviour
                                     // alphebetical
                                     // TODO: It should check if the numerical value representation of the letter is within the threshold
                                     // Debug.Log("Adding Y element because it was alphabetical");
-                                    shouldAddYElement = true;
+
+                                    if (plot.PlotOptions.YUniques != null)
+                                    {
+                                        // find index that this entry is found in uniques
+                                        int yIndex = -1;
+                                        for (int j = 0; j < plot.PlotOptions.YUniques.Length; j++)
+                                        {
+                                            if (plot.PlotOptions.YUniques[j] == second[i])
+                                            {
+                                                yIndex = j;
+                                                break;
+                                            }
+                                        }
+
+                                        if (yIndex != -1 && (int)plot.PlotOptions.YThresholds[0] <= yIndex && yIndex <= (int)plot.PlotOptions.YThresholds[1])
+                                        {
+                                            shouldAddYElement = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        shouldAddYElement = true;
+                                    }
+                                    // shouldAddYElement = true;
                                 }
                             }
                             else
@@ -484,16 +538,37 @@ public class MeshHandler : MonoBehaviour
                         else
                         {
                             // Alphabetical
-                            seenBefore.Add(new ComparedRow(first[i], second[i]));
+
+                            if (plot.PlotOptions.YUniques != null)
+                            {
+                                // find index that this entry is found in uniques
+                                int yIndex = -1;
+                                for (int j = 0; j < plot.PlotOptions.YUniques.Length; j++)
+                                {
+                                    if (plot.PlotOptions.YUniques[j] == second[i])
+                                    {
+                                        yIndex = j;
+                                        break;
+                                    }
+                                }
+
+                                if (yIndex != -1 && (int)plot.PlotOptions.YThresholds[0] <= yIndex && yIndex <= (int)plot.PlotOptions.YThresholds[1])
+                                {
+                                    seenBefore.Add(new ComparedRow(first[i], second[i]));
+                                }
+                            }
+                            else
+                            {
+                                seenBefore.Add(new ComparedRow(first[i], second[i]));
+                            }
+
                         }
                     }
                     else
                     {
                         seenBefore.Add(new ComparedRow(first[i], second[i]));
                     }
-
                 }
-
             }
             else
             {

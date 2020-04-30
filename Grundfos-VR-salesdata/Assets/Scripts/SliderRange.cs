@@ -21,10 +21,13 @@ public class SliderRange : MonoBehaviour
     public SliderAxis sliderAxis;
 
     public RectTransform fill;
+
+    private LocalPlotController localPlotRef;
     void FindSliders()
     {
         if (sliders == null)
         {
+            localPlotRef = GameObject.FindObjectOfType<LocalPlotController>();
             Debug.Log("It was neccescary to find sliders");
             sliders = GetComponentsInChildren<Slider>();
             sliderHandles = new RectTransform[sliders.Length];
@@ -37,6 +40,7 @@ public class SliderRange : MonoBehaviour
     {
         if (sliders == null)
         {
+            localPlotRef = GameObject.FindObjectOfType<LocalPlotController>();
             sliders = GetComponentsInChildren<Slider>();
             sliderHandles = new RectTransform[sliders.Length];
             sliderHandles[0] = sliders[0].transform.GetChild(0).GetComponentInChildren<RectTransform>();
@@ -83,7 +87,42 @@ public class SliderRange : MonoBehaviour
                 // Change text of min max to their values
                 foreach (Slider slider in sliders)
                 {
-                    slider.GetComponentInChildren<Text>().text = slider.value.ToString();
+                    MeshHandler meshHandlerRef = localPlotRef.GetPlot().GetComponent<MeshHandler>();
+                    if (meshHandlerRef)
+                    {
+                        switch (sliderAxis)
+                        {
+                            case SliderAxis.x:
+                                // check if x values are numerical or alphabetical
+                                if (meshHandlerRef.plot.PlotOptions.XUniques == null)
+                                {
+                                    slider.GetComponentInChildren<Text>().text = slider.value.ToString();
+                                }
+                                else
+                                {
+                                    // Debug.Log("value: " + slider.value + ", int version: " + (int)slider.value + ", array length: " + meshHandlerRef.plot.PlotOptions.XUniques.Length);
+                                    slider.GetComponentInChildren<Text>().text = meshHandlerRef.plot.PlotOptions.XUniques[(int)slider.value];
+                                }
+
+                                break;
+                            case SliderAxis.y:
+                                if (meshHandlerRef.plot.PlotOptions.YUniques == null)
+                                {
+                                    slider.GetComponentInChildren<Text>().text = slider.value.ToString();
+                                }
+                                else
+                                {
+                                    // Debug.Log("value: " + slider.value + ", int version: " + (int)slider.value + ", array length: " + meshHandlerRef.plot.PlotOptions.XUniques.Length);
+                                    slider.GetComponentInChildren<Text>().text = meshHandlerRef.plot.PlotOptions.YUniques[(int)slider.value];
+                                }
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        // Debug.Log("couldn't find localPlotRef");
+                    }
+
                 }
             }
         }
