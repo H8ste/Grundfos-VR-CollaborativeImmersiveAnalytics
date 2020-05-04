@@ -44,7 +44,7 @@ public class GlobalPlotController : MonoBehaviour
 
         // Add plot as child to this gameobject
         plots[plots.Count - 1].transform.SetParent(transform, false);
-        plots[plots.Count - 1].transform.localScale = Vector3.one;
+        plots[plots.Count - 1].transform.localScale = Vector3.one * 0.23f;
         plots[plots.Count - 1].transform.eulerAngles = Vector3.zero;
         if (plots.Count > 1)
         {
@@ -52,7 +52,7 @@ public class GlobalPlotController : MonoBehaviour
         }
         else
         {
-            plots[0].transform.localPosition += new Vector3(-5f, 1f, 0);
+            plots[0].transform.position = new Vector3(-5f, 1f, 0);
         }
     }
 
