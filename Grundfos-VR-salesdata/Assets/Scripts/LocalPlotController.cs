@@ -114,12 +114,14 @@ public class LocalPlotController : MonoBehaviour
         }
         if (ready)
         {
+
             if (plot != null)
             {
                 GameObject.Destroy(plot);
             }
             plot = GameObject.Instantiate(plotPrefab);
-            plot.GetComponent<MeshHandler>().CreateNewPlot(featuresChosen[0], featuresChosen[1], dataReader, TypeOfPlot.Barchart);
+            MeshHandler meshHandlerRef = plot.GetComponent<MeshHandler>();
+            meshHandlerRef.CreateNewPlot(featuresChosen[0], featuresChosen[1], dataReader, TypeOfPlot.Barchart);
 
             plot.transform.SetParent(transform);
             plot.transform.localPosition = new Vector3(-2.69f, -2.58f, 0.005f);
@@ -135,27 +137,68 @@ public class LocalPlotController : MonoBehaviour
 
             PlotComfirmButton.gameObject.SetActive(true);
 
+            float[] xThresholds; float[] yThresholds;
+
+
+            if (meshHandlerRef.plot.PlotOptions.XUniques != null)
+                meshHandlerRef.plot.PlotOptions.XUniques = null;
+            if (meshHandlerRef.plot.PlotOptions.YUniques != null)
+                meshHandlerRef.plot.PlotOptions.YUniques = null;
+
+            //x
+            if (float.TryParse(meshHandlerRef.plot.DataComparedHeaders[0], out _))
+            {
+                // numerical
+                xThresholds = meshHandlerRef.FindMinMaxValues(meshHandlerRef.plot.DataComparedHeaders.ToArray());
+            }
+            else
+            {
+                // alphabetical
+
+                xThresholds = new float[2] { 0, meshHandlerRef.plot.DataComparedHeaders.Count - 1 };
+                meshHandlerRef.plot.PlotOptions.XUniques = meshHandlerRef.plot.DataComparedHeaders.ToArray();
+            }
+
+
+            //y
             List<string> allYs = new List<string>();
-            foreach (List<string> row in plot.GetComponent<MeshHandler>().plot.DataCompared)
+            foreach (List<string> row in meshHandlerRef.plot.DataCompared)
             {
                 foreach (string entry in row)
                 {
-                    if (float.TryParse(entry, NumberStyles.Float, CultureInfo.InvariantCulture, out float value))
-                    {
-
-                    }
-
                     allYs.Add(entry);
                 }
             }
 
+            if (float.TryParse(meshHandlerRef.plot.DataCompared[1][0], out _))
+            {
+                // numerical
+                yThresholds = meshHandlerRef.FindMinMaxValues(allYs.ToArray());
+            }
+            else
+            {
+                // alphabetical
+                // find all unique y possibilities
+                // save those uniques into the plot for later use when thresholding
+                // where we begin a for loop at int sliderValueMin (min slider) and end with sliderValueMax (max slider)
+                // and if y value exist within that section, it thresholds by that 
+
+                List<string> yUniques = new List<string>();
+                HashSet<string> unique_y_values = new HashSet<string>(allYs);
+                foreach (string yUnique in unique_y_values)
+                {
+                    yUniques.Add(yUnique);
+                }
+                meshHandlerRef.plot.PlotOptions.YUniques = yUniques.ToArray();
+                yThresholds = new float[2] { 0, unique_y_values.Count - 1 };
+            }
+
+
             // Resetting threshold to be that of min and max
-            float[] xThresholds = plot.GetComponent<MeshHandler>().FindMinMaxValues(plot.GetComponent<MeshHandler>().plot.DataComparedHeaders.ToArray());
-            Debug.Log("x: " + xThresholds[0] + "," + xThresholds[1]);
+
             sliders[0].setSliderValues(xThresholds);
 
-            float[] yThresholds = plot.GetComponent<MeshHandler>().FindMinMaxValues(allYs.ToArray());
-            Debug.Log("y: " + yThresholds[0] + "," + yThresholds[1]);
+            // Debug.Log("y: " + yThresholds[0] + "," + yThresholds[1]);
             sliders[1].setSliderValues(yThresholds);
         }
 

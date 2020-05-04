@@ -67,6 +67,12 @@ public class PlotOptions
     float[] yThresholds = null;
     public float[] YThresholds { get { return yThresholds; } set { yThresholds = value; } }
 
+    string[] yUniques = null;
+    public string[] YUniques { get { return yUniques; } set { yUniques = value; } }
+
+    string[] xUniques = null;
+    public string[] XUniques { get { return xUniques; } set { xUniques = value; } }
+
     public PlotOptions()
     {
         this.plotLength = 5f; this.plotHeight = 5f;
@@ -179,7 +185,7 @@ public class MeshHandler : MonoBehaviour
             GetComponent<MeshFilter>().mesh = plot.Mesh;
         }
 
-        Debug.Log("max avg: " + plot.DataAverages[0]);
+        // Debug.Log("max avg: " + plot.DataAverages[0]);
 
     }
 
@@ -321,6 +327,7 @@ public class MeshHandler : MonoBehaviour
 
         plot.Vertices = CreateChartOfType(plot.PlotOptions.PlotType);
         plot.Triangles = FindTriangles(plot.Vertices);
+        plotMeshChanged = true;
     }
 
     private void InitialiseMeshColors()
@@ -350,6 +357,17 @@ public class MeshHandler : MonoBehaviour
     {
         List<ComparedRow> seenBefore = new List<ComparedRow>();
 
+        // if (xThresholds != null && yThresholds != null)
+        // {
+        // Debug.Log("xThresholds:  " + xThresholds[0] + "," + xThresholds[1]);
+        // Debug.Log("yThresholds:  " + yThresholds[0] + "," + yThresholds[1]);
+        //     if (100f > yThresholds[1])
+        //     {
+        //         Debug.Log("working");
+        //     }
+        // }
+
+
         // For each item in first feature
         for (int i = 0; i < first.Count; i++)
         {
@@ -373,9 +391,34 @@ public class MeshHandler : MonoBehaviour
                 else
                 {
                     // alphebetical
+                    // find 
+                    // if the index is above the index provided in threshold and below 
+
+                    if (plot.PlotOptions.XUniques != null)
+                    {
+                        // find index that this entry is found in uniques
+                        int xIndex = -1;
+                        for (int j = 0; j < plot.PlotOptions.XUniques.Length; j++)
+                        {
+                            if (plot.PlotOptions.XUniques[j] == first[i])
+                            {
+                                xIndex = j;
+                                break;
+                            }
+                        }
+
+                        if (xIndex != -1 && (int)plot.PlotOptions.XThresholds[0] <= xIndex && xIndex <= (int)plot.PlotOptions.XThresholds[1])
+                        {
+                            shouldAddXElement = true;
+                        }
+                    }
+                    else
+                    {
+                        shouldAddXElement = true;
+                    }
                     // TODO: It should check if the numerical value representation of the letter is within the threshold
                     // Debug.Log("Adding X element because it was alphabetical");
-                    shouldAddXElement = true;
+
 
                 }
 
@@ -408,25 +451,52 @@ public class MeshHandler : MonoBehaviour
                                     // numerical
                                     if (yThresholds[0] <= value && value <= yThresholds[1])
                                     {
-                                        Debug.Log("Adding Y element: " + value + ". Because it was within: " + yThresholds[0] + " <-> " + yThresholds[1]);
+                                        if (value > 80f)
+                                        {
+                                            // Debug.Log("Adding Y element: " + value + ". Because it was within: " + yThresholds[0] + " <-> " + yThresholds[1]);
+
+                                        }
                                         shouldAddYElement = true;
                                     }
                                     else
                                     {
-                                        Debug.Log("Didn't add Y element: " + value + ". Because it wasn't within: " + yThresholds[0] + " <-> " + yThresholds[1]);
+                                        // Debug.Log("Didn't add Y element: " + value + ". Because it wasn't within: " + yThresholds[0] + " <-> " + yThresholds[1]);
                                     }
                                 }
                                 else
                                 {
                                     // alphebetical
                                     // TODO: It should check if the numerical value representation of the letter is within the threshold
-                                    Debug.Log("Adding Y element because it was alphabetical");
-                                    shouldAddYElement = true;
+                                    // Debug.Log("Adding Y element because it was alphabetical");
+
+                                    if (plot.PlotOptions.YUniques != null)
+                                    {
+                                        // find index that this entry is found in uniques
+                                        int yIndex = -1;
+                                        for (int j = 0; j < plot.PlotOptions.YUniques.Length; j++)
+                                        {
+                                            if (plot.PlotOptions.YUniques[j] == second[i])
+                                            {
+                                                yIndex = j;
+                                                break;
+                                            }
+                                        }
+
+                                        if (yIndex != -1 && (int)plot.PlotOptions.YThresholds[0] <= yIndex && yIndex <= (int)plot.PlotOptions.YThresholds[1])
+                                        {
+                                            shouldAddYElement = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        shouldAddYElement = true;
+                                    }
+                                    // shouldAddYElement = true;
                                 }
                             }
                             else
                             {
-                                Debug.Log("Adding Y element because there were no threshold specified");
+                                // Debug.Log("Adding Y element because there were no threshold specified");
                                 shouldAddYElement = true;
                             }
 
@@ -453,7 +523,52 @@ public class MeshHandler : MonoBehaviour
                 } while (isUnique);
                 // Is unique
                 if (isUnique)
-                    seenBefore.Add(new ComparedRow(first[i], second[i]));
+                {
+                    if (yThresholds != null)
+                    {
+                        // Insert entry of second feature into list of appropiate object of seenBefore
+                        if (float.TryParse(second[i], NumberStyles.Float, CultureInfo.InvariantCulture, out float value))
+                        {
+                            if (yThresholds[0] <= value && value <= yThresholds[1])
+                            {
+                                seenBefore.Add(new ComparedRow(first[i], second[i]));
+                            }
+
+                        }
+                        else
+                        {
+                            // Alphabetical
+
+                            if (plot.PlotOptions.YUniques != null)
+                            {
+                                // find index that this entry is found in uniques
+                                int yIndex = -1;
+                                for (int j = 0; j < plot.PlotOptions.YUniques.Length; j++)
+                                {
+                                    if (plot.PlotOptions.YUniques[j] == second[i])
+                                    {
+                                        yIndex = j;
+                                        break;
+                                    }
+                                }
+
+                                if (yIndex != -1 && (int)plot.PlotOptions.YThresholds[0] <= yIndex && yIndex <= (int)plot.PlotOptions.YThresholds[1])
+                                {
+                                    seenBefore.Add(new ComparedRow(first[i], second[i]));
+                                }
+                            }
+                            else
+                            {
+                                seenBefore.Add(new ComparedRow(first[i], second[i]));
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        seenBefore.Add(new ComparedRow(first[i], second[i]));
+                    }
+                }
             }
             else
             {
@@ -464,19 +579,24 @@ public class MeshHandler : MonoBehaviour
         List<System.String>[] comparison = new List<System.String>[seenBefore.Count];
         plot.DataComparedHeaders = new List<string>();
 
-        if (plot.PlotOptions.SpecifiedOrder == null)
+        for (int index = 0; index < seenBefore.Count; index++)
         {
-            for (int index = 0; index < seenBefore.Count; index++)
-            {
-                comparison[index] = seenBefore[index].content;
-                plot.DataComparedHeaders.Add(seenBefore[index].header);
-            }
+            comparison[index] = seenBefore[index].content;
+            plot.DataComparedHeaders.Add(seenBefore[index].header);
         }
-        else
-        {
-            // SortPlot(withsomeprefix);
-            // TODO: Add code to use mapping provided from user instead of return value from findSortedOrder
-        }
+
+
+        // int xIndex = 0;
+        // foreach (var xRow in comparison)
+        // {
+        //     int yIndex = 0;
+        //     foreach (var yRow in xRow)
+        //     {
+        //         Debug.Log("xRow: " + xIndex + ". yRow:  " + yRow + ", index: " + yIndex);
+        //         yIndex++;
+        //     }
+        //     xIndex++;
+        // }
 
         return comparison;
     }
@@ -588,6 +708,7 @@ public class MeshHandler : MonoBehaviour
     // Returns found vertices for data input
     private Vector3[] CreateBarchart(List<System.String>[] input)
     {
+        // Debug.Log("Recomputing the mesh");
         spacing = plot.PlotOptions.PlotLength / input.Length;
         Vector3[] foundVertices = new Vector3[input.Length * 4];
 
