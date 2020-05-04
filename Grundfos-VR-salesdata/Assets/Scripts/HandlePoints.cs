@@ -23,6 +23,8 @@ public class HandlePoints : MonoBehaviour
 
     private GameObject textPrefab;
 
+    private GameObject[] savedSpawnedTexts;
+
 
     private bool[] previouslyAiming = new bool[] { false, false };
 
@@ -62,14 +64,10 @@ public class HandlePoints : MonoBehaviour
             temporaryTextHolder[(int)handside].transform.localScale = new Vector3(1, 1, 1);
 
         }
-        // if (index != prevIndex)
-        // {
         prevIndex = index;
         temporaryTextHolder[(int)handside].GetComponent<Text>().text = meshHandlerRef.GetDataAverages()[index + 1].ToString();
         Vector3 tempPos = meshHandlerRef.getTextPos(index);
         temporaryTextHolder[(int)handside].transform.position = hitWorldSpace;
-        // }
-        // Debug.Log("This interactable was hit at position: " + hitPosition);
     }
 
     public void XRNoPointerHit(HandSide handside)
@@ -82,9 +80,27 @@ public class HandlePoints : MonoBehaviour
         }
     }
 
-    public void XRPointerHitSave(HandSide handSide)
+    public void XRPointerHitSave(Vector3 hitPosition, HandSide handSide)
     {
-        GameObject newText = Instantiate(temporaryTextHolder[(int)handSide]);
-        newText.transform.SetParent(canvasGameObject.transform, false);
+        // If handlepoint doesn't have a regstry for each bar (to save text in)
+        if (savedSpawnedTexts == null)
+        {
+            savedSpawnedTexts = new GameObject[meshHandlerRef.plot.DataCompared.Length];
+        }
+
+        if (savedSpawnedTexts.Length != meshHandlerRef.plot.DataCompared.Length)
+        {
+            // should really do some smart stuff here but out of time
+            savedSpawnedTexts = new GameObject[meshHandlerRef.plot.DataCompared.Length];
+        }
+
+        int index = meshHandlerRef.GetIndexByPos(hitPosition);
+
+        if (savedSpawnedTexts[index])
+        {
+            Destroy(savedSpawnedTexts[index]);
+        }
+        savedSpawnedTexts[index] = Instantiate(temporaryTextHolder[(int)handSide]);
+        savedSpawnedTexts[index].transform.SetParent(canvasGameObject.transform, false);
     }
 }

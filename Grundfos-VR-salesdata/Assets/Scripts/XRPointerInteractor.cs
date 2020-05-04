@@ -46,12 +46,9 @@ namespace UnityEngine.XR.Interaction.Toolkit
         void Update()
         {
             FindController();
-            // If hand is pointing
 
             if (controllerFound && !PlotController.isMenuUp())
             {
-                // we are point
-                // Debug.Log("Is pointing: " + handSide);
                 Ray ray = new Ray(transform.position, transform.forward);
 
                 // Bit shift the index of the layer (11) to get a bit mask
@@ -63,7 +60,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
                 {
                     alreadyDeleted = false;
                     Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-                    // Debug.Log("Did Hit");
+
                     hit.transform.GetComponent<HandlePoints>().XRPointerHit(hit.point - hit.collider.gameObject.transform.position, handSide, hit.point + new Vector3(0, 0, -0.02f));
                     prevHit = hit;
 
@@ -76,7 +73,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
                     {
                         hasPressedTrigger = false;
                         Debug.Log("Trigger has been released");
-                        hit.transform.GetComponent<HandlePoints>().XRPointerHitSave(handSide);
+                        hit.transform.GetComponent<HandlePoints>().XRPointerHitSave(hit.point - hit.collider.gameObject.transform.position, handSide);
                     }
                 }
                 else
