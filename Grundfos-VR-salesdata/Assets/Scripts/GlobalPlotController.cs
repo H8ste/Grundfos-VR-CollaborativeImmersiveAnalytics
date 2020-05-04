@@ -52,7 +52,7 @@ public class GlobalPlotController : MonoBehaviour
         }
         else
         {
-            plots[0].transform.position = new Vector3(-5f, 1f, 0);
+            plots[0].transform.localPosition = new Vector3(-5f, 1f, 0);
         }
     }
 
