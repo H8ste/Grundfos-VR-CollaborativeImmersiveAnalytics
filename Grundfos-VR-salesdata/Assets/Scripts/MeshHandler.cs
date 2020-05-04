@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.XR.Interaction.Toolkit;
+// using UnityEngine.XR.Interaction.Toolkit;
 using System;
 using System.Globalization; //used to ensure correct parsing of comma numbers
 
@@ -451,7 +452,7 @@ public class MeshHandler : MonoBehaviour
                                     // numerical
                                     if (yThresholds[0] <= value && value <= yThresholds[1])
                                     {
-                                      shouldAddYElement = true;
+                                        shouldAddYElement = true;
                                     }
                                     else
                                     {
