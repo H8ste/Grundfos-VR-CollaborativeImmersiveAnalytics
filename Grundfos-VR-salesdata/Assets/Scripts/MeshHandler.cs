@@ -492,7 +492,7 @@ public class MeshHandler : MonoBehaviour
                             }
                             else
                             {
-                                Debug.Log("Adding Y element because there were no threshold specified");
+                                //Debug.Log("Adding Y element because there were no threshold specified");
                                 shouldAddYElement = true;
                             }
 

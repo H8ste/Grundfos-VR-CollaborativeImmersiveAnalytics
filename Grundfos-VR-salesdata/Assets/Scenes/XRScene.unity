@@ -934,6 +934,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2c0f69bb43c18040ac3f7551f051adc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DebugWithoutVR: 0
   PlotControllerPrefab: {fileID: 6204924794665209938, guid: 79f4b1ba7e79d2d4a8168e1f084f9682,
     type: 3}
 --- !u!1 &712799056
@@ -1180,7 +1181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugInstance:
-    spawnPlotOnStart: 1
+    spawnPlotOnStart: 0
     plotPrefab: {fileID: 1668697730447907967, guid: ced3d809396bf4f40b12106a0c54cffb,
       type: 3}
     dataReader: {fileID: 0}
