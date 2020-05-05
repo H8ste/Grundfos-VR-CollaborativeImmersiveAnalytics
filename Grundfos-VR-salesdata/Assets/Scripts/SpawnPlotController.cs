@@ -22,6 +22,8 @@ public class SpawnPlotController : MonoBehaviour
     private GameObject spawnedPlotController;
     private int flippedHand = -1;
 
+    public Vector3 testVector = Vector3.zero;
+
     void Start()
     {
         if (DebugWithoutVR)
@@ -216,12 +218,28 @@ public class SpawnPlotController : MonoBehaviour
 
     private void Spawn(HandSide hand)
     {
+        Debug.Log(hand);
         flippedHand = (int)hand;
 
         spawnedPlotController = Instantiate(PlotControllerPrefab);
         spawnedPlotController.transform.GetChild(0).GetComponent<Canvas>().worldCamera = Camera.main;
         spawnedPlotController.transform.SetParent(HandGameObjects[flippedHand].transform);
-        spawnedPlotController.transform.localPosition = new Vector3(0, -0.12f, 0);
+        // spawnedPlotController.transform.localPosition = new Vector3(0, -0.12f, 0);
+        switch (hand)
+        {
+            case HandSide.Left:
+                Debug.Log("Leftside");
+                spawnedPlotController.transform.localPosition = new Vector3(0.17f, -0.09f);
+
+                break;
+            case HandSide.Right:
+                Debug.Log("Rightside");
+                spawnedPlotController.transform.localPosition = new Vector3(-0.17f, -0.09f);
+                break;
+            default:
+                Debug.Log("Default");
+                break;
+        }
     }
 
     private void DeSpawn()
