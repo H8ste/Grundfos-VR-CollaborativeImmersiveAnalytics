@@ -38,7 +38,9 @@ public class GlobalPlotController : MonoBehaviour
     public void AddPlot(GameObject plotToAdd)
     {
         // Add plot provided into the local array of plots
+
         plots.Add(plotToAdd);
+        Debug.Log("plots added: " + plots.Count);
 
         // Change plot's position transform to be to the right of the previous element's position
 
@@ -46,9 +48,14 @@ public class GlobalPlotController : MonoBehaviour
         plots[plots.Count - 1].transform.SetParent(transform, false);
         plots[plots.Count - 1].transform.localScale = Vector3.one * 0.23f;
         plots[plots.Count - 1].transform.eulerAngles = Vector3.zero;
+        plots[plots.Count - 1].GetComponent<MeshHandler>().plot.PlotID = plots.Count - 1;
         if (plots.Count > 1)
         {
-            plots[plots.Count - 1].transform.position = plots[plots.Count - 2].transform.position + new Vector3(7f, 0, 0);
+            if (plots[plots.Count - 1] != null && plots[plots.Count - 2] != null)
+            {
+                plots[plots.Count - 1].transform.position = plots[plots.Count - 2].transform.position + new Vector3(7f, 0, 0);
+            }
+
         }
         else
         {
@@ -56,23 +63,24 @@ public class GlobalPlotController : MonoBehaviour
         }
     }
 
-    // public void DeletePlot(GameObject plotToDelete)
-    // {
-    //   // Using its ID, find the plot provided in the local array of plots
-    //   int index = FindPlotInArray(plotToDelete.GetComponent<MeshHandler>().plotID, plots);
-    //   if (index != -1)
-    //   {
-    //     plots.RemoveAt(index);
-    //   }
+    public void DeletePlot(GameObject plotToDelete)
+    {
+        // Using its ID, find the plot provided in the local array of plots
+        int index = FindPlotInArray(plotToDelete.GetComponent<MeshHandler>().plot.PlotID, plots);
+        if (index != -1)
+        {
+            Destroy(plots[index]);
+            // plots.RemoveAt(index);
+        }
 
-    //   RenderPlots();
-    // }
+        RenderPlots();
+    }
 
     int FindPlotInArray(int providedPlotID, List<GameObject> array)
     {
         foreach (GameObject plot in array)
         {
-            if (providedPlotID == plot.GetComponent<CreateMesh>().plotID)
+            if (providedPlotID == plot.GetComponent<MeshHandler>().plot.PlotID)
             {
                 return providedPlotID;
             }
@@ -89,9 +97,16 @@ public class GlobalPlotController : MonoBehaviour
     void RenderPlots()
     {
         // Call render on each plot element in local array of plots
-        foreach (var plot in plots)
+        for (int plotIndex = 0; plotIndex < plots.Count; plotIndex++)
         {
-            plot.GetComponent<MeshHandler>().Render();
+            if (plots[plotIndex] != null)
+            {
+                plots[plotIndex].GetComponent<MeshHandler>().Render();
+            }
+            else
+            {
+                plots.RemoveAt(plotIndex);
+            }
         }
     }
 }

@@ -122,6 +122,9 @@ public class Plot
     [HideInInspector]
     public int FeatureTwoIndex { get { return featureTwoIndex; } set { featureTwoIndex = value; } }
 
+    private int plotID;
+    public int PlotID { get { return plotID; } set { plotID = value; } }
+
     public Plot()
     {
         plotOptions = new PlotOptions();
