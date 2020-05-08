@@ -232,8 +232,8 @@ public class MeshHandler : MonoBehaviour
                 foreach (var notation in plot.PlotOptions.PlotNotations)
                 {
                     // label.transform.SetParent(gameObject.GetComponentInChildren<Canvas>().transform);
-                    notation.transform.localScale = new Vector3(1f, 1f, 1f);
-                    notation.transform.eulerAngles = new Vector3(0f, 0f, 0f);
+                    // notation.transform.localScale = new Vector3(1f, 1f, 1f);
+                    // notation.transform.eulerAngles = new Vector3(0f, 0f, 0f);
                     // Text labelText = label.AddComponent<Text>();
                     notation.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(400, 40);
                     // label.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0.5f);
@@ -286,27 +286,40 @@ public class MeshHandler : MonoBehaviour
         // X
         for (int i = 0; i < plot.DataCompared.Count(); i++)
         {
-            float actualSpacing = 176f / plot.DataCompared.Count();
+            float actualSpacing = 172f / plot.DataCompared.Count();
             GameObject temp = Instantiate(plotLabelPrefab,
-            new Vector3(i * actualSpacing + (actualSpacing / 2), -7f, -0.06f),
+            new Vector3(i * actualSpacing + (actualSpacing / 2) - 2f, -4f, -0.06f),
             Quaternion.Euler(0f, 0f, -35f));
             temp.transform.SetParent(transform.GetChild(0).GetChild(0), false);
             plot.PlotOptions.PlotXLabels.Add(temp);
-            plot.PlotOptions.PlotXLabels[i].GetComponent<Text>().text = plot.DataComparedHeaders[i];
+            plot.PlotOptions.PlotXLabels[i].GetComponentInChildren<Text>().text = plot.DataComparedHeaders[i];
             plot.PlotOptions.PlotXLabels[i].transform.localScale = (1f / (float)plot.DataCompared.Count()) * new Vector3(1f, 1f, 1f);
         }
 
         // y
         for (int i = 0; i < 11; i++)
         {
-            float actualSpacing = 176f / 10;
+            float actualSpacing = 172f / 10;
             GameObject temp = Instantiate(plotLabelPrefab,
-            new Vector3(0f, i * actualSpacing, -0.06f),
-            Quaternion.Euler(0f, 0f, -35f));
+            new Vector3(-4f, i * actualSpacing + 2f, -0.06f),
+            Quaternion.Euler(0f, 0f, 180f - 35f));
             temp.transform.SetParent(transform.GetChild(0).GetChild(0), false);
             plot.PlotOptions.PlotYLabels.Add(temp);
-            plot.PlotOptions.PlotYLabels[i].GetComponent<Text>().text = Remap(i * actualSpacing, 0, 176f, 0, plot.DataAverages[0]).ToString();
+            plot.PlotOptions.PlotYLabels[i].GetComponentInChildren<Text>().text = Remap(i * actualSpacing, 0, 176f, 0, plot.DataAverages[0]).ToString();
             plot.PlotOptions.PlotYLabels[i].transform.localScale = (1f / 10f) * new Vector3(1f, 1f, 1f);
+
+            //rotate text 180
+            plot.PlotOptions.PlotYLabels[i].GetComponentInChildren<Text>().transform.localEulerAngles = new Vector3(0f, 0f, 180f);
+
+            //set text to be rightmiddle
+            plot.PlotOptions.PlotYLabels[i].GetComponentInChildren<Text>().alignment = TextAnchor.MiddleRight;
+
+            //change localposition = 0
+            plot.PlotOptions.PlotYLabels[i].GetComponentInChildren<Text>().rectTransform.pivot = new Vector2(1, 0.5f);
+            plot.PlotOptions.PlotYLabels[i].GetComponentInChildren<Text>().transform.localPosition = new Vector3(80f, 0, -0.6f);
+
+            plot.PlotOptions.PlotYLabels[i].GetComponentInChildren<Image>().rectTransform.pivot = new Vector2(0, 0.5f);
+            plot.PlotOptions.PlotYLabels[i].GetComponentInChildren<Image>().rectTransform.localPosition = new Vector3(0f, 0f, -0.06f);
         }
     }
 
