@@ -327,7 +327,7 @@ MonoBehaviour:
     plotOptions:
       featureColors: []
   plotOptionsChanged: 0
-  plotLabelPrefab: {fileID: 3193424981685526097, guid: 4c00cc92e7e0e05498ba38f8f12dd233,
+  plotLabelPrefab: {fileID: 3193424981685526097, guid: 6d4d7052a096b5f40bef3ef698e1ad53,
     type: 3}
 --- !u!54 &105545843746034372
 Rigidbody:
