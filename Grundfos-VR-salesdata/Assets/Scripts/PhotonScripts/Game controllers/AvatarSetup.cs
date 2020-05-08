@@ -1,13 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.IO;
 using UnityEngine;
 using Photon.Pun;
-
+using Photon.Realtime;
+using UnityEngine.SceneManagement;
 public class AvatarSetup : MonoBehaviour
 {
     private PhotonView PV;
     public GameObject myCharacter;
     public int characterValue;
+    public GameObject plotPrefab;
 
 
     void Start()
@@ -17,6 +18,7 @@ public class AvatarSetup : MonoBehaviour
         {
 
             PV.RPC("RPC_AddCharacter", RpcTarget.AllBuffered, PlayerInfo.PI.mySelectedCharacter);
+
         }
 
     }
@@ -27,6 +29,7 @@ public class AvatarSetup : MonoBehaviour
     {
         characterValue = whichCharacter;
         myCharacter = Instantiate(PlayerInfo.PI.allCharacters[whichCharacter], transform.position, transform.rotation, transform);
+
 
     }
 

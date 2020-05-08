@@ -15,7 +15,7 @@ MonoBehaviour:
   AppSettings:
     AppIdRealtime: ab43a6fb-6109-410b-891a-a182d661ab57
     AppIdChat: 
-    AppIdVoice: 
+    AppIdVoice: 590c76d4-e03a-4542-8c5d-d205832afa30
     AppVersion: 0
     UseNameServer: 1
     FixedRegion: 
@@ -37,6 +37,7 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - RPC_AddCharacter
+  - ChangeColour
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

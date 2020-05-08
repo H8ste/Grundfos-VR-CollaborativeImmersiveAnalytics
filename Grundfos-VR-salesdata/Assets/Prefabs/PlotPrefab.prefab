@@ -16,6 +16,10 @@ GameObject:
   - component: {fileID: 2030893120834159761}
   - component: {fileID: 2013661691466233348}
   - component: {fileID: 105545843746034372}
+  - component: {fileID: -3017011045154688372}
+  - component: {fileID: -5244985140610054798}
+  - component: {fileID: -7342479020810797713}
+  - component: {fileID: -8028953728474538315}
   m_Layer: 11
   m_Name: PlotPrefab
   m_TagString: PlotMesh
@@ -169,6 +173,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc181f6a3fbb4d04f92f3b399c244842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  plot:
+    plotOptions:
+      featureColors: []
+  plotOptionsChanged: 0
 --- !u!54 &105545843746034372
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -185,6 +193,71 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-3017011045154688372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668697730447907967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: -5244985140610054798}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &-5244985140610054798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668697730447907967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+--- !u!114 &-7342479020810797713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668697730447907967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5897241199be774aa64e6a5a1221f06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-8028953728474538315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668697730447907967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79aac7a943c2b734fa2795e4fcbbee62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugInstance:
+    spawnPlotOnStart: 1
+    plotPrefab: {fileID: 1668697730447907967}
+    dataReader: {fileID: 0}
 --- !u!1 &3136514461859974395
 GameObject:
   m_ObjectHideFlags: 0

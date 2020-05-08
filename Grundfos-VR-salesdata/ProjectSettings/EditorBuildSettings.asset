@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MultyPlay.unity
     guid: 1ef43c56ab134dc4f9b995f438b7ff9a
+  - enabled: 1
+    path: Assets/Scenes/GlobalPlotController.unity
+    guid: 2ad3662ac524bd648aac48410566397e
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: be5501310ce338147b4964e1d8e2ce37,
       type: 2}
