@@ -218,7 +218,6 @@ public class SpawnPlotController : MonoBehaviour
 
     private void Spawn(HandSide hand)
     {
-        Debug.Log(hand);
         flippedHand = (int)hand;
 
         spawnedPlotController = Instantiate(PlotControllerPrefab);
