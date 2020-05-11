@@ -211,6 +211,8 @@ public class MeshHandler : MonoBehaviour
 
         SetupAxisLabels();
 
+
+
         plot.Mesh.RecalculateNormals();
 
         plotOptionsChanged = true;
@@ -284,17 +286,18 @@ public class MeshHandler : MonoBehaviour
         }
 
         // X
-        for (int i = 0; i < plot.DataCompared.Count(); i++)
-        {
-            float actualSpacing = 172f / plot.DataCompared.Count();
-            GameObject temp = Instantiate(plotLabelPrefab,
-            new Vector3(i * actualSpacing + (actualSpacing / 2) - 2f, -4f, -0.06f),
-            Quaternion.Euler(0f, 0f, -35f));
-            temp.transform.SetParent(transform.GetChild(0).GetChild(0), false);
-            plot.PlotOptions.PlotXLabels.Add(temp);
-            plot.PlotOptions.PlotXLabels[i].GetComponentInChildren<Text>().text = plot.DataComparedHeaders[i];
-            plot.PlotOptions.PlotXLabels[i].transform.localScale = (1f / (float)plot.DataCompared.Count()) * new Vector3(1f, 1f, 1f);
-        }
+        if (plot.DataComparedHeaders.Count < 50)
+            for (int i = 0; i < plot.DataCompared.Count(); i++)
+            {
+                float actualSpacing = 172f / plot.DataCompared.Count();
+                GameObject temp = Instantiate(plotLabelPrefab,
+                new Vector3(i * actualSpacing + (actualSpacing / 2) - 2f, -4f, -0.06f),
+                Quaternion.Euler(0f, 0f, -35f));
+                temp.transform.SetParent(transform.GetChild(0).GetChild(0), false);
+                plot.PlotOptions.PlotXLabels.Add(temp);
+                plot.PlotOptions.PlotXLabels[i].GetComponentInChildren<Text>().text = plot.DataComparedHeaders[i];
+                plot.PlotOptions.PlotXLabels[i].transform.localScale = (1f / (float)plot.DataCompared.Count()) * new Vector3(1f, 1f, 1f);
+            }
 
         // y
         for (int i = 0; i < 11; i++)
@@ -328,7 +331,8 @@ public class MeshHandler : MonoBehaviour
         plot.Data = dataReader.GetData();
         plot.DataCompared = Compare(plot.Data[plot.FeatureOneIndex], plot.Data[plot.FeatureTwoIndex], plot.PlotOptions.XThresholds, plot.PlotOptions.YThresholds);
 
-        SortPlot();
+        if (plot.DataComparedHeaders.Count < 50)
+            SortPlot();
 
         plot.Vertices = CreateChartOfType(plot.PlotOptions.PlotType);
         plot.Triangles = FindTriangles(plot.Vertices);
@@ -341,6 +345,9 @@ public class MeshHandler : MonoBehaviour
             plot.Data = dataReader.GetData();
             plot.DataCompared = Compare(plot.Data[plot.FeatureOneIndex], plot.Data[plot.FeatureTwoIndex], plot.PlotOptions.XThresholds, plot.PlotOptions.YThresholds);
         }
+
+        if (plot.DataComparedHeaders.Count < 50)
+            SortPlot();
 
         plot.Vertices = CreateChartOfType(plot.PlotOptions.PlotType);
         plot.Triangles = FindTriangles(plot.Vertices);
@@ -373,17 +380,6 @@ public class MeshHandler : MonoBehaviour
     List<System.String>[] Compare(List<System.String> first, List<System.String> second, float[] xThresholds, float[] yThresholds)
     {
         List<ComparedRow> seenBefore = new List<ComparedRow>();
-
-        // if (xThresholds != null && yThresholds != null)
-        // {
-        // Debug.Log("xThresholds:  " + xThresholds[0] + "," + xThresholds[1]);
-        // Debug.Log("yThresholds:  " + yThresholds[0] + "," + yThresholds[1]);
-        //     if (100f > yThresholds[1])
-        //     {
-        //         Debug.Log("working");
-        //     }
-        // }
-
 
         // For each item in first feature
         for (int i = 0; i < first.Count; i++)
@@ -617,7 +613,7 @@ public class MeshHandler : MonoBehaviour
     {
         string[] arrayToSort = new string[input.Count];
 
-        // Fill an int array : [0, 1, 3, ..., length]
+        // Fill an int array : [0, 1, 2, ..., length]
         int[] mapping = Enumerable.Range(0, arrayToSort.Length).Select(i => (int)i).ToArray();
 
         for (int i = 0; i < input.Count; i++)
@@ -663,6 +659,68 @@ public class MeshHandler : MonoBehaviour
         }
 
         return mapping;
+    }
+
+    private void QuickSort(string[] arr, int start, int end, int[] mapping)
+    {
+        int i;
+        if (start < end)
+        {
+            i = Partition(arr, start, end, mapping);
+
+            QuickSort(arr, start, i - 1, mapping);
+            QuickSort(arr, i + 1, end, mapping);
+        }
+    }
+
+    private int Partition(string[] arr, int start, int end, int[] mapping)
+    {
+        string temp;
+        int tempMapping;
+        string p = arr[end];
+        int i = start - 1;
+
+        for (int j = start; j <= end - 1; j++)
+        {
+            if (float.TryParse(arr[j], NumberStyles.Float, CultureInfo.InvariantCulture, out float number))
+            {
+                // Numerical
+                if (number <= float.Parse(p, NumberStyles.Float, CultureInfo.InvariantCulture))
+                {
+                    i++;
+                    temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+
+                    tempMapping = mapping[i];
+                    mapping[i] = mapping[j];
+                    mapping[j] = tempMapping;
+                }
+            }
+            else
+            {
+                // Alphabetical
+                if (arr[j] == p || arr[j][0] < p[0])
+                {
+                    i++;
+                    temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                    tempMapping = mapping[i];
+                    mapping[i] = mapping[j];
+                    mapping[j] = tempMapping;
+                }
+            }
+        }
+
+        temp = arr[i + 1];
+        arr[i + 1] = arr[end];
+        arr[end] = temp;
+
+        tempMapping = mapping[i + 1];
+        mapping[i + 1] = mapping[end];
+        mapping[end] = tempMapping;
+        return i + 1;
     }
 
     private int[] findSortedOrder(List<string> dataHeaders)
@@ -964,27 +1022,27 @@ public class MeshHandler : MonoBehaviour
     {
         if (plot.PlotOptions.SpecifiedOrder == null)
         {
-            Debug.Log("Sorted plot");
-            sortedOrder = findSortedOrder(plot.DataComparedHeaders);
+            string[] tempSort = plot.DataComparedHeaders.ToArray();
+            int[] mapping = Enumerable.Range(0, tempSort.Length).Select(i => (int)i).ToArray();
+            QuickSort(tempSort, 0, tempSort.Length - 1, mapping);
 
             List<string>[] sortedDataCompared = new List<string>[plot.DataComparedHeaders.Count];
             List<string> sortedDataComparedHeaders = new List<string>();
-            int i = 0;
-            foreach (int index in sortedOrder)
+
+            int k = 0;
+            foreach (int index in mapping)
             {
-                sortedDataCompared[i] = plot.DataCompared[index];
+                sortedDataCompared[k] = plot.DataCompared[index];
                 sortedDataComparedHeaders.Add(plot.DataComparedHeaders[index]);
-                i++;
+                k++;
             }
 
             plot.DataCompared = sortedDataCompared;
             plot.DataComparedHeaders = sortedDataComparedHeaders;
-
-            plot.Vertices = CreateChartOfType(plot.PlotOptions.PlotType);
-            plot.Triangles = FindTriangles(plot.Vertices);
         }
         else
         {
+            // Debug.Log("Didn't sort plot");
             // TODO Add using specifiedorder (user input)
         }
 

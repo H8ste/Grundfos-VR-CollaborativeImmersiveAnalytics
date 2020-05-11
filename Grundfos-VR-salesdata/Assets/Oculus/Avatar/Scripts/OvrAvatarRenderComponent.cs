@@ -38,7 +38,7 @@ public class OvrAvatarRenderComponent : MonoBehaviour
 
     protected SkinnedMeshRenderer CreateSkinnedMesh(ulong assetID, ovrAvatarVisibilityFlags visibilityMask, int thirdPersonLayer, int firstPersonLayer)
     {
-        Debug.Log("CreateSkinnedMesh");
+        // Debug.Log("CreateSkinnedMesh");
         isBodyComponent = name.Contains("body");
 
         OvrAvatarAssetMesh meshAsset = (OvrAvatarAssetMesh)OvrAvatarSDKManager.Instance.GetAsset(assetID);

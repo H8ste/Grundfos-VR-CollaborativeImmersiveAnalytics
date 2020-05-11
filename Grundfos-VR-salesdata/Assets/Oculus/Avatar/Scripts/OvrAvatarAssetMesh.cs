@@ -235,7 +235,7 @@ public class OvrAvatarAssetMesh : OvrAvatarAsset
 
     public SkinnedMeshRenderer CreateSkinnedMeshRendererOnObject(GameObject target)
     {
-        Debug.Log("CreateSkinnedMeshRendererOnObject");
+        // Debug.Log("CreateSkinnedMeshRendererOnObject");
         SkinnedMeshRenderer skinnedMeshRenderer = target.AddComponent<SkinnedMeshRenderer>();
         skinnedMeshRenderer.sharedMesh = mesh;
         mesh.name = "AvatarMesh_" + assetID;
