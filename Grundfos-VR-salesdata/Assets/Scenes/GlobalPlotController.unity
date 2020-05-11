@@ -340,10 +340,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e8a5909d245fd14da9778bc59c5c235, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myPrefab: {fileID: 1668697730447907967, guid: ced3d809396bf4f40b12106a0c54cffb,
-    type: 3}
-  controller: {fileID: 1509716145}
-  dataReader: {fileID: 0}
 --- !u!1 &1031078666
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,9 +614,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1509716144}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 216b63c04eb87b8418e05e2911d06ca4, type: 3}
+  m_Script: {fileID: 11500000, guid: 79aac7a943c2b734fa2795e4fcbbee62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugInstance:
+    spawnPlotOnStart: 1
+    plotPrefab: {fileID: 1668697730447907967, guid: ced3d809396bf4f40b12106a0c54cffb,
+      type: 3}
+    dataReader: {fileID: 0}
 --- !u!4 &1509716146
 Transform:
   m_ObjectHideFlags: 0
