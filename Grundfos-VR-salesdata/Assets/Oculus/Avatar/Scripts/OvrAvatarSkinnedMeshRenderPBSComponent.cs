@@ -3,7 +3,8 @@ using System.Collections;
 using System;
 using Oculus.Avatar;
 
-public class OvrAvatarSkinnedMeshRenderPBSComponent : OvrAvatarRenderComponent {
+public class OvrAvatarSkinnedMeshRenderPBSComponent : OvrAvatarRenderComponent
+{
 
     bool isMaterialInitilized = false;
 
@@ -29,6 +30,7 @@ public class OvrAvatarSkinnedMeshRenderPBSComponent : OvrAvatarRenderComponent {
             mat.SetTexture("_Surface", OvrAvatarComponent.GetLoadedTexture(surfaceTextureID));
         }
 
+        // Debug.Log("UpdateSkinnedMeshRenderPBS");
         ovrAvatarVisibilityFlags visibilityMask = CAPI.ovrAvatarSkinnedMeshRenderPBS_GetVisibilityMask(renderPart);
         ovrAvatarTransform localTransform = CAPI.ovrAvatarSkinnedMeshRenderPBS_GetTransform(renderPart);
         UpdateSkinnedMesh(avatar, bones, localTransform, visibilityMask, renderPart);

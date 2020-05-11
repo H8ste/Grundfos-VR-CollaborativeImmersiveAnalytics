@@ -3,7 +3,8 @@ using System.Collections;
 using System;
 using Oculus.Avatar;
 
-public abstract class OvrAvatarDriver : MonoBehaviour {
+public abstract class OvrAvatarDriver : MonoBehaviour
+{
 
     public enum PacketMode
     {
@@ -16,7 +17,7 @@ public abstract class OvrAvatarDriver : MonoBehaviour {
     public PoseFrame GetCurrentPose() { return CurrentPose; }
     public abstract void UpdateTransforms(IntPtr sdkAvatar);
 
-    private ovrAvatarControllerType ControllerType =  ovrAvatarControllerType.Quest;
+    private ovrAvatarControllerType ControllerType = ovrAvatarControllerType.Quest;
     public struct ControllerPose
     {
         public ovrAvatarButton buttons;
