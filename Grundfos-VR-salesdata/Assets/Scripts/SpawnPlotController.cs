@@ -24,6 +24,10 @@ public class SpawnPlotController : MonoBehaviour
 
     public Vector3 testVector = Vector3.zero;
 
+    [HideInInspector]
+    public bool rotateFeedForwardNeeded = true;
+
+
     void Start()
     {
         if (DebugWithoutVR)
@@ -84,6 +88,13 @@ public class SpawnPlotController : MonoBehaviour
                             // If it doesn't, add xray to that hand
                             HandXrayInteractors[1 - flippedHand] = HandGameObjects[1 - flippedHand].AddXrayComponent();
                             // Debug.Log("Added Xray for :" + (1 - flippedHand));
+
+                            // Remove the rotate feedforward sprite on both hands
+                            foreach (GameObject hand in HandGameObjects)
+                            {
+                                Color temp = hand.GetComponentInChildren<Image>().color;
+                                hand.GetComponentInChildren<Image>().color = new Color(temp.r, temp.g, temp.b, 0);
+                            }
                         }
                     }
                 }
@@ -111,6 +122,16 @@ public class SpawnPlotController : MonoBehaviour
                                 // Debug.Log("Added Direct Interactor for :" + i);
                                 // If it doesn't add a Director Interactor component to it
                                 HandDirectInteractors[i] = HandGameObjects[i].AddDirectComponent();
+
+                                // If button wasn't clicked sprites should be reshown
+                                if (rotateFeedForwardNeeded)
+                                {
+                                    foreach (GameObject hand in HandGameObjects)
+                                    {
+                                        Color temp = hand.GetComponentInChildren<Image>().color;
+                                        hand.GetComponentInChildren<Image>().color = new Color(temp.r, temp.g, temp.b, 1);
+                                    }
+                                }
                             }
                         }
                     }

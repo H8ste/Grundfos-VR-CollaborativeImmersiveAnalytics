@@ -59,7 +59,7 @@ public class LocalPlotController : MonoBehaviour
     // Spawns in screen that is used to create a new plot
     public void NewPlotCreator()
     {
-
+        GameObject.FindObjectOfType<SpawnPlotController>().rotateFeedForwardNeeded = false;
 
         // Hide Menu Screen
         HideMenu();
@@ -254,7 +254,7 @@ public class LocalPlotController : MonoBehaviour
             featureMenu = Instantiate(ScrollPrefab) as GameObject;
             featureMenu.GetComponentInChildren<ButtonListControl>().BeginControl();
             featureMenu.transform.SetParent(transform.GetChild(0), false);
-         //   featureMenu.transform.localPosition = new Vector3(0, 0, 0);
+            //   featureMenu.transform.localPosition = new Vector3(0, 0, 0);
             featureMenu.transform.localScale = new Vector3(1f, 1f, 1f);
             featureMenu.transform.localEulerAngles = new Vector3(0, 0, 0);
 
