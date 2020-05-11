@@ -22,6 +22,9 @@ public class BUttonTest : MonoBehaviour
     // Update is called once per frame
     public void OnClick()
     {
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlotPrefab"), canvas1.transform.position, Quaternion.identity, 0);
+        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Plot"), canvas1.transform.position, Quaternion.identity, 0);
     }
+
+    // [PunRPC]
+    //  void RPC_SincColors()
 }
