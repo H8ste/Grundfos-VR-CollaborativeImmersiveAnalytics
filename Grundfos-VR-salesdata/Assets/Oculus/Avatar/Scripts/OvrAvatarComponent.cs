@@ -44,6 +44,7 @@ public class OvrAvatarComponent : MonoBehaviour
             OvrAvatarRenderComponent renderComponent = RenderParts[(int)renderPartIndex];
             IntPtr renderPart = OvrAvatar.GetRenderPart(nativeAvatarComponent, renderPartIndex);
             ovrAvatarRenderPartType type = CAPI.ovrAvatarRenderPart_GetType(renderPart);
+            // Debug.Log("Updating avatar");
             switch (type)
             {
                 case ovrAvatarRenderPartType.SkinnedMeshRender:

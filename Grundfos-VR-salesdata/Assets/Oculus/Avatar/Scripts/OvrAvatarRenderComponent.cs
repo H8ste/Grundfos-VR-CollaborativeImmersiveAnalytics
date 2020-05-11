@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System;
 using Oculus.Avatar;
 
-public class OvrAvatarRenderComponent : MonoBehaviour {
+public class OvrAvatarRenderComponent : MonoBehaviour
+{
 
     private bool firstSkinnedUpdate = true;
     public SkinnedMeshRenderer mesh;
@@ -30,12 +31,14 @@ public class OvrAvatarRenderComponent : MonoBehaviour {
             bool active = avatar.ShowFirstPerson && (mask & ovrAvatarVisibilityFlags.FirstPerson) != 0;
             active |= avatar.ShowThirdPerson && (mask & ovrAvatarVisibilityFlags.ThirdPerson) != 0;
             this.gameObject.SetActive(active);
+            // Debug.Log("Set to true");
             mesh.enabled = active;
         }
     }
 
     protected SkinnedMeshRenderer CreateSkinnedMesh(ulong assetID, ovrAvatarVisibilityFlags visibilityMask, int thirdPersonLayer, int firstPersonLayer)
     {
+        Debug.Log("CreateSkinnedMesh");
         isBodyComponent = name.Contains("body");
 
         OvrAvatarAssetMesh meshAsset = (OvrAvatarAssetMesh)OvrAvatarSDKManager.Instance.GetAsset(assetID);
@@ -70,6 +73,7 @@ public class OvrAvatarRenderComponent : MonoBehaviour {
 
     protected void UpdateSkinnedMesh(OvrAvatar avatar, Transform[] bones, ovrAvatarTransform localTransform, ovrAvatarVisibilityFlags visibilityMask, IntPtr renderPart)
     {
+        // Debug.Log("UpdateSkinnedMesh");
         UpdateActive(avatar, visibilityMask);
         OvrAvatar.ConvertTransform(localTransform, this.transform);
         ovrAvatarRenderPartType type = CAPI.ovrAvatarRenderPart_GetType(renderPart);
@@ -131,5 +135,5 @@ public class OvrAvatarRenderComponent : MonoBehaviour {
         return mat;
     }
 
-   
+
 }
