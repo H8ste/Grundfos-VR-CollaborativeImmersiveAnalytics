@@ -918,13 +918,57 @@ public class MeshHandler : MonoBehaviour
 
     public void ReComputeColliders()
     {
+        Debug.Log("ReCreated Collider");
         //Redo collider
         MeshCollider collider;
         if (GetComponent<MeshCollider>())
         {
             Destroy(GetComponent<MeshCollider>());
         }
+        // if mesh verticy is so tiny, remake it to 0
+        Vector3[] verticies = GetComponent<MeshFilter>().mesh.vertices;
+        for (int index = 0; index < verticies.Length; index++)
+        {
+            if (float.IsNaN(verticies[index].x))
+            {
+                Debug.Log("Changed verticy x");
+                verticies[index].x = 0;
+                Debug.Log(verticies[index]);
+            }
+            if (float.IsNaN(verticies[index].y))
+            {
+                Debug.Log("Changed verticy y");
+                verticies[index].y = 0;
+                Debug.Log(verticies[index]);
+            }
+            if (float.IsNaN(verticies[index].z))
+            {
+                Debug.Log("Changed verticy z");
+                verticies[index].z = 0;
+                Debug.Log(verticies[index]);
+            }
+            // if (verticies[index].x < 0.000004f)
+            // {
+            //     Debug.Log("Changed verticy x");
+            //     verticies[index].x = 0;
+            // }
+            // if (verticies[index].y < 0.000004f)
+            // {
+            //     Debug.Log("Changed verticy y");
+            //     verticies[index].y = 0;
+            // }
+            // if (verticies[index].z < 0.000004f)
+            // {
+            //     Debug.Log("Changed verticy z");
+            //     verticies[index].z = 0;
+            // }
+
+        }
+        GetComponent<MeshFilter>().mesh.Clear();
+        GetComponent<MeshFilter>().mesh.vertices = verticies;
+
         collider = gameObject.AddComponent<MeshCollider>();
+        Debug.Log("Vertex 1: " + GetComponent<MeshFilter>().mesh.vertices[1]);
 
         collider.sharedMesh = GetComponent<MeshFilter>().mesh;
         collider.convex = false;

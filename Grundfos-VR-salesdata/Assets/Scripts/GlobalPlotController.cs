@@ -31,7 +31,7 @@ public class GlobalPlotController : MonoBehaviour
 
             GameObject tempPlot = GameObject.Instantiate(debugInstance.plotPrefab);
             // tempPlot.GetComponent<CreateMesh>().Create((int)Random.Range(0, debugInstance.dataReader.GetHeaders().Length - 1), (int)Random.Range(0, debugInstance.dataReader.GetHeaders().Length - 1), debugInstance.dataReader);
-            tempPlot.GetComponent<MeshHandler>().CreateNewPlot(11, 7, debugInstance.dataReader, TypeOfPlot.Barchart);
+            tempPlot.GetComponent<MeshHandler>().CreateNewPlot(0, 7, debugInstance.dataReader, TypeOfPlot.Barchart);
 
             AddPlot(tempPlot);
         }
