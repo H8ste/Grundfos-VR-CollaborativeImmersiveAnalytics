@@ -298,7 +298,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 10.6}
-  m_SizeDelta: {x: 13.1, y: 13.1}
+  m_SizeDelta: {x: 30.1, y: 17.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8669084725259074987
 CanvasRenderer:
@@ -321,7 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.066037714, g: 0.066037714, b: 0.066037714, a: 1}
+  m_Color: {r: 0.10980392, g: 0.101960786, b: 0.27450982, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -465,7 +465,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headers: []
   featuresChosen: 
-  inVR: 1
+  inVR: 0
   createButtonPrefab: {fileID: 0}
   plotCreatorPrefab: {fileID: 2499950107539525976, guid: 3dc0b392864794149a38a224686558d8,
     type: 3}
@@ -512,7 +512,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -8.9}
-  m_SizeDelta: {x: 13.1, y: 13.1}
+  m_SizeDelta: {x: 30.1, y: 17.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4084140254364287624
 CanvasRenderer:
@@ -535,7 +535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.066037714, g: 0.066037714, b: 0.066037714, a: 1}
+  m_Color: {r: 0.10980392, g: 0.101960786, b: 0.27450982, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
