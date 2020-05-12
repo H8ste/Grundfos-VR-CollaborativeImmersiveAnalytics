@@ -964,8 +964,10 @@ public class MeshHandler : MonoBehaviour
             // }
 
         }
+        plot.Vertices = verticies;
         GetComponent<MeshFilter>().mesh.Clear();
-        GetComponent<MeshFilter>().mesh.vertices = verticies;
+        GetComponent<MeshFilter>().mesh.vertices = plot.Vertices;
+        GetComponent<MeshFilter>().mesh.triangles = plot.Triangles;
 
         collider = gameObject.AddComponent<MeshCollider>();
         Debug.Log("Vertex 1: " + GetComponent<MeshFilter>().mesh.vertices[1]);
