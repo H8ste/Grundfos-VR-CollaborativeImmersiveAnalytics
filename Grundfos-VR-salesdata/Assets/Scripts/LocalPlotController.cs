@@ -247,9 +247,18 @@ public class LocalPlotController : MonoBehaviour
         {
             plot.SetActive(false);
         }
+
         // If feature menu isn't already spawned
         if (!featureMenu)
         {
+            //find both feature buttons and hide both button image and its containing
+            FeatureButtonScript[] featureButtons = transform.GetComponentsInChildren<FeatureButtonScript>();
+            foreach (var featureButton in featureButtons)
+            {
+                featureButton.transform.GetComponent<Image>().enabled = false;
+                featureButton.transform.GetComponentInChildren<Text>().enabled = false;
+            }
+
             featureBeingChanged = feature;
             featureMenu = Instantiate(ScrollPrefab) as GameObject;
             featureMenu.GetComponentInChildren<ButtonListControl>().BeginControl();
@@ -271,12 +280,19 @@ public class LocalPlotController : MonoBehaviour
 
     public void confirmFeatureSelection(int featureSelected)
     {
-        if (plot)
-        {
-            plot.SetActive(true);
-        }
         if (featureSelected != -1)
         {
+            if (plot)
+            {
+                plot.SetActive(true);
+            }
+            // reenable both image and text for both feature buttons
+            FeatureButtonScript[] featureButtons = transform.GetComponentsInChildren<FeatureButtonScript>();
+            foreach (var featureButton in featureButtons)
+            {
+                featureButton.transform.GetComponent<Image>().enabled = true;
+                featureButton.transform.GetComponentInChildren<Text>().enabled = true;
+            }
             setFeature(featureBeingChanged, featureSelected);
             Object.Destroy(featureMenu);
             featureBeingChanged = -1;
