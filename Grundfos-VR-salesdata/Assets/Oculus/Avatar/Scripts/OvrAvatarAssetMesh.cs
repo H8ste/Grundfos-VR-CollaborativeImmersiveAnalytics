@@ -147,7 +147,7 @@ public class OvrAvatarAssetMesh : OvrAvatarAsset
             mesh.SetIndices(triangles, MeshTopology.Triangles, (int)index);
         }
     }
-   
+
     private void LoadBlendShapes(IntPtr asset, long vertexCount)
     {
         UInt32 blendShapeCount = CAPI.ovrAvatarAsset_GetMeshBlendShapeCount(asset);
@@ -235,6 +235,7 @@ public class OvrAvatarAssetMesh : OvrAvatarAsset
 
     public SkinnedMeshRenderer CreateSkinnedMeshRendererOnObject(GameObject target)
     {
+        // Debug.Log("CreateSkinnedMeshRendererOnObject");
         SkinnedMeshRenderer skinnedMeshRenderer = target.AddComponent<SkinnedMeshRenderer>();
         skinnedMeshRenderer.sharedMesh = mesh;
         mesh.name = "AvatarMesh_" + assetID;

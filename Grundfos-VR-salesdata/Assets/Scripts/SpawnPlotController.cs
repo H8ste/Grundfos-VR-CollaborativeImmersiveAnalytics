@@ -22,6 +22,12 @@ public class SpawnPlotController : MonoBehaviour
     private GameObject spawnedPlotController;
     private int flippedHand = -1;
 
+    public Vector3 testVector = Vector3.zero;
+
+    [HideInInspector]
+    public bool rotateFeedForwardNeeded = true;
+
+
     void Start()
     {
         if (DebugWithoutVR)
@@ -82,6 +88,13 @@ public class SpawnPlotController : MonoBehaviour
                             // If it doesn't, add xray to that hand
                             HandXrayInteractors[1 - flippedHand] = HandGameObjects[1 - flippedHand].AddXrayComponent();
                             // Debug.Log("Added Xray for :" + (1 - flippedHand));
+
+                            // Remove the rotate feedforward sprite on both hands
+                            foreach (GameObject hand in HandGameObjects)
+                            {
+                                Color temp = hand.GetComponentInChildren<Image>().color;
+                                hand.GetComponentInChildren<Image>().color = new Color(temp.r, temp.g, temp.b, 0);
+                            }
                         }
                     }
                 }
@@ -109,6 +122,16 @@ public class SpawnPlotController : MonoBehaviour
                                 // Debug.Log("Added Direct Interactor for :" + i);
                                 // If it doesn't add a Director Interactor component to it
                                 HandDirectInteractors[i] = HandGameObjects[i].AddDirectComponent();
+
+                                // If button wasn't clicked sprites should be reshown
+                                if (rotateFeedForwardNeeded)
+                                {
+                                    foreach (GameObject hand in HandGameObjects)
+                                    {
+                                        Color temp = hand.GetComponentInChildren<Image>().color;
+                                        hand.GetComponentInChildren<Image>().color = new Color(temp.r, temp.g, temp.b, 1);
+                                    }
+                                }
                             }
                         }
                     }
@@ -221,7 +244,22 @@ public class SpawnPlotController : MonoBehaviour
         spawnedPlotController = Instantiate(PlotControllerPrefab);
         spawnedPlotController.transform.GetChild(0).GetComponent<Canvas>().worldCamera = Camera.main;
         spawnedPlotController.transform.SetParent(HandGameObjects[flippedHand].transform);
-        spawnedPlotController.transform.localPosition = new Vector3(0, -0.12f, 0);
+        // spawnedPlotController.transform.localPosition = new Vector3(0, -0.12f, 0);
+        switch (hand)
+        {
+            case HandSide.Left:
+                Debug.Log("Leftside");
+                spawnedPlotController.transform.localPosition = new Vector3(0.17f, -0.09f);
+
+                break;
+            case HandSide.Right:
+                Debug.Log("Rightside");
+                spawnedPlotController.transform.localPosition = new Vector3(-0.17f, -0.09f);
+                break;
+            default:
+                Debug.Log("Default");
+                break;
+        }
     }
 
     private void DeSpawn()
