@@ -251,6 +251,8 @@ public class LocalPlotController : MonoBehaviour
         // If feature menu isn't already spawned
         if (!featureMenu)
         {
+
+
             //find both feature buttons and hide both button image and its containing
             FeatureButtonScript[] featureButtons = transform.GetComponentsInChildren<FeatureButtonScript>();
             foreach (var featureButton in featureButtons)
@@ -267,6 +269,15 @@ public class LocalPlotController : MonoBehaviour
             featureMenu.transform.localScale = new Vector3(1f, 1f, 1f);
             featureMenu.transform.localEulerAngles = new Vector3(0, 0, 0);
 
+            GameObject confirmButton = GameObject.FindGameObjectWithTag("ConfirmButton");
+            if (confirmButton)
+            {
+                confirmButton.GetComponent<Button>().interactable = false;
+            }
+            else
+            {
+                Debug.Log("couldn't find confirmButton");
+            }
 
             Button[] temp = plotCreator.GetComponentsInChildren<Button>();
 
