@@ -8,7 +8,6 @@ public class AvatarSetup : MonoBehaviour
     private PhotonView PV;
     public GameObject myCharacter;
     public int characterValue;
-    public GameObject plotPrefab;
 
 
     void Start()
@@ -17,7 +16,8 @@ public class AvatarSetup : MonoBehaviour
         if (PV.IsMine)
         {
 
-            PV.RPC("RPC_AddCharacter", RpcTarget.AllBuffered, PlayerInfo.PI.mySelectedCharacter);
+            // PV.RPC("RPC_AddCharacter", RpcTarget.AllBuffered, PlayerInfo.PI.mySelectedCharacter);
+            // PV.RPC("RPC_AddCharacter", RpcTarget.AllBuffered, 0);
 
         }
 
