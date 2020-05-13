@@ -160,13 +160,7 @@ public class MeshHandler : MonoBehaviour
         {
             plotMeshChanged = false;
 
-            plot.Mesh.Clear();
-            plot.Mesh.vertices = plot.Vertices;
-            plot.Mesh.triangles = plot.Triangles;
 
-            plot.Mesh.RecalculateNormals();
-
-            GetComponent<MeshFilter>().mesh = plot.Mesh;
 
             ReComputeColliders();
         }
@@ -187,6 +181,19 @@ public class MeshHandler : MonoBehaviour
             plot.Mesh.RecalculateNormals();
 
             GetComponent<MeshFilter>().mesh = plot.Mesh;
+        }
+
+
+        if (GetComponent<MeshCollider>() == null)
+        {
+            MeshCollider collider = gameObject.AddComponent<MeshCollider>();
+
+            collider.sharedMesh = GetComponent<MeshFilter>().mesh;
+            collider.convex = false;
+
+            GetComponent<XRScaleInteractable>().colliders.Clear();
+            GetComponent<XRScaleInteractable>().colliders.Add(collider);
+            GetComponent<XRScaleInteractable>().BigHack();
         }
 
         // Debug.Log("max avg: " + plot.DataAverages[0]);
@@ -926,58 +933,75 @@ public class MeshHandler : MonoBehaviour
             Destroy(GetComponent<MeshCollider>());
         }
         // if mesh verticy is so tiny, remake it to 0
-        Vector3[] verticies = GetComponent<MeshFilter>().mesh.vertices;
+        Vector3[] verticies = plot.Vertices;
+
+        // Debug.Log("Before");
+        // foreach (var item in verticies)
+        // {
+        //     Debug.Log(item);
+        // }
+
         for (int index = 0; index < verticies.Length; index++)
         {
             if (float.IsNaN(verticies[index].x))
             {
-                Debug.Log("Changed verticy x");
+                // Debug.Log("Changed verticy x");
                 verticies[index].x = 0;
-                Debug.Log(verticies[index]);
+                // Debug.Log(verticies[index]);
             }
             if (float.IsNaN(verticies[index].y))
             {
-                Debug.Log("Changed verticy y");
+                // Debug.Log("Changed verticy y");
                 verticies[index].y = 0;
-                Debug.Log(verticies[index]);
+                // Debug.Log(verticies[index]);
             }
             if (float.IsNaN(verticies[index].z))
             {
-                Debug.Log("Changed verticy z");
+                // Debug.Log("Changed verticy z");
                 verticies[index].z = 0;
-                Debug.Log(verticies[index]);
+                // Debug.Log(verticies[index]);
             }
-            // if (verticies[index].x < 0.000004f)
-            // {
-            //     Debug.Log("Changed verticy x");
-            //     verticies[index].x = 0;
-            // }
-            // if (verticies[index].y < 0.000004f)
-            // {
-            //     Debug.Log("Changed verticy y");
-            //     verticies[index].y = 0;
-            // }
-            // if (verticies[index].z < 0.000004f)
-            // {
-            //     Debug.Log("Changed verticy z");
-            //     verticies[index].z = 0;
-            // }
 
+            if (float.IsInfinity(verticies[index].x))
+            {
+                // Debug.Log("Changed verticy x");
+                verticies[index].x = 0;
+                // Debug.Log(verticies[index]);
+            }
+            if (float.IsInfinity(verticies[index].y))
+            {
+                // Debug.Log("Changed verticy y");
+                verticies[index].y = 0;
+                // Debug.Log(verticies[index]);
+            }
+            if (float.IsInfinity(verticies[index].z))
+            {
+                // Debug.Log("Changed verticy z");
+                verticies[index].z = 0;
+                // Debug.Log(verticies[index]);
+            }
         }
-        plot.Vertices = verticies;
-        GetComponent<MeshFilter>().mesh.Clear();
-        GetComponent<MeshFilter>().mesh.vertices = plot.Vertices;
-        GetComponent<MeshFilter>().mesh.triangles = plot.Triangles;
 
-        collider = gameObject.AddComponent<MeshCollider>();
-        Debug.Log("Vertex 1: " + GetComponent<MeshFilter>().mesh.vertices[1]);
+        // plot.Vertices = verticies;
+        // GetComponent<MeshFilter>().mesh.Clear();
+        // GetComponent<MeshFilter>().mesh.vertices = plot.Vertices;
+        // GetComponent<MeshFilter>().mesh.triangles = plot.Triangles;
 
-        collider.sharedMesh = GetComponent<MeshFilter>().mesh;
-        collider.convex = false;
+        plot.Mesh.Clear();
+        plot.Mesh.vertices = plot.Vertices;
+        plot.Mesh.triangles = plot.Triangles;
 
-        GetComponent<XRScaleInteractable>().colliders.Clear();
-        GetComponent<XRScaleInteractable>().colliders.Add(collider);
-        GetComponent<XRScaleInteractable>().BigHack();
+        plot.Mesh.RecalculateNormals();
+
+        GetComponent<MeshFilter>().mesh = plot.Mesh;
+
+
+
+        // Debug.Log("After");
+        // foreach (var item in verticies)
+        // {
+        //     Debug.Log(item);
+        // }
     }
 
     public float[] FindMinMaxValues(String[] input)
