@@ -25,7 +25,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Started search for  photon lobby");
+        //  Debug.Log("Started search for  photon lobby");
         PhotonNetwork.ConnectUsingSettings(); // Connects to Master photon server.
     }
 
@@ -40,26 +40,35 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
         //     avatar.SetActive(true);
         // }
 
-        Debug.Log("Player has connected to the Photon MasterServer");
+        //  Debug.Log("Player has connected to the Photon MasterServer");
         PhotonNetwork.AutomaticallySyncScene = true;
+        if (PlayerInfo.PI != null)
+        {
+            PlayerInfo.PI.mySelectedCharacter = 0;
+            PlayerPrefs.SetInt("MyCharacter", 0);
+        }
+
+
+        //Debug.Log("my character" + 0);
         OnJoinRoomButton();
+
     }
 
     public void OnJoinRoomButton()
     {
-        Debug.Log("Joining room");
+        // Debug.Log("Joining room");
         PhotonNetwork.JoinRandomRoom();
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log("tried to join a room but failed");
+        // Debug.Log("tried to join a room but failed");
         CreateRoom();
     }
 
     void CreateRoom()
     {
-        Debug.Log("tried to create a room");
+        // Debug.Log("tried to create a room");
         int randomRoomName = Random.Range(0, 1000);
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 10 };
         PhotonNetwork.CreateRoom("room" + randomRoomName, roomOps);
@@ -67,12 +76,12 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        Debug.Log("We are now  in a room");
+        //Debug.Log("We are now  in a room");
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        Debug.Log("Tried to create room but failed, there must be already a room with the same name");
+        // Debug.Log("Tried to create room but failed, there must be already a room with the same name");
         CreateRoom();
     }
 
@@ -97,7 +106,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
                         //changes color of that avatar
                         if (AvatarHolder[avatarIndex].transform.childCount >= 2)
                         {
-                            Debug.Log("Changed color of avatar " + avatarIndex);
+                            // Debug.Log("Changed color of avatar " + avatarIndex);
                             hasAddedAvatarMaterial[avatarIndex] = true;
 
                             // SkinnedMeshRenderer rend = AvatarHolder[avatarIndex].transform.GetChild(2).GetChild(1).GetComponent<SkinnedMeshRenderer>();

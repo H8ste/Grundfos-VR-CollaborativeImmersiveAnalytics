@@ -150,8 +150,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a6ab9d462e242949b342792438f575b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleButton: {fileID: 408404929}
-  cancelButton: {fileID: 2106434491}
+  AvatarHolder: []
+  connectingText: {fileID: 0}
+  AvatarMaterials: []
 --- !u!4 &125463443
 Transform:
   m_ObjectHideFlags: 0
@@ -1118,7 +1119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mySelectedCharacter: 0
   allCharacters:
-  - {fileID: 6809010625423688667, guid: 155d0e0d1dbd2fd4c86c18b1ecd76662, type: 3}
+  - {fileID: 2641256233348467417, guid: 01d8eaf8491358c438b0db090b2d8810, type: 3}
   - {fileID: 4622214713729885341, guid: 0f684190002fd90468a859c6dcd33063, type: 3}
   - {fileID: 5927077314191072140, guid: b09a2d85a76e5844ca30eb0808e51a5d, type: 3}
   - {fileID: 4291826693313726848, guid: dc2a2a9ca38318148b114f5480c9a950, type: 3}

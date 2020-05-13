@@ -34,13 +34,13 @@ public class PlayerInfo : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("MyCharacter"))
         {
-
+            Debug.Log("has myCharacter");
             mySelectedCharacter = PlayerPrefs.GetInt("MyCharacter");
 
         }
         else
         {
-
+            Debug.Log("Does not have myCharacter");
             mySelectedCharacter = 0;
             PlayerPrefs.SetInt("MyCharacter", mySelectedCharacter);
         }
