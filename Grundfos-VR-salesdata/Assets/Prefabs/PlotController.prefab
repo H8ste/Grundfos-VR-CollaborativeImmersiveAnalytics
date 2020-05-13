@@ -465,7 +465,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headers: []
   featuresChosen: 
-  inVR: 0
+  inVR: 1
   createButtonPrefab: {fileID: 0}
   plotCreatorPrefab: {fileID: 2499950107539525976, guid: 3dc0b392864794149a38a224686558d8,
     type: 3}

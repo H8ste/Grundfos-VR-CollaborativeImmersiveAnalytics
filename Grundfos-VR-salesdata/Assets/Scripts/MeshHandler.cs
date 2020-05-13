@@ -372,9 +372,6 @@ public class MeshHandler : MonoBehaviour
 
         for (int i = 0; i < plot.PlotOptions.FeatureColors.Length; i++)
         {
-
-            Debug.Log(plot.PlotOptions.PlotColors.Length);
-
             // gives random value, should use colors in user-selected color array
             plot.PlotOptions.FeatureColors[i] = plot.PlotOptions.PlotColors[i % plot.PlotOptions.PlotColors.Length];
 

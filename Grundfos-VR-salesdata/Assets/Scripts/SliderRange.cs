@@ -162,6 +162,28 @@ public class SliderRange : MonoBehaviour
     public void sliderValueChanged()
     {
         // Debug.Log(sliders[0].value);
-        GameObject.FindObjectOfType<LocalPlotController>().SliderValueChanged(sliderAxis, sliders[0].value, sliders[1].value);
+        if (sliderAxis != null)
+        {
+            if (sliders[0].value != null)
+            {
+                if (sliders[1].value != null)
+                {
+                    GameObject.FindObjectOfType<LocalPlotController>().SliderValueChanged(sliderAxis, sliders[0].value, sliders[1].value);
+                }
+                else
+                {
+                    Debug.Log("Couldn't find sliders 1");
+                }
+            }
+            else
+            {
+                Debug.Log("Couldn't find sliders 0");
+            }
+        }
+        else
+        {
+            Debug.Log("Couldn't find slideraxis");
+        }
+
     }
 }
