@@ -217,12 +217,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3242d919c04c1f04cbc3eb2372403234, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedH: 2
-  speedV: 2
-  camera: {fileID: 62186903}
-  touchPosVector: {x: 0, y: 0, z: 0}
-  featureTypeText: {fileID: 1029334033}
-  index1: 0
 --- !u!1 &834500116
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,6 +404,16 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 62186903}
+    - target: {fileID: 1047346723138337508, guid: 79f4b1ba7e79d2d4a8168e1f084f9682,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 30.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1047346723138337508, guid: 79f4b1ba7e79d2d4a8168e1f084f9682,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 17.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4466606779537687405, guid: 79f4b1ba7e79d2d4a8168e1f084f9682,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -424,6 +428,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 3.5848
+      objectReference: {fileID: 0}
+    - target: {fileID: 5564361471050889452, guid: 79f4b1ba7e79d2d4a8168e1f084f9682,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 30.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5564361471050889452, guid: 79f4b1ba7e79d2d4a8168e1f084f9682,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 16.1
       objectReference: {fileID: 0}
     - target: {fileID: 6204924794665209936, guid: 79f4b1ba7e79d2d4a8168e1f084f9682,
         type: 3}
