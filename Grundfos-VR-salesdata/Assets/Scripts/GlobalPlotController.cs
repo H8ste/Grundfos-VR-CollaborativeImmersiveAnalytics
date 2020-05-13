@@ -6,7 +6,10 @@ public class GlobalPlotController : MonoBehaviour
 {
     private List<GameObject> plots;
 
+
     [System.Serializable]
+
+
     public class Debugger
     {
         public bool spawnPlotOnStart = false;
@@ -31,7 +34,7 @@ public class GlobalPlotController : MonoBehaviour
 
             GameObject tempPlot = GameObject.Instantiate(debugInstance.plotPrefab);
             // tempPlot.GetComponent<CreateMesh>().Create((int)Random.Range(0, debugInstance.dataReader.GetHeaders().Length - 1), (int)Random.Range(0, debugInstance.dataReader.GetHeaders().Length - 1), debugInstance.dataReader);
-            tempPlot.GetComponent<MeshHandler>().CreateNewPlot(0, 7, debugInstance.dataReader, TypeOfPlot.Barchart);
+            tempPlot.GetComponent<MeshHandler>().CreateNewPlot(9, 7, debugInstance.dataReader, TypeOfPlot.Barchart);
 
             AddPlot(tempPlot);
         }
@@ -78,7 +81,7 @@ public class GlobalPlotController : MonoBehaviour
             for (int j = 0; j < plots.Count; j++)
             {
                 // if plot is within spawnpoints area
-                if (isInsideSpawnPoint(plots[j].transform.position, spawnPoints[i].transform.position))
+                if (isInsideSpawnPoint(plots[j].transform.position, spawnPoints[i].transform.position, plots[j].transform.lossyScale))
                 {
                     Debug.Log("A plot was already inside. Plot: " + j);
                     plotAlreadyInside = true;
@@ -105,14 +108,15 @@ public class GlobalPlotController : MonoBehaviour
 
     }
 
-    private bool isInsideSpawnPoint(Vector3 plotPosition, Vector3 spawnPosition)
+    private bool isInsideSpawnPoint(Vector3 plotPosition, Vector3 spawnPosition, Vector3 scale)
     {
-        float xSpacing = 2f;
-        float ySpacing = 1f;
 
-        if (plotPosition.x > spawnPosition.x - xSpacing && plotPosition.x < spawnPosition.x + xSpacing)
+        float xSpacing = Mathf.Abs(spawnPoints[0].transform.position.x - spawnPoints[3].transform.position.x);
+        float ySpacing = Mathf.Abs(spawnPoints[0].transform.position.y - spawnPoints[3].transform.position.y);
+
+        if (plotPosition.x + (172 * scale.x) / 2f > spawnPosition.x - xSpacing && plotPosition.x + (172 * scale.x) / 2f < spawnPosition.x + xSpacing)
         {
-            if (plotPosition.y > spawnPosition.y - ySpacing && plotPosition.y < spawnPosition.y + ySpacing)
+            if (plotPosition.y + (172 * scale.y) / 2f > spawnPosition.y - ySpacing && plotPosition.y + (172 * scale.y) / 2f < spawnPosition.y + ySpacing)
             {
                 return true;
             }

@@ -74,6 +74,10 @@ public class PlotOptions
     string[] xUniques = null;
     public string[] XUniques { get { return xUniques; } set { xUniques = value; } }
 
+    Color32[] plotColors = { new Color32(74,162,44, 255), new Color32(0,104,180, 255), new Color32(52,100,143, 255), new Color32(28,78,15,255),
+     new Color32(255,165,0, 255), new Color32(128,128,128,255) };
+    public Color32[] PlotColors { get { return plotColors; } set { plotColors = value; } }
+
     public PlotOptions()
     {
         this.plotLength = 5f; this.plotHeight = 5f;
@@ -357,10 +361,17 @@ public class MeshHandler : MonoBehaviour
     private void InitialiseMeshColors()
     {
         plot.PlotOptions.FeatureColors = new Color32[plot.DataCompared.Length];
+
+
         for (int i = 0; i < plot.PlotOptions.FeatureColors.Length; i++)
         {
+
+            Debug.Log(plot.PlotOptions.PlotColors.Length);
+
             // gives random value, should use colors in user-selected color array
-            plot.PlotOptions.FeatureColors[i] = new Color32((byte)(int)UnityEngine.Random.Range(0, 255f), (byte)(int)UnityEngine.Random.Range(0, 255f), (byte)(int)UnityEngine.Random.Range(0, 255f), 255);
+            plot.PlotOptions.FeatureColors[i] = plot.PlotOptions.PlotColors[i % plot.PlotOptions.PlotColors.Length];
+
+            // new Color32((byte)(int)UnityEngine.Random.Range(0, 255f), (byte)(int)UnityEngine.Random.Range(0, 255f), (byte)(int)UnityEngine.Random.Range(0, 255f), 255);
         }
     }
 
