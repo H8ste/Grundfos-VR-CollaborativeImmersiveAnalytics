@@ -56,7 +56,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
                 // This would cast rays only against colliders in layer 11.
 
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 50f, layerMask))
+                if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 10f, layerMask))
                 {
                     alreadyDeleted = false;
                     Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
@@ -85,7 +85,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
                     }
                     hasPressedTrigger = false;
                 }
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 5f, Color.yellow);
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 8.2f, Color.yellow);
             }
         }
 

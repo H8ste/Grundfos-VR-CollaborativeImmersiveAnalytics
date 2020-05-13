@@ -67,19 +67,21 @@ public class SliderRange : MonoBehaviour
                     sliders[0].value = sliders[1].value - sliders[0].maxValue * 0.1f;
                 }
 
-                // Reposition fill
-                if (transform.localEulerAngles.z == 270f)
-                {
-                    // y  
-                    Vector3 differenceVector = (sliderHandles[1].GetChild(0).transform.position - sliderHandles[0].GetChild(0).transform.position);
-                    fill.transform.position = new Vector3(fill.position.x, sliderHandles[0].GetChild(0).transform.position.y + differenceVector.y / 2f, fill.position.z);
-                }
-                else
-                {
-                    // x
-                    Vector3 differenceVector = (sliderHandles[1].GetChild(0).transform.position - sliderHandles[0].GetChild(0).transform.position);
-                    fill.transform.position = new Vector3(sliderHandles[0].GetChild(0).transform.position.x + differenceVector.x / 2f, fill.position.y, fill.position.z);
-                }
+                // Reposition fill to be between the two slider handles
+                Vector3 differenceVector = (sliderHandles[1].GetChild(0).transform.position - sliderHandles[0].GetChild(0).transform.position);
+                fill.transform.position = sliderHandles[0].GetChild(0).transform.position + differenceVector * 0.5f;
+                // if (transform.localEulerAngles.z == 270f)
+                // {
+                //     // y  
+                //     Vector3 differenceVector = (sliderHandles[1].GetChild(0).transform.position - sliderHandles[0].GetChild(0).transform.position);
+                //     fill.transform.position = new Vector3(fill.position.x, sliderHandles[0].GetChild(0).transform.position.y + differenceVector.y / 2f, fill.position.z);
+                // }
+                // else
+                // {
+                //     // x
+                //     Vector3 differenceVector = (sliderHandles[1].GetChild(0).transform.position - sliderHandles[0].GetChild(0).transform.position);
+                //     fill.transform.position = new Vector3(sliderHandles[0].GetChild(0).transform.position.x + differenceVector.x / 2f, fill.position.y, fill.position.z);
+                // }
 
                 // Reevaluate fill width
                 fill.sizeDelta = new Vector2(Remap(sliders[1].value, sliders[1].minValue, sliders[1].maxValue, 0f, 200f) - Remap(sliders[0].value, sliders[0].minValue, sliders[0].maxValue, 0f, 200f), fill.sizeDelta.y);
