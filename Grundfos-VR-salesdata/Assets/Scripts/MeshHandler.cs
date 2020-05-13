@@ -925,7 +925,7 @@ public class MeshHandler : MonoBehaviour
 
     public void ReComputeColliders()
     {
-        Debug.Log("ReCreated Collider");
+        // Debug.Log("ReCreated Collider");
         //Redo collider
         MeshCollider collider;
         if (GetComponent<MeshCollider>())
