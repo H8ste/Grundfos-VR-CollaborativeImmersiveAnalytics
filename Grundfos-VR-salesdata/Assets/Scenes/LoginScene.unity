@@ -121,6 +121,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &34802859
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 34802861}
+  - component: {fileID: 34802860}
+  m_Layer: 0
+  m_Name: PlayerInfo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &34802860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34802859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 476b7e1694d736e458865d3c5bbd9802, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mySelectedCharacter: 0
+  allCharacters:
+  - {fileID: 4622214713729885341, guid: 0f684190002fd90468a859c6dcd33063, type: 3}
+--- !u!4 &34802861
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34802859}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.057552338, y: 1.4651635, z: -0.15038869}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &56049019
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -281,7 +327,6 @@ GameObject:
   - component: {fileID: 311784896}
   - component: {fileID: 311784895}
   - component: {fileID: 311784894}
-  - component: {fileID: 311784892}
   m_Layer: 0
   m_Name: XR Rig
   m_TagString: Untagged
@@ -289,21 +334,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &311784892
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 311784891}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 476b7e1694d736e458865d3c5bbd9802, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mySelectedCharacter: 0
-  allCharacters:
-  - {fileID: 2641256233348467417, guid: 01d8eaf8491358c438b0db090b2d8810, type: 3}
 --- !u!114 &311784894
 MonoBehaviour:
   m_ObjectHideFlags: 0

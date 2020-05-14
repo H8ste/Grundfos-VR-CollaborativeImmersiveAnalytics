@@ -3,8 +3,6 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using Oculus.Avatar;
-using Photon.Pun;
-using Photon.Realtime;
 
 public class OvrAvatarLocalDriver : OvrAvatarDriver
 {
@@ -101,14 +99,9 @@ public class OvrAvatarLocalDriver : OvrAvatarDriver
     public GameObject pvChild = null;
     public override void UpdateTransforms(IntPtr sdkAvatar)
     {
-        if (pvChild)
-        {
-            if (pvChild.transform.parent.GetComponent<PhotonView>().IsMine)
-            {
-                CalculateCurrentPose();
-                UpdateTransformsFromPose(sdkAvatar);
-            }
-        }
+
+        CalculateCurrentPose();
+        UpdateTransformsFromPose(sdkAvatar);
 
     }
 }

@@ -2,6 +2,7 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - AvatarSetup
+    - BUttonTest
     - ButtonListButton
     - ButtonListControl
     - ChangeColor
@@ -13,6 +14,7 @@ ScriptsOnlyBuild:
     - ExitGames.Demos.DemoPunVoice.OrthographicController
     - ExitGames.Demos.DemoPunVoice.ThirdPersonController
     - FeatureButtonScript
+    - GameSetup
     - GlobalPlotController
     - HandlePoints
     - LocalPlotController
@@ -21,8 +23,10 @@ ScriptsOnlyBuild:
     - OvrAvatar
     - OvrAvatarLocalDriver
     - OvrAvatarSettings
+    - PhotonLobby
     - PhotonPlayer
-    - PlayerMovement
+    - PhotonRoom
+    - PlayerInfo
     - PointersController
     - ProximityVoiceTrigger
     - PushPlotToGlobalPlot
@@ -33,8 +37,6 @@ ScriptsOnlyBuild:
     Oculus.VR.Editor.dll:
     - Assets.Oculus.VR.Editor.OVRPlatformToolSettings
     - OVRConfig
-    Oculus.VR.dll:
-    - OVRManager
     PhotonUnityNetworking.Demos.dll:
     - Photon.Pun.Demo.Asteroids.Asteroid
     - Photon.Pun.Demo.Asteroids.Bullet
@@ -56,8 +58,10 @@ ScriptsOnlyBuild:
     - Photon.Pun.PhotonView
     - Photon.Pun.ServerSettings
     PhotonVoice.PUN.dll:
+    - Photon.Voice.PUN.PhotonVoiceNetwork
     - Photon.Voice.PUN.PhotonVoiceView
     PhotonVoice.dll:
+    - Photon.Voice.Unity.Recorder
     - Photon.Voice.Unity.Speaker
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
@@ -70,7 +74,6 @@ ScriptsOnlyBuild:
     Unity.XR.Interaction.Toolkit.dll:
     - UnityEngine.XR.Interaction.Toolkit.LocomotionSystem
     - UnityEngine.XR.Interaction.Toolkit.SnapTurnProvider
-    - UnityEngine.XR.Interaction.Toolkit.TeleportationArea
     - UnityEngine.XR.Interaction.Toolkit.TeleportationProvider
     - UnityEngine.XR.Interaction.Toolkit.UI.TrackedDeviceGraphicRaycaster
     - UnityEngine.XR.Interaction.Toolkit.UI.XRUIInputModule
@@ -94,6 +97,7 @@ ScriptsOnlyBuild:
     - UnityEngine.SpatialTracking.TrackedPoseDriver
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
+    - UnityEngine.EventSystems.StandaloneInputModule
     - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.ContentSizeFitter
@@ -107,8 +111,10 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.Slider
     - UnityEngine.UI.Text
     - UnityEngine.UI.VerticalLayoutGroup
+    com.unity.multiplayer-hlapi.Runtime.dll:
+    - UnityEngine.Networking.NetworkCallbacks
   sceneClasses:
-    Assets/Scenes/XRScene.unity:
+    Assets/Scenes/LoginScene.unity:
     - Class: 1
       Script: {instanceID: 0}
     - Class: 4
@@ -166,8 +172,6 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11748}
     - Class: 114
-      Script: {instanceID: 11784}
-    - Class: 114
       Script: {instanceID: 11798}
     - Class: 114
       Script: {instanceID: 11816}
@@ -192,6 +196,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12126}
     - Class: 114
+      Script: {instanceID: 12258}
+    - Class: 114
       Script: {instanceID: 12296}
     - Class: 114
       Script: {instanceID: 12298}
@@ -201,8 +207,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 12360}
     - Class: 114
       Script: {instanceID: 12414}
-    - Class: 114
-      Script: {instanceID: 12506}
     - Class: 114
       Script: {instanceID: 12554}
     - Class: 114
@@ -214,6 +218,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12698}
     - Class: 114
+      Script: {instanceID: 12786}
+    - Class: 114
       Script: {instanceID: 12796}
     - Class: 114
       Script: {instanceID: 12846}
@@ -223,6 +229,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 12948}
     - Class: 114
       Script: {instanceID: 12966}
+    - Class: 114
+      Script: {instanceID: 13156}
     - Class: 114
       Script: {instanceID: 13170}
     - Class: 114
@@ -294,8 +302,6 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 15036}
     - Class: 114
-      Script: {instanceID: 15070}
-    - Class: 114
       Script: {instanceID: 15258}
     - Class: 114
       Script: {instanceID: 15462}
@@ -338,6 +344,77 @@ ScriptsOnlyBuild:
     - Class: 224
       Script: {instanceID: 0}
     - Class: 225
+      Script: {instanceID: 0}
+    Assets/Scenes/MultyPlay.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 33
+      Script: {instanceID: 0}
+    - Class: 43
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 64
+      Script: {instanceID: 0}
+    - Class: 65
+      Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 11434}
+    - Class: 114
+      Script: {instanceID: 11798}
+    - Class: 114
+      Script: {instanceID: 11816}
+    - Class: 114
+      Script: {instanceID: 11900}
+    - Class: 114
+      Script: {instanceID: 12476}
+    - Class: 114
+      Script: {instanceID: 12796}
+    - Class: 114
+      Script: {instanceID: 13792}
+    - Class: 114
+      Script: {instanceID: 14842}
+    - Class: 114
+      Script: {instanceID: 14904}
+    - Class: 114
+      Script: {instanceID: 14940}
+    - Class: 114
+      Script: {instanceID: 14954}
+    - Class: 114
+      Script: {instanceID: 15462}
+    - Class: 114
+      Script: {instanceID: 15490}
+    - Class: 114
+      Script: {instanceID: 15666}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
       Script: {instanceID: 0}
   scriptHashData:
   - hash:
@@ -810,18 +887,6 @@ ScriptsOnlyBuild:
     className: LocomotionSystem
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: UnityEngine.Advertisements.dll
-    namespaceName: UnityEngine.Advertisements
-    className: CallbackExecutor
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: UnityEngine.Advertisements.dll
-    namespaceName: UnityEngine.Advertisements.Editor
-    className: Placeholder
-  - hash:
-      serializedVersion: 2
       Hash: b1f26da3046d8b188758169a9d6b1078
     assemblyName: PhotonUnityNetworking.Demos.dll
     namespaceName: Photon.Pun.Demo.SlotRacer.Utils
@@ -1020,7 +1085,7 @@ ScriptsOnlyBuild:
     className: ChangeColor
   - hash:
       serializedVersion: 2
-      Hash: 025866bb53162ac1e71a1b207ceca793
+      Hash: 9a657710922de871daf68dbddb93b0ac
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: OvrAvatarLocalDriver
@@ -3492,5 +3557,6 @@ ScriptsOnlyBuild:
     className: PlayableTrack
   platform: 13
   scenePathNames:
-  - Assets/Scenes/XRScene.unity
+  - Assets/Scenes/LoginScene.unity
+  - Assets/Scenes/MultyPlay.unity
   playerPath: C:/Users/Nickl/Desktop/Ny mappe/test36.apk

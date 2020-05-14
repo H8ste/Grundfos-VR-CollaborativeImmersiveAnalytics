@@ -743,7 +743,6 @@ GameObject:
   - component: {fileID: 2641256233348467362}
   - component: {fileID: 2641256233348467421}
   - component: {fileID: 2641256233348467420}
-  - component: {fileID: -7804664569203164255}
   m_Layer: 0
   m_Name: XR Rig
   m_TagString: Untagged
@@ -849,14 +848,6 @@ MonoBehaviour:
     type: 3}
   testVector: {x: 0, y: 0, z: 0}
   rotateFeedForwardNeeded: 1
---- !u!81 &-7804664569203164255
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2641256233348467417}
-  m_Enabled: 1
 --- !u!1 &2641256233828827312
 GameObject:
   m_ObjectHideFlags: 0

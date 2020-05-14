@@ -7,7 +7,7 @@ using System.IO;
 public class PhotonPlayer : MonoBehaviour
 {
 
-
+    public GameObject XRPrefab;
     private PhotonView PV;
     public GameObject myAvatar;
 
@@ -22,7 +22,7 @@ public class PhotonPlayer : MonoBehaviour
         {
             myAvatar = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerAvatar"), GameSetup.GS.spawnPoints[spawnPicker].position,
              GameSetup.GS.spawnPoints[spawnPicker].rotation, 0);
-
+            Instantiate(XRPrefab, Vector3.zero, Quaternion.identity);
         }
     }
 
