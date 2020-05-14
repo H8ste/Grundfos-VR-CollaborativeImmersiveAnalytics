@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
+using System.IO;
+
 
 public class GlobalPlotController : MonoBehaviour
 {
@@ -19,6 +23,8 @@ public class GlobalPlotController : MonoBehaviour
     }
 
     public Debugger debugInstance = new Debugger();
+
+    private MeshHandler CurrRefMesh;
 
     private Transform[] spawnPoints;
     // Start is called before the first frame update
@@ -41,23 +47,80 @@ public class GlobalPlotController : MonoBehaviour
 
     }
 
+    [PunRPC]
+    public void SendPlot(int _FeatureOneIndex, int _FeatureTwoIndex, float[] _XThresholds, float[] _YThresholds)
+    {
+
+        Debug.Log("RECEIVER plots added: " + plots.Count);
+        Debug.Log(CurrRefMesh + " = curr reff mesh");
+        Debug.Log(_FeatureOneIndex + "feature one index");
+        Debug.Log(_FeatureTwoIndex + " =  feature two index");
+        Debug.Log(_XThresholds + " thresholds X");
+        Debug.Log(_YThresholds + " thresholds y");
+        if (CurrRefMesh != null)
+        {
+            CurrRefMesh.GetComponent<MeshHandler>().MeshSendPlot(_FeatureOneIndex, _FeatureTwoIndex, _XThresholds, _YThresholds);
+
+        }
+
+    }
+
     public void AddPlot(GameObject plotToAdd)
     {
+        if (!GetComponent<PhotonView>().IsMine)
+        {
+            GetComponent<PhotonView>().RequestOwnership();
+        }
         // Add plot provided into the local array of plots
+        // if (GetComponent<PhotonView>().IsMine)
+        // {
 
         plots.Add(plotToAdd);
-        Debug.Log("plots added: " + plots.Count);
+        Debug.Log("SENDER plots added: " + plots.Count);
 
         // Change plot's position transform to be to the right of the previous element's position
-
+        //Instante Photon it
+        // GameObject photonPlotHolder = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "whateveryouwant"), Vector3.zero, Quaternion.identity);
+        // photonPlotHolder.transform.SetParent(transform, false);
+        // photonPlotHolder.transform.SetParent(transform, false);
         // Add plot as child to this gameobject
+        // Destroy(photonPlotHolder.GetComponent<MeshHandler>());
+        // photonPlotHolder.AddComponent<MeshFilter>(plots[plots.Count - 1].GetComponent<MeshFilter>());
+        // photonPlotHolder.AddComponent<MeshRenderer>(plots[plots.Count - 1].GetComponent<MeshRenderer>());
+        // Destroy(photonPlotHolder.GetComponent<MeshFilter>());
+        // Destroy(photonPlotHolder.GetComponent<MeshRenderer>());
+
+        // photonPlotHolder.AddComponent<MeshHandler>(plots[plots.Count - 1].GetComponent<MeshHandler>());
+
+
+
+        // photonPlotHolder.transform.localScale = Vector3.one * 0.23f;
+        // photonPlotHolder.transform.position = new Vector3(-100f, 0f, 0f);
+        // photonPlotHolder.transform.eulerAngles = Vector3.zero;
+        // photonPlotHolder.GetComponent<MeshHandler>().plot.PlotID = plots.Count - 1;
+
+        // photonPlotHolder.GetComponent<MeshHandler>() = plots[plots.Count - 1].GetComponent<MeshHandler>();
         plots[plots.Count - 1].transform.SetParent(transform, false);
         plots[plots.Count - 1].transform.localScale = Vector3.one * 0.23f;
         plots[plots.Count - 1].transform.position = new Vector3(-100f, 0f, 0f);
         plots[plots.Count - 1].transform.eulerAngles = Vector3.zero;
-        plots[plots.Count - 1].GetComponent<MeshHandler>().plot.PlotID = plots.Count - 1;
+        plots[plots.Count - 1].GetComponentInChildren<MeshHandler>().plot.PlotID = plots.Count - 1;
 
-        PlacePlot(plots[plots.Count - 1]);
+
+        PlacePlot(plots[plots.Count - 1].gameObject);
+        // }
+        Debug.Log("Plots count: " + plots.Count);
+        CurrRefMesh = plots[plots.Count - 1].GetComponentInChildren<MeshHandler>();
+        // if (GetComponent<PhotonView>().IsMine)
+        {
+            PhotonView.Get(this).RPC("SendPlot", RpcTarget.AllBuffered, CurrRefMesh.plot.FeatureOneIndex, CurrRefMesh.plot.FeatureTwoIndex, CurrRefMesh.plot.PlotOptions.XThresholds, CurrRefMesh.plot.PlotOptions.YThresholds);
+
+        }
+
+
+
+
+
         // if (plots.Count > 1)
         // {
         //     if (plots[plots.Count - 1] != null && plots[plots.Count - 2] != null)
@@ -127,7 +190,7 @@ public class GlobalPlotController : MonoBehaviour
     public void DeletePlot(GameObject plotToDelete)
     {
         // Using its ID, find the plot provided in the local array of plots
-        int index = FindPlotInArray(plotToDelete.GetComponent<MeshHandler>().plot.PlotID, plots);
+        int index = FindPlotInArray(plotToDelete.GetComponentInChildren<MeshHandler>().plot.PlotID, plots);
         if (index != -1)
         {
             Destroy(plots[index]);
@@ -141,7 +204,7 @@ public class GlobalPlotController : MonoBehaviour
     {
         foreach (GameObject plot in array)
         {
-            if (providedPlotID == plot.GetComponent<MeshHandler>().plot.PlotID)
+            if (providedPlotID == plot.GetComponentInChildren<MeshHandler>().plot.PlotID)
             {
                 return providedPlotID;
             }
@@ -162,7 +225,7 @@ public class GlobalPlotController : MonoBehaviour
         {
             if (plots[plotIndex] != null)
             {
-                plots[plotIndex].GetComponent<MeshHandler>().Render();
+                plots[plotIndex].GetComponentInChildren<MeshHandler>().Render();
             }
             else
             {

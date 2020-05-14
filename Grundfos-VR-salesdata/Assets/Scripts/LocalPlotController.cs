@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Globalization; //used to ensure correct parsing of comma numbers
+using System.IO;
+using Photon.Pun;
 
 public class LocalPlotController : MonoBehaviour
 {
@@ -27,6 +29,8 @@ public class LocalPlotController : MonoBehaviour
     private GameObject ThresholdingSliders;
 
     private GameObject PlotComfirmButton;
+
+    private GameObject PlotHolder;
 
 
 
@@ -119,11 +123,15 @@ public class LocalPlotController : MonoBehaviour
             {
                 GameObject.Destroy(plot);
             }
-            plot = GameObject.Instantiate(plotPrefab);
+            PlotHolder = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "whateveryouwant"), Vector3.zero, Quaternion.identity);
+
+            // plot = GameObject.Instantiate(plotPrefab); 
+            plot = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlotPrefab"), Vector3.zero, Quaternion.identity);
             MeshHandler meshHandlerRef = plot.GetComponent<MeshHandler>();
             meshHandlerRef.CreateNewPlot(featuresChosen[0], featuresChosen[1], dataReader, TypeOfPlot.Barchart);
 
-            plot.transform.SetParent(transform);
+            plot.transform.SetParent(PlotHolder.transform, false);
+            PlotHolder.transform.SetParent(transform, false);
             plot.transform.localPosition = new Vector3(-2.69f, -2.58f, 0.005f);
             plot.transform.localScale = new Vector3(1f, 1f, 1f);
             plot.transform.localEulerAngles = new Vector3(0, 0, 0);
@@ -346,7 +354,7 @@ public class LocalPlotController : MonoBehaviour
 
     public GameObject GetPlot()
     {
-        return plot;
+        return PlotHolder;
     }
 
 

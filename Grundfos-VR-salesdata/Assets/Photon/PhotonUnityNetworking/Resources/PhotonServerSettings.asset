@@ -38,6 +38,7 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - RPC_AddCharacter
+  - SendPlot
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

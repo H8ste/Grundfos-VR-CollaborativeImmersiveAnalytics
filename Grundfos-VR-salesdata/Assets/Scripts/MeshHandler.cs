@@ -6,6 +6,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 // using UnityEngine.XR.Interaction.Toolkit;
 using System;
 using System.Globalization; //used to ensure correct parsing of comma numbers
+using Photon.Pun;
 
 public enum TypeOfPlot { Barchart };
 
@@ -204,8 +205,36 @@ public class MeshHandler : MonoBehaviour
 
     }
 
+    //create new fucntion that creates new plot but transfers the thresholds.
+
+    public void MeshSendPlot(int _FeatureOneIndex, int _FeatureTwoIndex, float[] _XThresholds, float[] _YThresholds)
+    {
+        Debug.Log("REcieving request to build plot");
+        plot = new Plot();
+        plot.FeatureOneIndex = _FeatureOneIndex; plot.FeatureTwoIndex = _FeatureTwoIndex;
+
+        dataReader = new DataReader();
+
+        plot.Mesh = new Mesh();
+
+        plot.PlotOptions.XThresholds = _XThresholds; plot.PlotOptions.YThresholds = _YThresholds;
+
+        InitialiseMesh();
+        InitialiseMeshColors();
+
+        SetupAxisNotation();
+        SetupAxisLabels();
+
+        plot.Mesh.RecalculateNormals();
+
+        plotOptionsChanged = true;
+        plotMeshChanged = true;
+        Render();
+    }
+
     public void CreateNewPlot(int _featureOneIndex, int _featureTwoIndex, DataReader dataReaderRef, TypeOfPlot plotType)
     {
+        Debug.Log("Creating plot anew");
         plot = new Plot();
 
         plot.FeatureOneIndex = _featureOneIndex; plot.FeatureTwoIndex = _featureTwoIndex;

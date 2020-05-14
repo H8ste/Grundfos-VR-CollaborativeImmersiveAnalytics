@@ -11,13 +11,22 @@ public class PushPlotToGlobalPlot : MonoBehaviour
 
     void Start()
     {
-        localPlot = GameObject.FindObjectOfType<LocalPlotController>();
+        localPlot = FindObjectOfType<SpawnPlotController>().GetComponentInChildren<LocalPlotController>();
+        if (!localPlot)
+        {
+            Debug.Log("Couldn't find LocalPlotController");
+        }
+        // GameObject.FindObjectOfType<LocalPlotController>();
         globalPlot = GameObject.FindObjectOfType<GlobalPlotController>();
     }
 
     void Awake()
     {
-        localPlot = GameObject.FindObjectOfType<LocalPlotController>();
+        localPlot = FindObjectOfType<SpawnPlotController>().GetComponentInChildren<LocalPlotController>();
+        if (!localPlot)
+        {
+            Debug.Log("Couldn't find LocalPlotController");
+        }
         globalPlot = GameObject.FindObjectOfType<GlobalPlotController>();
     }
 
