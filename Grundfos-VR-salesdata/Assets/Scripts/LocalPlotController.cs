@@ -88,7 +88,7 @@ public class LocalPlotController : MonoBehaviour
         {    //rotate towards headset
 
             // Determine which direction to rotate towards
-            Vector3 targetDirection = transform.position - transform.parent.parent.GetChild(0).position;
+            Vector3 targetDirection = transform.position - Camera.main.transform.position;
 
             // The step size is equal to speed times frame time.
             float singleStep = 3f * Time.deltaTime;

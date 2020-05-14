@@ -198,31 +198,6 @@ public class GlobalPlotController : MonoBehaviour
         return false;
     }
 
-    public void DeletePlot(GameObject plotToDelete)
-    {
-        // Using its ID, find the plot provided in the local array of plots
-        int index = FindPlotInArray(plotToDelete.GetComponentInChildren<MeshHandler>().plot.PlotID, plots);
-        if (index != -1)
-        {
-            Destroy(plots[index]);
-            // plots.RemoveAt(index);
-        }
-
-        RenderPlots();
-    }
-
-    int FindPlotInArray(int providedPlotID, List<GameObject> array)
-    {
-        foreach (GameObject plot in array)
-        {
-            if (providedPlotID == plot.GetComponentInChildren<MeshHandler>().plot.PlotID)
-            {
-                return providedPlotID;
-            }
-        }
-        return -1;
-    }
-
     public void Update()
     {
         // This shouldn't be here
@@ -248,47 +223,58 @@ public class GlobalPlotController : MonoBehaviour
 
     public void updatePosition(int id, Vector3 newPos)
     {
-        // transform.position = newPos;
-        //find plot with certain id
-        //call RPC function
-
         PhotonView.Get(this).RPC("updatePositionRPC", RpcTarget.OthersBuffered, id, newPos);
-
-
     }
 
     public void updateScale(int id, Vector3 newScale)
     {
         PhotonView.Get(this).RPC("updateScaleRPC", RpcTarget.OthersBuffered, id, newScale);
-        // transform.localScale = newScale;
     }
 
     [PunRPC]
     void updatePositionRPC(int id, Vector3 newPos)
     {
-        foreach (var plot in plots)
-        {
-            if (plot.GetComponent<MeshHandler>().plot.PlotID == id)
-            {
-                plot.transform.position = newPos;
-                break;
-            }
-        }
-        // transform.position = newPos;
+        GameObject foundPlot = FindPlot(id);
+        if (foundPlot)
+            foundPlot.transform.position = newPos;
     }
 
     [PunRPC]
     void updateScaleRPC(int id, Vector3 newScale)
     {
+        GameObject foundPlot = FindPlot(id);
+        if (foundPlot)
+            foundPlot.transform.localScale = newScale;
+    }
+
+    public void DeletePlot(int id)
+    {
+        GameObject foundPlot = FindPlot(id);
+        if (foundPlot)
+            Destroy(foundPlot);
+        PhotonView.Get(this).RPC("DeletePlotRPC", RpcTarget.OthersBuffered, id);
+    }
+
+    [PunRPC]
+    public void DeletePlotRPC(int id)
+    {
+        GameObject foundPlot = FindPlot(id);
+        if (foundPlot)
+            Destroy(foundPlot);
+
+        RenderPlots();
+    }
+
+    GameObject FindPlot(int id)
+    {
         foreach (var plot in plots)
         {
             if (plot.GetComponent<MeshHandler>().plot.PlotID == id)
             {
-                plot.transform.localScale = newScale;
-                break;
+                return plot;
             }
         }
-        // transform.localScale = newScale;
+        return null;
     }
 
 }
