@@ -42,6 +42,10 @@ MonoBehaviour:
   - updatePositionRPC
   - updateScaleRPC
   - DeletePlotRPC
+  - SpawnBarValueRPC
+  - SetBarValueTextRPC
+  - RemoveBarValueRPC
+  - SaveBarRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

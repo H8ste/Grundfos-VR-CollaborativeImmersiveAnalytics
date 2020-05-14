@@ -17,8 +17,15 @@ public class MoveAvatarByVR : MonoBehaviour
         if (GetComponent<PhotonView>().IsMine)
         {
             Transform XRRig = FindObjectOfType<SpawnPlotController>().GetComponentInChildren<Camera>().transform;
-            transform.position = XRRig.position;
-            transform.rotation = XRRig.rotation;
+            transform.GetChild(2).position = XRRig.position;
+            transform.GetChild(2).rotation = XRRig.rotation;
+
+            transform.GetChild(3).position = XRRig.parent.GetChild(1).position;
+            transform.GetChild(3).rotation = XRRig.parent.GetChild(1).rotation;
+
+            transform.GetChild(4).position = XRRig.parent.GetChild(2).position;
+            transform.GetChild(4).rotation = XRRig.parent.GetChild(2).rotation;
+
         }
     }
 }

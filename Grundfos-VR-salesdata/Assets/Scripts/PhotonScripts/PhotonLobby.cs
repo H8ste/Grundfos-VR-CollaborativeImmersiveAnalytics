@@ -31,7 +31,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        Destroy(GameObject.FindObjectOfType<SpawnPlotController>().gameObject);
+        // Destroy(GameObject.FindObjectOfType<SpawnPlotController>().gameObject);
         // ""Hides"" "connecting" text and shows avatars
         hasConnected = true;
 

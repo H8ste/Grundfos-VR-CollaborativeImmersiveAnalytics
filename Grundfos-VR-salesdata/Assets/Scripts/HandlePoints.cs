@@ -11,19 +11,18 @@ using UnityEngine.UI;
 // }
 public class HandlePoints : MonoBehaviour
 {
-
-    private int prevIndex = -1;
-
     private GameObject canvasGameObject;
     private MeshHandler meshHandlerRef;
 
     private GameObject[] temporaryTextHolder = new GameObject[] { null, null };
+    public GameObject[] TemporaryTextHolder { get { return temporaryTextHolder; } set { temporaryTextHolder = value; } }
 
     [SerializeField]
 
     private GameObject textPrefab;
 
     private GameObject[] savedSpawnedTexts;
+    public GameObject[] SavedSpawnedTexts { get { return savedSpawnedTexts; } set { savedSpawnedTexts = value; } }
 
 
     private bool[] previouslyAiming = new bool[] { false, false };
@@ -57,17 +56,25 @@ public class HandlePoints : MonoBehaviour
     {
         previouslyAiming[(int)handside] = true;
         int index = meshHandlerRef.GetIndexByPos(hitPosition);
+
+
+
         if (!temporaryTextHolder[(int)handside])
         {
-            temporaryTextHolder[(int)handside] = Instantiate(textPrefab, hitPosition, Quaternion.identity);
-            temporaryTextHolder[(int)handside].transform.SetParent(canvasGameObject.transform);
-            temporaryTextHolder[(int)handside].transform.localScale = new Vector3(1, 1, 1);
-
+            temporaryTextHolder[(int)handside] = FindObjectOfType<GlobalPlotController>().SpawnBarValue(
+            meshHandlerRef.plot.PlotID, (int)handside, meshHandlerRef.GetDataAverages()[index + 1].ToString(),
+             hitWorldSpace, canvasGameObject.transform);
+            // temporaryTextHolder[(int)handside] = Instantiate(textPrefab, hitPosition, Quaternion.identity);
+            // temporaryTextHolder[(int)handside].transform.SetParent(canvasGameObject.transform);
+            // temporaryTextHolder[(int)handside].transform.localScale = new Vector3(1, 1, 1);
         }
-        prevIndex = index;
-        temporaryTextHolder[(int)handside].GetComponent<Text>().text = meshHandlerRef.GetDataAverages()[index + 1].ToString();
-        Vector3 tempPos = meshHandlerRef.getTextPos(index);
-        temporaryTextHolder[(int)handside].transform.position = hitWorldSpace;
+
+        FindObjectOfType<GlobalPlotController>().SetBarValueText(
+            meshHandlerRef.plot.PlotID, (int)handside,
+            meshHandlerRef.GetDataAverages()[index + 1].ToString(), temporaryTextHolder[(int)handside], hitWorldSpace);
+        // temporaryTextHolder[(int)handside].GetComponent<Text>().text = meshHandlerRef.GetDataAverages()[index + 1].ToString();
+        // Vector3 tempPos = meshHandlerRef.getTextPos(index);
+        // temporaryTextHolder[(int)handside].transform.position = hitWorldSpace;
     }
 
     public void XRNoPointerHit(HandSide handside)
@@ -77,6 +84,7 @@ public class HandlePoints : MonoBehaviour
             previouslyAiming[(int)handside] = false;
             Destroy(temporaryTextHolder[(int)handside]);
             temporaryTextHolder[(int)handside] = null;
+            FindObjectOfType<GlobalPlotController>().RemoveBarValue(meshHandlerRef.plot.PlotID, (int)handside);
         }
     }
 
@@ -96,11 +104,16 @@ public class HandlePoints : MonoBehaviour
 
         int index = meshHandlerRef.GetIndexByPos(hitPosition);
 
+
+        // FindObjectOfType<GlobalPlotController>().SpawnBarValue(meshHandlerRef)
+
         if (savedSpawnedTexts[index])
         {
             Destroy(savedSpawnedTexts[index]);
         }
         savedSpawnedTexts[index] = Instantiate(temporaryTextHolder[(int)handSide]);
         savedSpawnedTexts[index].transform.SetParent(canvasGameObject.transform, false);
+
+        FindObjectOfType<GlobalPlotController>().SaveBar(meshHandlerRef.plot.PlotID, (int)handSide, index);
     }
 }

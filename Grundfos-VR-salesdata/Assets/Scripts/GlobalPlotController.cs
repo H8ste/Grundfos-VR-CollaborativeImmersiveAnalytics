@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.IO;
-
+using UnityEngine.UI;
 
 public class GlobalPlotController : MonoBehaviour
 {
@@ -276,5 +276,124 @@ public class GlobalPlotController : MonoBehaviour
         }
         return null;
     }
+
+    public GameObject BarValueTextPrefab = null;
+
+    public GameObject SpawnBarValue(int id, int handIndex, string barValue, Vector3 barvaluePosition, Transform parentTransform)
+    {
+        GameObject spawnedBarValue = Instantiate(BarValueTextPrefab, barvaluePosition, Quaternion.identity);
+        Debug.Log("SENDER Spawned barValueTextPrefab");
+        spawnedBarValue.transform.SetParent(parentTransform);
+        spawnedBarValue.transform.localScale = Vector3.one;
+
+        PhotonView.Get(this).RPC("SpawnBarValueRPC", RpcTarget.OthersBuffered, id, handIndex, barValue, barvaluePosition);
+
+        return spawnedBarValue;
+    }
+
+    [PunRPC]
+    public void SpawnBarValueRPC(int id, int handIndex, string barValue, Vector3 barvaluePosition)
+    {
+        //remember to set text holder with spawned text 
+        GameObject foundPlot = FindPlot(id);
+        if (foundPlot)
+        {
+            foundPlot.GetComponent<HandlePoints>().TemporaryTextHolder[handIndex] = Instantiate(BarValueTextPrefab, barvaluePosition, Quaternion.identity);
+            Debug.Log("RECIEVER Spawned barValueTextPrefab");
+            foundPlot.GetComponent<HandlePoints>().TemporaryTextHolder[handIndex].transform.SetParent(foundPlot.GetComponent<HandlePoints>().transform.GetChild(0).transform, false);
+            foundPlot.GetComponent<HandlePoints>().TemporaryTextHolder[handIndex].transform.localScale = Vector3.one;
+        }
+    }
+
+    public void SetBarValueText(int id, int handIndex, string newBarValue, GameObject textToChange, Vector3 worldPos)
+    {
+        textToChange.GetComponent<Text>().text = newBarValue;
+        textToChange.transform.position = worldPos;
+
+        //rpc function
+        PhotonView.Get(this).RPC("SetBarValueTextRPC", RpcTarget.OthersBuffered, id, handIndex, newBarValue, worldPos);
+    }
+
+    [PunRPC]
+    public void SetBarValueTextRPC(int id, int handIndex, string newBarValue, Vector3 worldPos)
+    {
+        GameObject foundPlot = FindPlot(id);
+        if (foundPlot)
+        {
+            if (foundPlot.GetComponent<HandlePoints>().TemporaryTextHolder != null)
+            {
+                // Debug.Log("It could fine the temporary text holder. Length: " + foundPlot.GetComponent<HandlePoints>().TemporaryTextHolder.Length);
+                if (foundPlot.GetComponent<HandlePoints>().TemporaryTextHolder[0] == null)
+                {
+
+                    // Debug.Log("Could not find the index 0 ");
+                }
+                if (foundPlot.GetComponent<HandlePoints>().TemporaryTextHolder[1] == null)
+                {
+                    // Debug.Log("Could not find the index 1 ");
+                }
+            }
+            foundPlot.GetComponent<HandlePoints>().TemporaryTextHolder[handIndex].GetComponent<Text>().text = newBarValue;
+            foundPlot.GetComponent<HandlePoints>().TemporaryTextHolder[handIndex].GetComponent<Text>().transform.position = worldPos;
+        }
+    }
+
+
+    public void RemoveBarValue(int id, int handIndex)
+    {
+        PhotonView.Get(this).RPC("RemoveBarValueRPC", RpcTarget.OthersBuffered, id, handIndex);
+    }
+
+    [PunRPC]
+    public void RemoveBarValueRPC(int id, int handIndex)
+    {
+        GameObject foundPlot = FindPlot(id);
+        if (foundPlot)
+        {
+            Destroy(foundPlot.GetComponent<HandlePoints>().TemporaryTextHolder[handIndex]);
+            foundPlot.GetComponent<HandlePoints>().TemporaryTextHolder[handIndex] = null;
+            //    Destroy(temporaryTextHolder[(int)handside]);
+            // temporaryTextHolder[(int)handside] = null;
+        }
+
+    }
+
+    public void SaveBar(int id, int handIndex, int barIndex)
+    {
+        PhotonView.Get(this).RPC("SaveBarRPC", RpcTarget.OthersBuffered, id, handIndex, barIndex);
+    }
+
+
+    [PunRPC]
+    public void SaveBarRPC(int id, int handIndex, int barIndex)
+    {
+        GameObject foundPlot = FindPlot(id);
+        if (foundPlot)
+        {
+            Debug.Log("RECIEVER Saving: " + id + ", " + handIndex + ", " + barIndex);
+            if (foundPlot.GetComponent<HandlePoints>().SavedSpawnedTexts == null)
+            {
+                foundPlot.GetComponent<HandlePoints>().SavedSpawnedTexts = new GameObject[foundPlot.GetComponent<MeshHandler>().plot.DataCompared.Length];
+            }
+            if (foundPlot.GetComponent<HandlePoints>().SavedSpawnedTexts[barIndex] == null)
+            {
+                foundPlot.GetComponent<HandlePoints>().SavedSpawnedTexts = new GameObject[foundPlot.GetComponent<MeshHandler>().plot.DataCompared.Length];
+            }
+            if (foundPlot.GetComponent<HandlePoints>().SavedSpawnedTexts.Length != foundPlot.GetComponent<MeshHandler>().plot.DataCompared.Length)
+            {
+                // should really do some smart stuff here but out of time
+                foundPlot.GetComponent<HandlePoints>().SavedSpawnedTexts = new GameObject[foundPlot.GetComponent<MeshHandler>().plot.DataCompared.Length];
+            }
+
+            if (foundPlot.GetComponent<HandlePoints>().SavedSpawnedTexts[barIndex])
+            {
+                Destroy(foundPlot.GetComponent<HandlePoints>().SavedSpawnedTexts[barIndex]);
+            }
+
+            foundPlot.GetComponent<HandlePoints>().SavedSpawnedTexts[barIndex] = Instantiate(foundPlot.GetComponent<HandlePoints>().TemporaryTextHolder[handIndex]);
+            foundPlot.GetComponent<HandlePoints>().SavedSpawnedTexts[barIndex].transform.SetParent(foundPlot.GetComponent<HandlePoints>().transform.GetChild(0).transform, false);
+        }
+    }
+
 
 }
