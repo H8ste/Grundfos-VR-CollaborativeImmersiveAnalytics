@@ -27,6 +27,8 @@ public class GlobalPlotController : MonoBehaviour
     private MeshHandler CurrRefMesh;
 
     private Transform[] spawnPoints;
+
+    // public GameObject plotPrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -48,29 +50,37 @@ public class GlobalPlotController : MonoBehaviour
     }
 
     [PunRPC]
-    public void SendPlot(int _FeatureOneIndex, int _FeatureTwoIndex, float[] _XThresholds, float[] _YThresholds)
+    public void SendPlot(int _FeatureOneIndex, int _FeatureTwoIndex, float[] _XThresholds, float[] _YThresholds, Vector3 scale)
     {
 
+        //instantiate new plotprefab
+        plots.Add(Instantiate(debugInstance.plotPrefab, Vector3.zero, Quaternion.identity));
+        // plots.Add(PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlotPrefab"), Vector3.zero, Quaternion.identity));
+        plots[plots.Count - 1].transform.SetParent(transform, false);
+        // call meshsendplot on it
+        plots[plots.Count - 1].GetComponentInChildren<MeshHandler>().MeshSendPlot(_FeatureOneIndex, _FeatureTwoIndex, _XThresholds, _YThresholds, scale);
+        plots[plots.Count - 1].GetComponentInChildren<MeshHandler>().plot.PlotID = plots.Count - 1;
         Debug.Log("RECEIVER plots added: " + plots.Count);
         Debug.Log(CurrRefMesh + " = curr reff mesh");
         Debug.Log(_FeatureOneIndex + "feature one index");
         Debug.Log(_FeatureTwoIndex + " =  feature two index");
         Debug.Log(_XThresholds + " thresholds X");
         Debug.Log(_YThresholds + " thresholds y");
-        if (CurrRefMesh != null)
-        {
-            CurrRefMesh.GetComponent<MeshHandler>().MeshSendPlot(_FeatureOneIndex, _FeatureTwoIndex, _XThresholds, _YThresholds);
+        // if (CurrRefMesh != null)
+        // {
+        //     CurrRefMesh.GetComponent<MeshHandler>().MeshSendPlot(_FeatureOneIndex, _FeatureTwoIndex, _XThresholds, _YThresholds);
 
-        }
+        // }
 
     }
 
     public void AddPlot(GameObject plotToAdd)
     {
-        if (!GetComponent<PhotonView>().IsMine)
-        {
-            GetComponent<PhotonView>().RequestOwnership();
-        }
+
+        // if (!GetComponent<PhotonView>().IsMine)
+        // {
+        //     GetComponent<PhotonView>().RequestOwnership();
+        // }
         // Add plot provided into the local array of plots
         // if (GetComponent<PhotonView>().IsMine)
         // {
@@ -100,6 +110,7 @@ public class GlobalPlotController : MonoBehaviour
         // photonPlotHolder.GetComponent<MeshHandler>().plot.PlotID = plots.Count - 1;
 
         // photonPlotHolder.GetComponent<MeshHandler>() = plots[plots.Count - 1].GetComponent<MeshHandler>();
+        Debug.Log(plots[plots.Count - 1]);
         plots[plots.Count - 1].transform.SetParent(transform, false);
         plots[plots.Count - 1].transform.localScale = Vector3.one * 0.23f;
         plots[plots.Count - 1].transform.position = new Vector3(-100f, 0f, 0f);
@@ -113,7 +124,7 @@ public class GlobalPlotController : MonoBehaviour
         CurrRefMesh = plots[plots.Count - 1].GetComponentInChildren<MeshHandler>();
         // if (GetComponent<PhotonView>().IsMine)
         {
-            PhotonView.Get(this).RPC("SendPlot", RpcTarget.AllBuffered, CurrRefMesh.plot.FeatureOneIndex, CurrRefMesh.plot.FeatureTwoIndex, CurrRefMesh.plot.PlotOptions.XThresholds, CurrRefMesh.plot.PlotOptions.YThresholds);
+            PhotonView.Get(this).RPC("SendPlot", RpcTarget.OthersBuffered, CurrRefMesh.plot.FeatureOneIndex, CurrRefMesh.plot.FeatureTwoIndex, CurrRefMesh.plot.PlotOptions.XThresholds, CurrRefMesh.plot.PlotOptions.YThresholds, CurrRefMesh.transform.localScale);
 
         }
 
@@ -233,4 +244,51 @@ public class GlobalPlotController : MonoBehaviour
             }
         }
     }
+
+
+    public void updatePosition(int id, Vector3 newPos)
+    {
+        // transform.position = newPos;
+        //find plot with certain id
+        //call RPC function
+
+        PhotonView.Get(this).RPC("updatePositionRPC", RpcTarget.OthersBuffered, id, newPos);
+
+
+    }
+
+    public void updateScale(int id, Vector3 newScale)
+    {
+        PhotonView.Get(this).RPC("updateScaleRPC", RpcTarget.OthersBuffered, id, newScale);
+        // transform.localScale = newScale;
+    }
+
+    [PunRPC]
+    void updatePositionRPC(int id, Vector3 newPos)
+    {
+        foreach (var plot in plots)
+        {
+            if (plot.GetComponent<MeshHandler>().plot.PlotID == id)
+            {
+                plot.transform.position = newPos;
+                break;
+            }
+        }
+        // transform.position = newPos;
+    }
+
+    [PunRPC]
+    void updateScaleRPC(int id, Vector3 newScale)
+    {
+        foreach (var plot in plots)
+        {
+            if (plot.GetComponent<MeshHandler>().plot.PlotID == id)
+            {
+                plot.transform.localScale = newScale;
+                break;
+            }
+        }
+        // transform.localScale = newScale;
+    }
+
 }

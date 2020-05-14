@@ -89,35 +89,38 @@ public class SliderRange : MonoBehaviour
                 // Change text of min max to their values
                 foreach (Slider slider in sliders)
                 {
-                    MeshHandler meshHandlerRef = localPlotRef.GetPlot().GetComponent<MeshHandler>();
-                    if (meshHandlerRef)
+                    if (localPlotRef.GetPlot())
                     {
-                        switch (sliderAxis)
+                        MeshHandler meshHandlerRef = localPlotRef.GetPlot().GetComponent<MeshHandler>();
+                        if (meshHandlerRef)
                         {
-                            case SliderAxis.x:
-                                // check if x values are numerical or alphabetical
-                                if (meshHandlerRef.plot.PlotOptions.XUniques == null)
-                                {
-                                    slider.GetComponentInChildren<Text>().text = slider.value.ToString();
-                                }
-                                else
-                                {
-                                    // Debug.Log("value: " + slider.value + ", int version: " + (int)slider.value + ", array length: " + meshHandlerRef.plot.PlotOptions.XUniques.Length);
-                                    slider.GetComponentInChildren<Text>().text = meshHandlerRef.plot.PlotOptions.XUniques[(int)slider.value];
-                                }
+                            switch (sliderAxis)
+                            {
+                                case SliderAxis.x:
+                                    // check if x values are numerical or alphabetical
+                                    if (meshHandlerRef.plot.PlotOptions.XUniques == null)
+                                    {
+                                        slider.GetComponentInChildren<Text>().text = slider.value.ToString();
+                                    }
+                                    else
+                                    {
+                                        // Debug.Log("value: " + slider.value + ", int version: " + (int)slider.value + ", array length: " + meshHandlerRef.plot.PlotOptions.XUniques.Length);
+                                        slider.GetComponentInChildren<Text>().text = meshHandlerRef.plot.PlotOptions.XUniques[(int)slider.value];
+                                    }
 
-                                break;
-                            case SliderAxis.y:
-                                if (meshHandlerRef.plot.PlotOptions.YUniques == null)
-                                {
-                                    slider.GetComponentInChildren<Text>().text = slider.value.ToString();
-                                }
-                                else
-                                {
-                                    // Debug.Log("value: " + slider.value + ", int version: " + (int)slider.value + ", array length: " + meshHandlerRef.plot.PlotOptions.XUniques.Length);
-                                    slider.GetComponentInChildren<Text>().text = meshHandlerRef.plot.PlotOptions.YUniques[(int)slider.value];
-                                }
-                                break;
+                                    break;
+                                case SliderAxis.y:
+                                    if (meshHandlerRef.plot.PlotOptions.YUniques == null)
+                                    {
+                                        slider.GetComponentInChildren<Text>().text = slider.value.ToString();
+                                    }
+                                    else
+                                    {
+                                        // Debug.Log("value: " + slider.value + ", int version: " + (int)slider.value + ", array length: " + meshHandlerRef.plot.PlotOptions.XUniques.Length);
+                                        slider.GetComponentInChildren<Text>().text = meshHandlerRef.plot.PlotOptions.YUniques[(int)slider.value];
+                                    }
+                                    break;
+                            }
                         }
                     }
                     else

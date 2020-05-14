@@ -170,8 +170,8 @@ GameObject:
   - component: {fileID: 2030893120834159761}
   - component: {fileID: 2013661691466233348}
   - component: {fileID: 105545843746034372}
-  - component: {fileID: 7569506273936765806}
-  - component: {fileID: 3794058756872272467}
+  - component: {fileID: 5675805611346490429}
+  - component: {fileID: 4483029415259271587}
   m_Layer: 11
   m_Name: PlotPrefab
   m_TagString: PlotMesh
@@ -347,7 +347,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7569506273936765806
+--- !u!114 &5675805611346490429
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -365,11 +365,11 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 3794058756872272467}
+  - {fileID: 4483029415259271587}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &3794058756872272467
+--- !u!114 &4483029415259271587
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

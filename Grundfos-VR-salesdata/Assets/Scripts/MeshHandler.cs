@@ -207,7 +207,7 @@ public class MeshHandler : MonoBehaviour
 
     //create new fucntion that creates new plot but transfers the thresholds.
 
-    public void MeshSendPlot(int _FeatureOneIndex, int _FeatureTwoIndex, float[] _XThresholds, float[] _YThresholds)
+    public void MeshSendPlot(int _FeatureOneIndex, int _FeatureTwoIndex, float[] _XThresholds, float[] _YThresholds, Vector3 scale)
     {
         Debug.Log("REcieving request to build plot");
         plot = new Plot();
@@ -229,6 +229,7 @@ public class MeshHandler : MonoBehaviour
 
         plotOptionsChanged = true;
         plotMeshChanged = true;
+        transform.localScale = scale;
         Render();
     }
 

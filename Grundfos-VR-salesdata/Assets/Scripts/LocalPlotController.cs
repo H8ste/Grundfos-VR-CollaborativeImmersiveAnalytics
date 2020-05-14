@@ -123,15 +123,16 @@ public class LocalPlotController : MonoBehaviour
             {
                 GameObject.Destroy(plot);
             }
-            PlotHolder = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "whateveryouwant"), Vector3.zero, Quaternion.identity);
+            // PlotHolder = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "whateveryouwant"), Vector3.zero, Quaternion.identity);
 
-            // plot = GameObject.Instantiate(plotPrefab); 
-            plot = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlotPrefab"), Vector3.zero, Quaternion.identity);
+            plot = GameObject.Instantiate(plotPrefab);
+            // plot = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlotPrefab"), Vector3.zero, Quaternion.identity);
             MeshHandler meshHandlerRef = plot.GetComponent<MeshHandler>();
             meshHandlerRef.CreateNewPlot(featuresChosen[0], featuresChosen[1], dataReader, TypeOfPlot.Barchart);
 
-            plot.transform.SetParent(PlotHolder.transform, false);
-            PlotHolder.transform.SetParent(transform, false);
+            // plot.transform.SetParent(PlotHolder.transform, false);
+            // PlotHolder.transform.SetParent(transform, false);
+            plot.transform.SetParent(transform, false);
             plot.transform.localPosition = new Vector3(-2.69f, -2.58f, 0.005f);
             plot.transform.localScale = new Vector3(1f, 1f, 1f);
             plot.transform.localEulerAngles = new Vector3(0, 0, 0);
@@ -354,7 +355,7 @@ public class LocalPlotController : MonoBehaviour
 
     public GameObject GetPlot()
     {
-        return PlotHolder;
+        return plot;
     }
 
 
