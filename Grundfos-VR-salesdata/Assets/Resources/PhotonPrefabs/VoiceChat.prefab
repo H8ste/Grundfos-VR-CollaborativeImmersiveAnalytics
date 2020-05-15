@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4194345551203039294}
   - component: {fileID: 4194345551203039295}
-  - component: {fileID: 4194345551203039424}
+  - component: {fileID: -4490993681335990380}
   m_Layer: 0
   m_Name: VoiceChat
   m_TagString: Untagged
@@ -52,7 +52,7 @@ MonoBehaviour:
   statsResetInterval: 1000
   speakerPrefab: {fileID: 8500913799391894629, guid: 3def2c2fb46093c4c848b54738e2d47e,
     type: 3}
-  primaryRecorder: {fileID: 4194345551203039424}
+  primaryRecorder: {fileID: -4490993681335990380}
   Settings:
     AppIdRealtime: 
     AppIdChat: 
@@ -72,7 +72,7 @@ MonoBehaviour:
   AutoLeaveAndDisconnect: 1
   AutoCreateSpeakerIfNotFound: 1
   usePunAppSettings: 1
---- !u!114 &4194345551203039424
+--- !u!114 &-4490993681335990380
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -84,15 +84,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91175dcc15224463780e01a8a98b1b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  logLevel: 1
-  voiceDetection: 1
+  logLevel: 5
+  voiceDetection: 0
   voiceDetectionThreshold: 0.01
   voiceDetectionDelayMs: 500
   unityMicrophoneDevice: Headset Microphone (Oculus Virtual Audio Device)
   photonMicrophoneDeviceId: 0
   interestGroup: 0
   debugEchoMode: 0
-  reliableMode: 1
+  reliableMode: 0
   encrypt: 0
   transmitEnabled: 1
   samplingRate: 24000
@@ -104,6 +104,6 @@ MonoBehaviour:
   loopAudioClip: 1
   reactOnSystemChanges: 1
   autoStart: 1
-  recordOnlyWhenEnabled: 0
-  skipDeviceChangeChecks: 1
+  recordOnlyWhenEnabled: 1
+  skipDeviceChangeChecks: 0
   stopRecordingWhenPaused: 0
