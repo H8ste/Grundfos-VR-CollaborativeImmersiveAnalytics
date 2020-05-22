@@ -44,4 +44,4 @@ A step by step that tell you how to get the project up and running.
 
 Game requires an active internet connection to play. Once the game has started, you and your friends can join eachother and present each others plots.
 
-![Image description]("./Implementation.jpg")
+![Image description](Implementation.jpg)
