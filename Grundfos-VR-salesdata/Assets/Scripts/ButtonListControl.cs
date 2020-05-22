@@ -70,7 +70,7 @@ public class ButtonListControl : MonoBehaviour
             schrollMenuButtonList[i].GetComponent<Button>().image.color = Color.white;
         }
         // Setting new color to the clicked button
-        button.image.color = Color.green;
+        // button.image.color = Color.green;
 
     }
 

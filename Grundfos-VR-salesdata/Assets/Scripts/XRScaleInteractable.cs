@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 namespace UnityEngine.XR.Interaction.Toolkit
 {
     using System;
     using UnityEngine.UI;
+    using Photon.Pun;
     public class InitialDistance
     {
         public bool isInitialised;
@@ -138,7 +140,9 @@ namespace UnityEngine.XR.Interaction.Toolkit
             }
         }
 
-
+        private bool hasChangedPosition = false;
+        private bool hasChangedScale = false;
+        private int lastTouchedID = -1;
 
         // Update is called once per frame
         void Update()
@@ -169,6 +173,8 @@ namespace UnityEngine.XR.Interaction.Toolkit
                   m_FirstSelectingInteractor.selectTarget.transform.position.z
                 );
                 GetComponentInChildren<DeletePlotController>().CurrentPosition = m_FirstSelectingInteractor.transform.position;
+                hasChangedPosition = true;
+                lastTouchedID = m_FirstSelectingInteractor.selectTarget.GetComponent<MeshHandler>().plot.PlotID;
             }
 
             // If both selectors has been Entered
@@ -187,10 +193,31 @@ namespace UnityEngine.XR.Interaction.Toolkit
                 float scaleMultiplier = Vector3.Magnitude(newDistance) - Vector3.Magnitude(initialDistance.distanceVector);
 
                 transform.localScale = new Vector3(initialDistance.initialScale.x * (1 + scaleMultiplier), initialDistance.initialScale.y * (1 + scaleMultiplier), 1f);
+
+                hasChangedScale = true;
+                lastTouchedID = m_FirstSelectingInteractor.selectTarget.GetComponent<MeshHandler>().plot.PlotID;
                 // gameObject.GetComponent<CreateMesh>().MeshColliderBool = false;
                 // re add meshcolliderbool
                 // gameObject.GetComponent<MeshHandler>().ReComputeColliders();
             }
+        }
+
+
+        void LateUpdate()
+        {
+            if (hasChangedPosition)
+            {
+                hasChangedPosition = false;
+                FindObjectOfType<GlobalPlotController>().updatePosition(lastTouchedID, m_FirstSelectingInteractor.selectTarget.transform.position);
+                // PhotonView.Get(this).RPC("updatePositionRPC", RpcTarget.OthersBuffered, lastTouchedID, m_FirstSelectingInteractor.selectTarget.transform.position);
+            }
+            if (hasChangedScale)
+            {
+                hasChangedScale = false;
+                FindObjectOfType<GlobalPlotController>().updateScale(lastTouchedID, transform.localScale);
+                // PhotonView.Get(this).RPC("updateScaleRPC", RpcTarget.OthersBuffered, lastTouchedID, transform.localScale);
+            }
+            lastTouchedID = -1;
         }
 
         public void reRegisterColliders()

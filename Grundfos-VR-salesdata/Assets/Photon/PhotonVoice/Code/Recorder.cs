@@ -41,14 +41,14 @@ namespace Photon.Voice.Unity
 
         private LocalVoice voice = LocalVoiceAudioDummy.Dummy;
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [SerializeField]
-        #endif
+#endif
         private string unityMicrophoneDevice;
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [SerializeField]
-        #endif
+#endif
         private int photonMicrophoneDeviceId = -1;
 
         private IAudioDesc inputSource;
@@ -108,16 +108,16 @@ namespace Photon.Voice.Unity
         [SerializeField]
         private bool autoStart = true;
 
-        #if UNITY_IOS
+#if UNITY_IOS
         [SerializeField] 
         private IOS.AudioSessionParameters audioSessionParameters = IOS.AudioSessionParametersPresets.Game;
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [SerializeField]
         private bool useCustomAudioSessionParameters;
         [SerializeField] 
         private int audioSessionPresetIndex;
-        #endif
-        #endif
+#endif
+#endif
 
         [SerializeField]
         private bool recordOnlyWhenEnabled;
@@ -238,8 +238,8 @@ namespace Photon.Voice.Unity
         /// <summary>If true, stream data sent in reliable mode.</summary>
         public bool ReliableMode
         {
-            get 
-            { 
+            get
+            {
                 return this.reliableMode;
             }
             set
@@ -427,13 +427,13 @@ namespace Photon.Voice.Unity
         {
             get
             {
-                #if !PHOTON_MICROPHONE_ENUMERATOR
+#if !PHOTON_MICROPHONE_ENUMERATOR
                 if (this.Logger.IsInfoEnabled)
                 {
                     this.Logger.LogInfo("Photon microphone device IDs are not supported on this platform");
                 }
                 this.photonMicrophoneDeviceId = -1;
-                #else
+#else
                 if (!this.CheckIfPhotonMicrophoneIdIsValid(PhotonMicrophoneEnumerator, this.photonMicrophoneDeviceId))
                 {
                     if (this.Logger.IsInfoEnabled)
@@ -442,18 +442,18 @@ namespace Photon.Voice.Unity
                     }
                     this.photonMicrophoneDeviceId = -1;
                 }
-                #endif
+#endif
                 return this.photonMicrophoneDeviceId;
             }
             set
             {
-                #if !PHOTON_MICROPHONE_ENUMERATOR
+#if !PHOTON_MICROPHONE_ENUMERATOR
                 if (this.Logger.IsErrorEnabled)
                 {
                     this.Logger.LogError("Setting a Photon microphone device ID is not supported on this platform");
                 }
                 return;
-                #endif
+#endif
                 if (!this.CheckIfPhotonMicrophoneIdIsValid(PhotonMicrophoneEnumerator, value))
                 {
                     if (this.Logger.IsErrorEnabled)
@@ -570,7 +570,7 @@ namespace Photon.Voice.Unity
             {
                 if (this.microphoneType != value)
                 {
-                    #if !UNITY_STANDALONE_OSX && !UNITY_STANDALONE_WIN && !UNITY_ANDROID && !UNITY_IOS
+#if !UNITY_STANDALONE_OSX && !UNITY_STANDALONE_WIN && !UNITY_ANDROID && !UNITY_IOS
                     if (value == MicType.Photon)
                     {
                         if (this.Logger.IsErrorEnabled)
@@ -579,7 +579,7 @@ namespace Photon.Voice.Unity
                         }
                         return;
                     }
-                    #endif
+#endif
                     this.microphoneType = value;
                     if (this.IsRecording)
                     {
@@ -593,11 +593,11 @@ namespace Photon.Voice.Unity
             }
         }
 
-        #pragma warning disable 618
+#pragma warning disable 618
         /// <summary>Force creation of 'short' pipeline and convert audio data to short for 'float' audio sources.</summary>
         [Obsolete("No longer used. Implicit conversion is done internally when needed.")]
         public SampleTypeConv TypeConvert { get; set; }
-        #pragma warning restore 618
+#pragma warning restore 618
 
         /// <summary>Source audio clip.</summary>
         public AudioClip AudioClip
@@ -779,7 +779,7 @@ namespace Photon.Voice.Unity
                         if (this.recordOnlyWhenEnabled)
                         {
                             this.IsRecording = this.isActiveAndEnabled;
-                        } 
+                        }
                         else if (this.AutoStart)
                         {
                             this.StartRecording();
@@ -968,7 +968,7 @@ namespace Photon.Voice.Unity
             this.RemoveVoice(true);
         }
 
-        #if UNITY_IOS
+#if UNITY_IOS
         /// <summary>
         /// Sets the AudioSessionParameters for iOS audio initialization when Photon MicrophoneType is used.
         /// </summary>
@@ -1019,7 +1019,7 @@ namespace Photon.Voice.Unity
             return false;
         }
 
-        #endif
+#endif
 
         #endregion
 
@@ -1061,109 +1061,109 @@ namespace Photon.Voice.Unity
             switch (this.SourceType)
             {
                 case InputSourceType.Microphone:
-                {
-                    if (this.MicrophoneType == MicType.Photon)
                     {
-                        #if PHOTON_MICROPHONE_ENUMERATOR
-                        var hwMicDev = this.PhotonMicrophoneDeviceId;
-                        if (this.Logger.IsInfoEnabled)
+                        if (this.MicrophoneType == MicType.Photon)
                         {
-                            this.Logger.LogInfo("Setting recorder's source to Photon microphone device [{0}] \"{1}\"", hwMicDev, PhotonMicrophoneEnumerator.NameAtIndex(hwMicDev));
-                        }
-                        #else
+#if PHOTON_MICROPHONE_ENUMERATOR
+                            var hwMicDev = this.PhotonMicrophoneDeviceId;
+                            if (this.Logger.IsInfoEnabled)
+                            {
+                                this.Logger.LogInfo("Setting recorder's source to Photon microphone device [{0}] \"{1}\"", hwMicDev, PhotonMicrophoneEnumerator.NameAtIndex(hwMicDev));
+                            }
+#else
                         if (this.Logger.IsInfoEnabled)
                         {
                             this.Logger.LogInfo("Setting recorder's source to Photon microphone device");
                         }
-                        #endif
-                        #if UNITY_STANDALONE_WIN && !UNITY_EDITOR || UNITY_EDITOR_WIN
-                        if (this.Logger.IsInfoEnabled)
-                        {
-                            this.Logger.LogInfo("Setting recorder's source to WindowsAudioInPusher");
-                        }
-                        this.inputSource = new Windows.WindowsAudioInPusher(hwMicDev, this.Logger);
-                        #elif UNITY_IOS && !UNITY_EDITOR
+#endif
+#if UNITY_STANDALONE_WIN && !UNITY_EDITOR || UNITY_EDITOR_WIN
+                            if (this.Logger.IsInfoEnabled)
+                            {
+                                this.Logger.LogInfo("Setting recorder's source to WindowsAudioInPusher");
+                            }
+                            this.inputSource = new Windows.WindowsAudioInPusher(hwMicDev, this.Logger);
+#elif UNITY_IOS && !UNITY_EDITOR
                         if (this.Logger.IsInfoEnabled)
                         {
                             this.Logger.LogInfo("Setting recorder's source to IOS.AudioInPusher with session {0}", audioSessionParameters);
                         }
                         inputSource = new IOS.AudioInPusher(audioSessionParameters, this.Logger);
-                        #elif UNITY_STANDALONE_OSX && !UNITY_EDITOR || UNITY_EDITOR_OSX
+#elif UNITY_STANDALONE_OSX && !UNITY_EDITOR || UNITY_EDITOR_OSX
                         if (this.Logger.IsInfoEnabled)
                         {
                             this.Logger.LogInfo("Setting recorder's source to MacOS.AudioInPusher");
                         }
                         inputSource = new MacOS.AudioInPusher(hwMicDev, this.Logger);
-                        #elif UNITY_ANDROID && !UNITY_EDITOR
+#elif UNITY_ANDROID && !UNITY_EDITOR
                         if (this.Logger.IsInfoEnabled)
                         {
                             this.Logger.LogInfo("Setting recorder's source to UnityAndroidAudioInAEC");
                         }
                         inputSource = new UnityAndroidAudioInAEC(this.Logger);
-                        #else
+#else
                         inputSource = new AudioDesc(0, 0, "Photon microphone type is not supported for the current platform.");
-                        #endif
-                        if (this.inputSource.Error == null)
-                        {
-                            break;
+#endif
+                            if (this.inputSource.Error == null)
+                            {
+                                break;
+                            }
+                            if (this.Logger.IsErrorEnabled)
+                            {
+                                this.Logger.LogError("Photon microphone input source creation failure: {0}. Falling back to Unity microphone", this.inputSource.Error);
+                            }
                         }
-                        if (this.Logger.IsErrorEnabled)
+                        if (Microphone.devices.Length < 1)
                         {
-                            this.Logger.LogError("Photon microphone input source creation failure: {0}. Falling back to Unity microphone", this.inputSource.Error);
+                            if (this.Logger.IsInfoEnabled)
+                            {
+                                this.Logger.LogInfo("No Microphone");
+                            }
+                            return LocalVoiceAudioDummy.Dummy;
                         }
-                    }
-                    if (Microphone.devices.Length < 1)
-                    {
+                        var micDev = this.UnityMicrophoneDevice;
                         if (this.Logger.IsInfoEnabled)
                         {
-                            this.Logger.LogInfo("No Microphone");
+                            this.Logger.LogInfo("Setting recorder's source to Unity microphone device {0}", micDev);
                         }
-                        return LocalVoiceAudioDummy.Dummy;
+                        // mic can ignore passed sampling rate and set its own
+                        this.inputSource = new MicWrapper(micDev, (int)this.SamplingRate, this.Logger);
+                        if (this.inputSource.Error != null && this.Logger.IsErrorEnabled)
+                        {
+                            this.Logger.LogError("Unity microphone input source creation failure: {0}.", this.inputSource.Error);
+                        }
                     }
-                    var micDev = this.UnityMicrophoneDevice;
-                    if (this.Logger.IsInfoEnabled)
-                    {
-                        this.Logger.LogInfo("Setting recorder's source to Unity microphone device {0}", micDev);
-                    }
-                    // mic can ignore passed sampling rate and set its own
-                    this.inputSource = new MicWrapper(micDev, (int)this.SamplingRate, this.Logger);
-                    if (this.inputSource.Error != null && this.Logger.IsErrorEnabled)
-                    {
-                        this.Logger.LogError("Unity microphone input source creation failure: {0}.", this.inputSource.Error);
-                    }
-                }
                     break;
                 case InputSourceType.AudioClip:
-                {
-                    if (this.AudioClip == null)
                     {
-                        if (this.Logger.IsErrorEnabled)
+                        if (this.AudioClip == null)
                         {
-                            this.Logger.LogError("AudioClip property must be set for AudioClip audio source");
+                            if (this.Logger.IsErrorEnabled)
+                            {
+                                this.Logger.LogError("AudioClip property must be set for AudioClip audio source");
+                            }
+                            return LocalVoiceAudioDummy.Dummy;
                         }
-                        return LocalVoiceAudioDummy.Dummy;
+                        AudioClipWrapper audioClipWrapper = new AudioClipWrapper(this.AudioClip); // never fails, no need to check Error
+                        audioClipWrapper.Loop = this.LoopAudioClip;
+                        this.inputSource = audioClipWrapper;
                     }
-                    AudioClipWrapper audioClipWrapper = new AudioClipWrapper(this.AudioClip); // never fails, no need to check Error
-                    audioClipWrapper.Loop = this.LoopAudioClip;
-                    this.inputSource = audioClipWrapper;
-                }
                     break;
                 case InputSourceType.Factory:
-                {
-                    if (this.InputFactory == null)
                     {
-                        if (this.Logger.IsErrorEnabled)
+                        if (this.InputFactory == null)
                         {
-                            this.Logger.LogError("Recorder.InputFactory must be specified if Recorder.Source set to Factory");
+                            if (this.Logger.IsErrorEnabled)
+                            {
+                                this.Logger.LogError("Recorder.InputFactory must be specified if Recorder.Source set to Factory");
+                            }
+                            return LocalVoiceAudioDummy.Dummy;
                         }
-                        return LocalVoiceAudioDummy.Dummy;
+                        this.inputSource = this.InputFactory();
+                        if (this.inputSource.Error != null && this.Logger.IsErrorEnabled)
+                        {
+                            this.Logger.LogError("InputFactory creation failure: {0}.", this.inputSource.Error);
+                        }
                     }
-                    this.inputSource = this.InputFactory();
-                    if (this.inputSource.Error != null && this.Logger.IsErrorEnabled)
-                    {
-                        this.Logger.LogError("InputFactory creation failure: {0}.", this.inputSource.Error);
-                    }
-                }
                     break;
                 default:
                     if (this.Logger.IsErrorEnabled)
@@ -1264,9 +1264,9 @@ namespace Photon.Voice.Unity
 
         private void HandleDeviceChange()
         {
-            #if PHOTON_MICROPHONE_ENUMERATOR
+#if PHOTON_MICROPHONE_ENUMERATOR
             PhotonMicrophoneEnumerator.Refresh();
-            #endif
+#endif
             if (this.IsRecording)
             {
                 if (this.SkipDeviceChangeChecks)
@@ -1277,11 +1277,11 @@ namespace Photon.Voice.Unity
                 {
                     if (this.MicrophoneType == MicType.Photon)
                     {
-                        #if PHOTON_MICROPHONE_ENUMERATOR
+#if PHOTON_MICROPHONE_ENUMERATOR
                         this.RequiresRestart = this.photonMicrophoneDeviceId == -1 || !this.CheckIfPhotonMicrophoneIdIsValid(PhotonMicrophoneEnumerator, this.photonMicrophoneDeviceId);
-                        #else
+#else
                         this.RequiresRestart = true;
-                        #endif
+#endif
                     }
                     else
                     {
@@ -1310,9 +1310,9 @@ namespace Photon.Voice.Unity
             }
             else if (this.photonMicChangeNotifier.Error != null)
             {
-                if (this.Logger.IsErrorEnabled) 
+                if (this.Logger.IsErrorEnabled)
                 {
-                   this.Logger.LogError("Error creating instance of photonMicChangeNotifier: {0}", this.photonMicChangeNotifier.Error);
+                    this.Logger.LogError("Error creating instance of photonMicChangeNotifier: {0}", this.photonMicChangeNotifier.Error);
                 }
                 this.photonMicChangeNotifier.Dispose();
                 this.photonMicChangeNotifier = null;
@@ -1422,7 +1422,7 @@ namespace Photon.Voice.Unity
             {
                 return true;
             }
-            #if PHOTON_MICROPHONE_ENUMERATOR
+#if PHOTON_MICROPHONE_ENUMERATOR
             if (audioInEnumerator.IsSupported && audioInEnumerator.Error == null && audioInEnumerator.IDIsValid(id))
             {
                 for (int i = 0; i < audioInEnumerator.Count; i++)
@@ -1433,7 +1433,7 @@ namespace Photon.Voice.Unity
                     }
                 }
             }
-            #endif
+#endif
             return false;
         }
 
@@ -1507,7 +1507,7 @@ namespace Photon.Voice.Unity
             None,
             Short
         }
-        
+
         [Obsolete("Use Photon.Voice.Unity.PhotonVoiceCreatedParams")]
         public class PhotonVoiceCreatedParams : Unity.PhotonVoiceCreatedParams
         {

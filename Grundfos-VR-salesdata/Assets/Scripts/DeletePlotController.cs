@@ -55,9 +55,10 @@ public class DeletePlotController : MonoBehaviour
                     image.color = new Color(image.color.r, image.color.g, image.color.b, progress);
                 }
                 text.color = new Color(text.color.r, text.color.g, text.color.b, progress);
+                text.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
                 if (progress >= .97f)
                 {
-                    Transform.FindObjectOfType<GlobalPlotController>().DeletePlot(transform.parent.parent.parent.gameObject);
+                    Transform.FindObjectOfType<GlobalPlotController>().DeletePlot(transform.parent.parent.parent.gameObject.GetComponent<MeshHandler>().plot.PlotID);
                     gameObject.SetActive(false);
                 }
             }

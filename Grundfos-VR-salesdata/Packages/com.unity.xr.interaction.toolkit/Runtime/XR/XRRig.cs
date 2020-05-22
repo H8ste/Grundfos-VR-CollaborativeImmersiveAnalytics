@@ -5,6 +5,7 @@ using System.Numerics;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.XR;
+// using ;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -46,7 +47,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
         /// <summary>
         /// The game object that contains the camera, this is usually the 'Head' of XR rigs.
         /// </summary>
-        public GameObject cameraGameObject { get { return m_CameraGameObject;} set { m_CameraGameObject = value;}}
+        public GameObject cameraGameObject { get { return m_CameraGameObject; } set { m_CameraGameObject = value; } }
 
 #if UNITY_2019_3_OR_NEWER
         [SerializeField]
@@ -106,12 +107,12 @@ namespace UnityEngine.XR.Interaction.Toolkit
                     case TrackingSpaceType.RoomScale:
                         {
                             m_TrackingOriginMode = TrackingOriginModeFlags.Floor;
-                            break; 
+                            break;
                         }
                     case TrackingSpaceType.Stationary:
                         {
                             m_TrackingOriginMode = TrackingOriginModeFlags.Device;
-                            break; 
+                            break;
                         }
                     default:
                         break;
@@ -154,7 +155,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
 
         void TryInitializeCamera()
         {
-            m_CameraInitialized = SetupCamera();            
+            m_CameraInitialized = SetupCamera();
             if (!m_CameraInitialized & !m_CameraInitializing)
                 StartCoroutine(RepeatInitializeCamera());
         }
@@ -220,17 +221,17 @@ namespace UnityEngine.XR.Interaction.Toolkit
             if (m_TrackingOriginMode == TrackingOriginModeFlags.Floor)
             {
                 // We need to check for Unknown because we may not be in a state where we can read this data yet.
-                if((subsystem.GetSupportedTrackingOriginModes() & (TrackingOriginModeFlags.Floor | TrackingOriginModeFlags.Unknown)) == 0)
+                if ((subsystem.GetSupportedTrackingOriginModes() & (TrackingOriginModeFlags.Floor | TrackingOriginModeFlags.Unknown)) == 0)
                 {
                     Debug.LogWarning("XRRig.SetupCamera: Attempting to set the tracking space to Room, but that is not supported by the SDK.");
                     return true;
                 }
 
-                if(subsystem.TrySetTrackingOriginMode(m_TrackingOriginMode))
+                if (subsystem.TrySetTrackingOriginMode(m_TrackingOriginMode))
                 {
                     desiredOffset = 0;
                     trackingSettingsSet = true;
-                }        
+                }
             }
 
             if (m_TrackingOriginMode == TrackingOriginModeFlags.Device)
@@ -245,10 +246,10 @@ namespace UnityEngine.XR.Interaction.Toolkit
                 if (subsystem.TrySetTrackingOriginMode(m_TrackingOriginMode))
                 {
                     trackingSettingsSet = subsystem.TryRecenter();
-                }                    
+                }
             }
 
-            if(trackingSettingsSet)
+            if (trackingSettingsSet)
             {
                 // Move camera to correct height
                 if (m_CameraFloorOffsetObject)
@@ -327,7 +328,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
             }
             Quaternion rigUp = Quaternion.FromToRotation(m_RigBaseGameObject.transform.up, destinationUp);
             m_RigBaseGameObject.transform.rotation = rigUp * transform.rotation;
-            
+
             return true;
         }
 
@@ -368,7 +369,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
         /// <param name="destinationForward">the forward vector that will be matched to the forward vector of the rig object,
         /// which is the direction the player moves in Unity when walking forward in the physical world.</param>
         /// <returns>true if the rotation is performed. </returns>
-        public bool MatchRigUpRigForward (Vector3 destinationUp, Vector3 destinationForward)
+        public bool MatchRigUpRigForward(Vector3 destinationUp, Vector3 destinationForward)
         {
             if (m_RigBaseGameObject != null && MatchRigUp(destinationUp))
             {
@@ -416,12 +417,12 @@ namespace UnityEngine.XR.Interaction.Toolkit
                 GizmoHelpers.DrawAxisArrows(m_RigBaseGameObject.transform, 0.5f);
             }
 
-            if(m_CameraFloorOffsetObject != null)
+            if (m_CameraFloorOffsetObject != null)
             {
                 GizmoHelpers.DrawAxisArrows(m_CameraFloorOffsetObject.transform, 0.5f);
             }
 
-            if(m_CameraGameObject != null)
+            if (m_CameraGameObject != null)
             {
                 Gizmos.color = Color.red;
                 GizmoHelpers.DrawWireCubeOriented(m_CameraGameObject.transform.position, m_CameraGameObject.transform.rotation, 0.1f);

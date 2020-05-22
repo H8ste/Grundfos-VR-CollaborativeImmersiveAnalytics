@@ -95,9 +95,13 @@ public class OvrAvatarLocalDriver : OvrAvatarDriver
         }
     }
 
+
+    public GameObject pvChild = null;
     public override void UpdateTransforms(IntPtr sdkAvatar)
     {
+
         CalculateCurrentPose();
         UpdateTransformsFromPose(sdkAvatar);
+
     }
 }
